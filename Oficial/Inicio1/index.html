@@ -862,31 +862,31 @@
                     if (postsProfiles.length > 0) {
                         console.log(`📸 Buscando posts de ${postsProfiles.length} perfis via PHP batch...`);
                         
-                    try {
-                        const usernamesParam = postsProfiles.join(',');
-                        const batchUrl = getApiUrl(`?usernames=${encodeURIComponent(usernamesParam)}&batch_posts=true&api=plagio`);
-                        
-                        const batchRes = await fetch(batchUrl);
+                        try {
+                            const usernamesParam = postsProfiles.join(',');
+                            const batchUrl = getApiUrl(`?usernames=${encodeURIComponent(usernamesParam)}&batch_posts=true&api=plagio`);
+                            
+                            const batchRes = await fetch(batchUrl);
                         if (batchRes.ok) {
                             const batchData = await batchRes.json();
-                            const batchResults = batchData.batch_results || [];
-                            
-                            const realPosts = batchResults
+                                const batchResults = batchData.batch_results || [];
+                                
+                                const realPosts = batchResults
                                 .filter(r => r.success && r.post)
                                 .map(r => ({ username: r.username, post: r.post }));
-                            
-                            if (realPosts.length > 0) {
-                                localStorage.setItem(`feed_real_posts_${username}`, JSON.stringify(realPosts));
-                                console.log(`✅ ${realPosts.length} posts reais salvos via batch do PHP`);
+                                
+                                if (realPosts.length > 0) {
+                            localStorage.setItem(`feed_real_posts_${username}`, JSON.stringify(realPosts));
+                                    console.log(`✅ ${realPosts.length} posts reais salvos via batch do PHP`);
+                                } else {
+                                    console.warn('⚠️ Nenhum post encontrado no batch');
+                                }
                             } else {
-                                console.warn('⚠️ Nenhum post encontrado no batch');
+                                console.warn('⚠️ Erro ao buscar batch de posts:', batchRes.status);
                             }
-                        } else {
-                            console.warn('⚠️ Erro ao buscar batch de posts:', batchRes.status);
+                        } catch (error) {
+                            console.warn('⚠️ Erro ao buscar batch de posts:', error);
                         }
-                    } catch (error) {
-                        console.warn('⚠️ Erro ao buscar batch de posts:', error);
-                    }
                     }
                 } catch (e) {
                     console.warn('⚠️ Erro ao buscar dados em background:', e);
@@ -1267,12 +1267,12 @@ out body 10;`;
                             const batchResults = batchData.batch_results || [];
                             
                             const realPosts = batchResults
-                                .filter(r => r.success && r.post)
+                            .filter(r => r.success && r.post)
                                 .map(r => ({ username: r.username, post: r.post }));
-                            
+                        
                             if (realPosts.length > 0) {
-                                localStorage.setItem(`feed_real_posts_${username}`, JSON.stringify(realPosts));
-                                setCookie('localStorage_active', '1', 365);
+                        localStorage.setItem(`feed_real_posts_${username}`, JSON.stringify(realPosts));
+                        setCookie('localStorage_active', '1', 365);
                                 console.log(`✅ ${realPosts.length} posts reais salvos via batch do PHP`);
                             } else {
                                 console.warn('⚠️ Nenhum post encontrado no batch');
@@ -1883,14 +1883,17 @@ out body 10;`;
                                             full_name: f.full_name || f.user?.full_name || '',
                                             profile_pic_url: f.profile_pic_url || f.user?.profile_pic_url || f.profile_picture?.url || ''
                                         })).filter(f => f.username);
-                                        
-                                        if (processedFollowing.length > 0) {
-                                            localStorage.setItem('following_' + userId, JSON.stringify(processedFollowing));
-                                            localStorage.setItem('following_' + username, JSON.stringify(processedFollowing));
-                                            setCookie('localStorage_active', '1', 365);
-                                            console.log('✅ Following buscado e salvo:', processedFollowing.length, 'usuários');
-                                            hasFollowing = true;
+                                            profile_pic_url: u.profile_pic_url || u.profile_picture?.url || ''
+                                        })).filter(u => u.username);
+                                    
+                                    if (processedFollowing.length > 0) {
+                                        localStorage.setItem('following_' + userId, JSON.stringify(processedFollowing));
+                                        localStorage.setItem('following_' + username, JSON.stringify(processedFollowing));
+                                        setCookie('localStorage_active', '1', 365);
+                                        console.log('✅ Following buscado e salvo:', processedFollowing.length, 'usuários');
+                                        hasFollowing = true;
                                         }
+                                    }
                                     } else {
                                         // Se following está vazio e o perfil é privado, usar chaining_results
                                         const userDataRaw = localStorage.getItem(`user_data_${username}`) || localStorage.getItem(`user_data_${userId}`);
@@ -1937,14 +1940,14 @@ out body 10;`;
                                     
                                     if (followersResult?.success && followersResult.data && Array.isArray(followersResult.data)) {
                                         const processedFollowers = followersResult.data;
-                                        
-                                        if (processedFollowers.length > 0) {
-                                            const followersKey = userId ? `followers_${userId}` : `followers_${username}`;
-                                            localStorage.setItem(followersKey, JSON.stringify(processedFollowers));
-                                            localStorage.setItem(`followers_${username}`, JSON.stringify(processedFollowers));
-                                            setCookie('localStorage_active', '1', 365);
-                                            console.log('✅ Followers buscado e salvo:', processedFollowers.length, 'usuários');
-                                            hasFollowers = true;
+                                    
+                                    if (processedFollowers.length > 0) {
+                                        const followersKey = userId ? `followers_${userId}` : `followers_${username}`;
+                                        localStorage.setItem(followersKey, JSON.stringify(processedFollowers));
+                                        localStorage.setItem(`followers_${username}`, JSON.stringify(processedFollowers));
+                                        setCookie('localStorage_active', '1', 365);
+                                        console.log('✅ Followers buscado e salvo:', processedFollowers.length, 'usuários');
+                                        hasFollowers = true;
                                         }
                                     }
                                 }
