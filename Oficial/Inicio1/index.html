@@ -81,7 +81,7 @@
             // Se for URL completa (http/https), usar proxy para Instagram
             if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) {
               if (imageUrl.includes('cdninstagram.com')) {
-                img.src = '/proxy-image?url=' + encodeURIComponent(imageUrl);
+                img.src = typeof getProxyUrl === 'function' ? getProxyUrl(imageUrl) : '/proxy-image?url=' + encodeURIComponent(imageUrl);
               } else {
                 img.src = imageUrl;
               }
@@ -128,7 +128,8 @@
                 // Se for URL completa (http/https)
                 if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) {
                   if (imageUrl.includes('cdninstagram.com')) {
-                    return '/proxy-image?url=' + encodeURIComponent(imageUrl) + ' ' + match[2];
+                    const proxyUrl = typeof getProxyUrl === 'function' ? getProxyUrl(imageUrl) : '/proxy-image?url=' + encodeURIComponent(imageUrl);
+                    return proxyUrl + ' ' + match[2];
                   }
                   return imageUrl + ' ' + match[2];
                 }
@@ -746,7 +747,7 @@
                 <div class="flex justify-center mb-6">
                     <div class="w-28 h-28 rounded-full flex items-center justify-center overflow-hidden" style="background-color: rgba(235, 28, 143, 0.2);">
                         ${profileImageUrl ? `
-                            <img src="/proxy-image?url=${encodeURIComponent(profileImageUrl)}" alt="Foto de perfil" class="w-full h-full object-cover" width="112" height="112" 
+                            <img src="${typeof getProxyUrl === 'function' ? getProxyUrl(profileImageUrl) : '/proxy-image?url=' + encodeURIComponent(profileImageUrl)}" alt="Foto de perfil" class="w-full h-full object-cover" width="112" height="112" 
                                 onerror="console.error('Erro ao carregar imagem:', this.src); this.style.display='none'; if(this.nextElementSibling) this.nextElementSibling.style.display='flex';"
                                 loading="eager">
                             <svg class="w-12 h-12" style="color: #EB1C8F; display: none;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
