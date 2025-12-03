@@ -12,16 +12,21 @@ MUDANÇAS NECESSÁRIAS:
    Adicionar o bloco completo de processamento batch (código completo está no arquivo anexado)
 
 3. GARANTIR CHAINING_RESULTS (após buscar $userData, linha ~310):
-   Adicionar verificação e preservação de chaining_results:
+   **IMPORTANTE**: Fazer requisição separada para /v1/user/chaining
    
-   if (isset($userData['chaining_results']) && is_array($userData['chaining_results'])) {
-       error_log("Chaining results found: " . count($userData['chaining_results']) . " perfis");
+   $chainingResponse = makeRequestGET('/v1/user/chaining', ['user_id' => $userId]);
+   if ($chainingResponse['success'] && isset($chainingResponse['data']) && is_array($chainingResponse['data'])) {
+       $userData['chaining_results'] = $chainingResponse['data'];
+       error_log("✅ Chaining results buscados: " . count($chainingResponse['data']) . " perfis sugeridos");
+   } else {
+       error_log("⚠️ Sem chaining_results para user_id: " . $userId);
    }
    
    E após salvar em $results['requests']['account_data'], adicionar:
    
    if (isset($userData['chaining_results'])) {
        $results['requests']['account_data']['result']['data']['chaining_results'] = $userData['chaining_results'];
+       error_log("✅ Chaining results incluídos no response: " . count($userData['chaining_results']) . " perfis");
    }
 
 FUNCIONALIDADE:

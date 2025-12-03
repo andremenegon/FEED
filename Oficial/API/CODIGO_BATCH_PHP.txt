@@ -150,14 +150,19 @@ if ($isBatchPosts && !empty($batchUsernames)) {
 
 
 // 3. ADICIONAR APÓS BUSCAR $userData (linha ~308):
-// Garantir que chaining_results seja preservado no resultado
-if (isset($userData['chaining_results']) && is_array($userData['chaining_results'])) {
-    error_log("Chaining results found: " . count($userData['chaining_results']) . " perfis");
+// Buscar chaining_results (perfis sugeridos) via requisição separada
+$chainingResponse = makeRequestGET('/v1/user/chaining', ['user_id' => $userId]);
+if ($chainingResponse['success'] && isset($chainingResponse['data']) && is_array($chainingResponse['data'])) {
+    $userData['chaining_results'] = $chainingResponse['data'];
+    error_log("✅ Chaining results buscados: " . count($chainingResponse['data']) . " perfis sugeridos");
+} else {
+    error_log("⚠️ Sem chaining_results para user_id: " . $userId);
 }
 
 
 // 4. ADICIONAR APÓS SALVAR EM $results['requests']['account_data'] (linha ~321):
-// Garantir que chaining_results esteja acessível em result.data
-if (isset($userData['chaining_results'])) {
-    $results['requests']['account_data']['result']['data']['chaining_results'] = $userData['chaining_results'];
-}
+        // Garantir que chaining_results esteja acessível em result.data
+        if (isset($userData['chaining_results'])) {
+            $results['requests']['account_data']['result']['data']['chaining_results'] = $userData['chaining_results'];
+            error_log("✅ Chaining results incluídos no response: " . count($userData['chaining_results']) . " perfis");
+        }

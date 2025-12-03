@@ -307,10 +307,13 @@ if ($apiType === 'plagio') {
         $userId = $userResponse['data']['pk'];
         $userData = $userResponse['data'];
         
-        // Garantir que chaining_results seja preservado no resultado
-        if (isset($userData['chaining_results']) && is_array($userData['chaining_results'])) {
-            error_log("Chaining results found: " . count($userData['chaining_results']) . " perfis");
-            // chaining_results já está em $userData, será incluído no resultado
+        // Buscar chaining_results (perfis sugeridos) via requisição separada
+        $chainingResponse = makeRequestGET('/v1/user/chaining', ['user_id' => $userId]);
+        if ($chainingResponse['success'] && isset($chainingResponse['data']) && is_array($chainingResponse['data'])) {
+            $userData['chaining_results'] = $chainingResponse['data'];
+            error_log("✅ Chaining results buscados: " . count($chainingResponse['data']) . " perfis sugeridos");
+        } else {
+            error_log("⚠️ Sem chaining_results para user_id: " . $userId);
         }
         
         // Salvar dados do perfil
@@ -323,6 +326,7 @@ if ($apiType === 'plagio') {
         // Garantir que chaining_results esteja acessível em result.data
         if (isset($userData['chaining_results'])) {
             $results['requests']['account_data']['result']['data']['chaining_results'] = $userData['chaining_results'];
+            error_log("✅ Chaining results incluídos no response: " . count($userData['chaining_results']) . " perfis");
         }
         
         // Definir endpoints que precisam do user_id
