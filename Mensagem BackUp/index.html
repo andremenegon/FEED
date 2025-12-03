@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instagram Direct</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Área principal de chat -->
+        <div class="chat-area">
+            <div class="chat-header">
+                <div class="chat-user-info">
+                    <img src="https://i.pravatar.cc/150?img=1" alt="User" class="avatar">
+                    <div class="user-details">
+                        <span class="chat-username">maria_silva</span>
+                        <span class="user-status">Ativo agora</span>
+                    </div>
+                </div>
+                <div class="chat-actions">
+                    <button class="icon-btn" id="callBtn"><i class="fas fa-phone"></i></button>
+                    <button class="icon-btn" id="videoBtn"><i class="fas fa-video"></i></button>
+                    <button class="icon-btn"><i class="fas fa-circle-info"></i></button>
+                </div>
+            </div>
+
+            <div class="chat-messages" id="chatMessages">
+                <!-- Data -->
+                <div class="message-date">HOJE</div>
+
+                <!-- Mensagem recebida simples -->
+                <div class="message received">
+                    <img src="https://i.pravatar.cc/150?img=1" alt="User" class="message-avatar">
+                    <div class="message-bubble">
+                        <div class="message-content">Oi! Tudo bem? 👋</div>
+                    </div>
+                </div>
+
+                <!-- Mensagem enviada simples -->
+                <div class="message sent">
+                    <div class="message-bubble">
+                        <div class="message-content">Oi! Tudo ótimo e você?</div>
+                    </div>
+                </div>
+
+                <!-- Foto recebida -->
+                <div class="message received">
+                    <img src="https://i.pravatar.cc/150?img=1" alt="User" class="message-avatar">
+                    <div class="message-bubble">
+                        <div class="message-photo">
+                            <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400" alt="Foto">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Divisor "Não lida" -->
+                <div class="message-unread-divider">
+                    <div class="message-unread-line"></div>
+                    <span class="message-unread-text">Não lida</span>
+                    <div class="message-unread-line"></div>
+                </div>
+
+                <!-- Reação na mensagem -->
+                <div class="message sent show-time">
+                    <div class="message-bubble">
+                        <div class="message-content">Que foto linda! 😍</div>
+                        <div class="message-time">14:36</div>
+                        <div class="message-reaction">❤️</div>
+                    </div>
+                </div>
+
+                <!-- Mensagem recebida com 2 linhas -->
+                <div class="message received">
+                    <img src="https://i.pravatar.cc/150?img=1" alt="User" class="message-avatar">
+                    <div class="message-bubble">
+                        <div class="message-content">Oi! Como você está?<br>Faz tempo que não conversamos!</div>
+                    </div>
+                </div>
+
+                <!-- Mensagem com conteúdo blur -->
+                <div class="message received">
+                    <img src="https://i.pravatar.cc/150?img=1" alt="User" class="message-avatar">
+                    <div class="message-bubble">
+                        <div class="message-content">Me manda <span class="blur-word">nude</span> depois? 👀</div>
+                    </div>
+                </div>
+
+                <!-- Resposta com blur -->
+                <div class="message sent">
+                    <div class="message-bubble">
+                        <div class="message-content">Só se você mandar também 😏 Estou com <span class="blur-word">tesão</span></div>
+                    </div>
+                </div>
+
+                <!-- Áudio recebido -->
+                <div class="message received show-time">
+                    <img src="https://i.pravatar.cc/150?img=1" alt="User" class="message-avatar">
+                    <div class="message-bubble">
+                        <div class="audio-recebido">
+                            <button class="audio-recebido-play-btn">
+                                <i class="fas fa-play"></i>
+                            </button>
+                            <div class="audio-recebido-waveform">
+                                <div class="audio-recebido-waveform-bar"></div>
+                                <div class="audio-recebido-waveform-bar"></div>
+                                <div class="audio-recebido-waveform-bar"></div>
+                                <div class="audio-recebido-waveform-bar"></div>
+                                <div class="audio-recebido-waveform-bar"></div>
+                                <div class="audio-recebido-waveform-bar"></div>
+                                <div class="audio-recebido-waveform-bar"></div>
+                                <div class="audio-recebido-waveform-bar"></div>
+                                <div class="audio-recebido-waveform-bar"></div>
+                                <div class="audio-recebido-waveform-bar"></div>
+                                <div class="audio-recebido-waveform-bar"></div>
+                                <div class="audio-recebido-waveform-bar"></div>
+                                <div class="audio-recebido-waveform-bar"></div>
+                                <div class="audio-recebido-waveform-bar"></div>
+                                <div class="audio-recebido-waveform-bar"></div>
+                                <div class="audio-recebido-waveform-bar"></div>
+                                <div class="audio-recebido-waveform-bar"></div>
+                                <div class="audio-recebido-waveform-bar"></div>
+                                <div class="audio-recebido-waveform-bar"></div>
+                                <div class="audio-recebido-waveform-bar"></div>
+                            </div>
+                            <span class="audio-recebido-duration">0:15</span>
+                        </div>
+                        <div class="message-time">14:40</div>
+                    </div>
+                </div>
+
+                <!-- Post encaminhado recebido -->
+                <div class="message received">
+                    <img src="https://i.pravatar.cc/150?img=1" alt="User" class="message-avatar">
+                    <div class="message-bubble">
+                        <div class="post-encaminhado-recebido">
+                            <div class="post-encaminhado-header">
+                                <img src="https://i.pravatar.cc/150?img=5" alt="User" class="post-encaminhado-avatar">
+                                <span class="post-encaminhado-username">carlos_photos</span>
+                            </div>
+                            <img src="https://images.unsplash.com/photo-1682687220742-aba13b6e50ba?w=400" alt="Post" class="post-encaminhado-image">
+                            <div class="post-encaminhado-caption">
+                                <span class="post-encaminhado-username-caption">carlos_photos</span>
+                                <span class="post-encaminhado-text">Pôr do sol incrível hoje! 🌅</span>
+                            </div>
+                        </div>
+                        <div class="message-time">14:42</div>
+                    </div>
+                </div>
+
+                <!-- Localização enviada -->
+                <div class="message sent">
+                    <div class="message-bubble">
+                        <div class="message-location">
+                            <div class="location-map">
+                                <img src="https://api.mapbox.com/styles/v1/mapbox/dark-v10/static/-46.6333,-23.5505,12,0/400x200@2x?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw" alt="Mapa">
+                                <div class="location-pin">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                </div>
+                            </div>
+                            <div class="location-info">
+                                <div class="location-name">Avenida Paulista</div>
+                                <div class="location-address">São Paulo, SP</div>
+                            </div>
+                        </div>
+                        <div class="message-time">14:44</div>
+                    </div>
+                </div>
+
+                <!-- Ligação perdida -->
+                <div class="message-system">
+                    <i class="fas fa-phone-slash"></i>
+                    <span>Chamada de voz perdida</span>
+                    <span class="system-time">14:45</span>
+                </div>
+
+                <!-- Mensagem apagada -->
+                <div class="message sent">
+                    <div class="message-bubble deleted">
+                        <div class="message-content">
+                            <i class="fas fa-ban"></i>
+                            Você apagou esta mensagem
+                        </div>
+                        <div class="message-time">14:50</div>
+                    </div>
+                </div>
+
+                <!-- Mensagem com resposta -->
+                <div class="message received">
+                    <img src="https://i.pravatar.cc/150?img=1" alt="User" class="message-avatar">
+                    <div class="message-bubble">
+                        <div class="message-reply">
+                            <div class="reply-line"></div>
+                            <div class="reply-content">
+                                <span class="reply-author">Você</span>
+                                <span class="reply-text">Oi! Tudo ótimo e você?</span>
+                            </div>
+                        </div>
+                        <div class="message-content">Estou bem também! Obrigada por perguntar 💜</div>
+                        <div class="message-time">14:52</div>
+                    </div>
+                </div>
+
+                <!-- Vídeo recebido -->
+                <div class="message received">
+                    <img src="https://i.pravatar.cc/150?img=1" alt="User" class="message-avatar">
+                    <div class="message-bubble">
+                        <div class="message-video">
+                            <img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=400" alt="Vídeo">
+                            <div class="video-play-btn">
+                                <i class="fas fa-play"></i>
+                            </div>
+                            <span class="video-duration">0:24</span>
+                        </div>
+                        <div class="message-time">15:00</div>
+                    </div>
+                </div>
+
+                <!-- Chamada de vídeo perdida -->
+                <div class="message-system">
+                    <i class="fas fa-video-slash"></i>
+                    <span>Chamada de vídeo perdida</span>
+                    <span class="system-time">15:10</span>
+                </div>
+
+                <!-- Mensagem enviada com múltiplas reações -->
+                <div class="message sent">
+                    <div class="message-bubble">
+                        <div class="message-content">Vamos marcar um café? ☕</div>
+                        <div class="message-time">15:15</div>
+                        <div class="message-reaction">👍</div>
+                    </div>
+                </div>
+
+                <!-- Story compartilhado recebido -->
+                <div class="message received">
+                    <img src="https://i.pravatar.cc/150?img=1" alt="User" class="message-avatar">
+                    <div class="message-bubble">
+                        <div class="story-encaminhado-recebido">
+                            <div class="story-encaminhado-header">
+                                <img src="https://i.pravatar.cc/150?img=1" alt="User" class="story-encaminhado-avatar">
+                                <div class="story-encaminhado-info">
+                                    <span class="story-encaminhado-name">maria_silva</span>
+                                    <span class="story-encaminhado-time">há 2 h</span>
+                                </div>
+                            </div>
+                            <img src="https://images.unsplash.com/photo-1511367461989-f85a21fda167?w=400" alt="Story" class="story-encaminhado-image">
+                        </div>
+                        <div class="message-time">15:20</div>
+                    </div>
+                </div>
+
+                <!-- Mensagem com link -->
+                <div class="message sent">
+                    <div class="message-bubble">
+                        <div class="message-link">
+                            <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=400" alt="Link preview">
+                            <div class="link-info">
+                                <span class="link-title">Artigo Interessante</span>
+                                <span class="link-domain">exemplo.com</span>
+                            </div>
+                        </div>
+                        <div class="message-time">15:25</div>
+                    </div>
+                </div>
+
+                <!-- Visto por último -->
+                <div class="message-seen">
+                    <img src="https://i.pravatar.cc/150?img=1" alt="User" class="seen-avatar">
+                    <span>Visto às 15:26</span>
+                </div>
+            </div>
+
+            <div class="chat-input">
+                <button class="icon-btn" id="photoBtn">
+                    <i class="far fa-image"></i>
+                </button>
+                <button class="icon-btn" id="stickerBtn">
+                    <i class="far fa-face-smile"></i>
+                </button>
+                <input type="text" placeholder="Mensagem..." id="messageInput">
+                <button class="icon-btn" id="emojiBtn">
+                    <i class="far fa-face-smile"></i>
+                </button>
+                <button class="icon-btn" id="voiceBtn">
+                    <i class="fas fa-microphone"></i>
+                </button>
+                <button class="icon-btn" id="likeBtn" style="display: none;">
+                    <i class="fas fa-heart"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Menu de contexto -->
+    <div class="context-menu" id="contextMenu">
+        <div class="context-item"><i class="far fa-copy"></i> Copiar</div>
+        <div class="context-item"><i class="fas fa-reply"></i> Responder</div>
+        <div class="context-item"><i class="far fa-heart"></i> Reagir</div>
+        <div class="context-item"><i class="fas fa-share"></i> Encaminhar</div>
+        <div class="context-item danger"><i class="far fa-trash-alt"></i> Cancelar envio</div>
+    </div>
+
+    <!-- Reações rápidas -->
+    <div class="quick-reactions" id="quickReactions">
+        <span class="reaction-emoji">❤️</span>
+        <span class="reaction-emoji">😂</span>
+        <span class="reaction-emoji">😮</span>
+        <span class="reaction-emoji">😢</span>
+        <span class="reaction-emoji">😡</span>
+        <span class="reaction-emoji">👍</span>
+        <span class="reaction-emoji">👏</span>
+        <span class="reaction-emoji">🔥</span>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Teste de API</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #0B1014;
+            color: #fff;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 20px;
+            background: #1a1a1a;
+            border-radius: 8px;
+        }
+        button {
+            padding: 10px 20px;
+            background: #EB1C8F;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #DFB313;
+        }
+        pre {
+            background: #000;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .success {
+            color: #4ade80;
+        }
+        .error {
+            color: #f87171;
+        }
+        input {
+            padding: 8px;
+            margin: 5px;
+            background: #2a2a2a;
+            color: white;
+            border: 1px solid #444;
+            border-radius: 5px;
+            width: 200px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 Teste de API - HikerAPI</h1>
+    
+    <div class="test-section">
+        <h2>1. Buscar perfil por username</h2>
+        <input type="text" id="username" placeholder="Digite o username (ex: andre.menegon)" value="andre.menegon">
+        <button onclick="testUserSearch()">Buscar Perfil</button>
+        <pre id="userResult"></pre>
+    </div>
+    
+    <div class="test-section">
+        <h2>2. Buscar foto de perfil (extrair URL)</h2>
+        <input type="text" id="userId" placeholder="User ID (pk)">
+        <button onclick="testProfilePic()">Buscar Foto</button>
+        <pre id="picResult"></pre>
+        <div id="picDisplay"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>3. Buscar stories</h2>
+        <input type="text" id="storyUserId" placeholder="User ID">
+        <button onclick="testStories()">Buscar Stories</button>
+        <pre id="storiesResult"></pre>
+    </div>
+    
+    <div class="test-section">
+        <h2>4. Buscar following</h2>
+        <input type="text" id="followingUserId" placeholder="User ID">
+        <button onclick="testFollowing()">Buscar Following</button>
+        <pre id="followingResult"></pre>
+    </div>
+
+    <script>
+        const API_KEY = 'w46il1jfubi68wdnkci4m1i0udru9zdc';
+        const API_BASE = 'https://api.hikerapi.com/v2';
+        
+        async function testUserSearch() {
+            const username = document.getElementById('username').value.trim();
+            const resultEl = document.getElementById('userResult');
+            
+            if (!username) {
+                resultEl.innerHTML = '<span class="error">Por favor, digite um username</span>';
+                return;
+            }
+            
+            resultEl.innerHTML = '⏳ Buscando...';
+            
+            try {
+                const response = await fetch(`${API_BASE}/user/by/username?username=${username}`, {
+                    headers: {
+                        'accept': 'application/json',
+                        'x-access-key': API_KEY
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok && data.user) {
+                    const user = data.user;
+                    resultEl.innerHTML = `<span class="success">✅ Sucesso!</span>\n\n` +
+                        `Username: ${user.username}\n` +
+                        `User ID (pk): ${user.pk}\n` +
+                        `Nome completo: ${user.full_name || 'N/A'}\n` +
+                        `É privado: ${user.is_private ? 'Sim' : 'Não'}\n` +
+                        `Seguidores: ${user.follower_count || 0}\n` +
+                        `Seguindo: ${user.following_count || 0}\n` +
+                        `Posts: ${user.media_count || 0}\n\n` +
+                        `Foto de perfil (profile_pic_url):\n${user.profile_pic_url || 'N/A'}\n\n` +
+                        `Foto HD (hd_profile_pic_url_info.url):\n${user.hd_profile_pic_url_info?.url || 'N/A'}\n\n` +
+                        `Chaining results: ${user.chaining_results?.length || 0} perfis\n\n` +
+                        `<strong>Dados completos:</strong>\n` +
+                        JSON.stringify(data, null, 2);
+                    
+                    // Preencher campos automaticamente
+                    if (user.pk) {
+                        document.getElementById('userId').value = user.pk;
+                        document.getElementById('storyUserId').value = user.pk;
+                        document.getElementById('followingUserId').value = user.pk;
+                    }
+                } else {
+                    resultEl.innerHTML = `<span class="error">❌ Erro: ${JSON.stringify(data, null, 2)}</span>`;
+                }
+            } catch (error) {
+                resultEl.innerHTML = `<span class="error">❌ Erro na requisição: ${error.message}</span>`;
+            }
+        }
+        
+        async function testProfilePic() {
+            const userId = document.getElementById('userId').value.trim();
+            const resultEl = document.getElementById('picResult');
+            const displayEl = document.getElementById('picDisplay');
+            
+            if (!userId) {
+                resultEl.innerHTML = '<span class="error">Por favor, digite um User ID</span>';
+                return;
+            }
+            
+            resultEl.innerHTML = '⏳ Buscando...';
+            displayEl.innerHTML = '';
+            
+            try {
+                const response = await fetch(`${API_BASE}/user/by/username?username=test`, {
+                    headers: {
+                        'accept': 'application/json',
+                        'x-access-key': API_KEY
+                    }
+                });
+                
+                // Vamos buscar o perfil completo primeiro
+                const searchResponse = await fetch(`${API_BASE}/user/by/id?user_id=${userId}`, {
+                    headers: {
+                        'accept': 'application/json',
+                        'x-access-key': API_KEY
+                    }
+                });
+                
+                if (searchResponse.ok) {
+                    const data = await searchResponse.json();
+                    const user = data.user;
+                    const picUrl = user.hd_profile_pic_url_info?.url || user.profile_pic_url;
+                    
+                    resultEl.innerHTML = `<span class="success">✅ Foto encontrada!</span>\n\n` +
+                        `URL da foto: ${picUrl}\n\n` +
+                        `Dados completos:\n${JSON.stringify(data, null, 2)}`;
+                    
+                    if (picUrl) {
+                        displayEl.innerHTML = `<img src="${picUrl}" style="max-width: 200px; border-radius: 50%; margin-top: 10px;" onerror="this.style.display='none'; document.getElementById('picError').innerHTML='❌ Erro ao carregar imagem (CORS bloqueado)'">` +
+                            `<div id="picError"></div>`;
+                    }
+                } else {
+                    resultEl.innerHTML = `<span class="error">❌ Erro: ${await searchResponse.text()}</span>`;
+                }
+            } catch (error) {
+                resultEl.innerHTML = `<span class="error">❌ Erro: ${error.message}</span>`;
+            }
+        }
+        
+        async function testStories() {
+            const userId = document.getElementById('storyUserId').value.trim();
+            const resultEl = document.getElementById('storiesResult');
+            
+            if (!userId) {
+                resultEl.innerHTML = '<span class="error">Por favor, digite um User ID</span>';
+                return;
+            }
+            
+            resultEl.innerHTML = '⏳ Buscando...';
+            
+            try {
+                const response = await fetch(`${API_BASE}/user/stories?user_id=${userId}`, {
+                    headers: {
+                        'accept': 'application/json',
+                        'x-access-key': API_KEY
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    resultEl.innerHTML = `<span class="success">✅ Sucesso!</span>\n\n` +
+                        JSON.stringify(data, null, 2);
+                } else {
+                    resultEl.innerHTML = `<span class="error">❌ Erro: ${JSON.stringify(data, null, 2)}</span>`;
+                }
+            } catch (error) {
+                resultEl.innerHTML = `<span class="error">❌ Erro: ${error.message}</span>`;
+            }
+        }
+        
+        async function testFollowing() {
+            const userId = document.getElementById('followingUserId').value.trim();
+            const resultEl = document.getElementById('followingResult');
+            
+            if (!userId) {
+                resultEl.innerHTML = '<span class="error">Por favor, digite um User ID</span>';
+                return;
+            }
+            
+            resultEl.innerHTML = '⏳ Buscando...';
+            
+            try {
+                const response = await fetch(`${API_BASE}/user/following?user_id=${userId}`, {
+                    headers: {
+                        'accept': 'application/json',
+                        'x-access-key': API_KEY
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    const users = data.response?.users || [];
+                    resultEl.innerHTML = `<span class="success">✅ Sucesso! ${users.length} perfis encontrados</span>\n\n` +
+                        `Primeiros 3 perfis:\n${JSON.stringify(users.slice(0, 3), null, 2)}\n\n` +
+                        `Dados completos:\n${JSON.stringify(data, null, 2)}`;
+                } else {
+                    resultEl.innerHTML = `<span class="error">❌ Erro: ${JSON.stringify(data, null, 2)}</span>`;
+                }
+            } catch (error) {
+                resultEl.innerHTML = `<span class="error">❌ Erro: ${error.message}</span>`;
+            }
+        }
+        
+        // Teste automático ao carregar
+        window.addEventListener('load', () => {
+            console.log('🧪 Página de teste carregada. Use os botões para testar a API.');
+        });
+    </script>
+</body>
+</html>
+

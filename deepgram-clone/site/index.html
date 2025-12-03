@@ -1,0 +1,322 @@
+<!DOCTYPE html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="preload" href="_next/static/media/e4af272ccee01ff0-s.p.woff2" as="font" crossorigin="" type="font/woff2"><link rel="preload" as="image" imagesrcset="images/image.png 1x, images/image.png 2x"><link rel="stylesheet" href="css/da856031f36d61b4.css" data-precedence="next"><link rel="preload" as="script" fetchpriority="low" href="_next/static/chunks/webpack-aaf1bd8426438e84.js"><script src="_next/static/chunks/webpack-aaf1bd8426438e84.js" async=""></script><script src="_next/static/chunks/4bd1b696-927b5d87d2664d33.js" async=""></script><script src="_next/static/chunks/517-fcf3391f07a5a6b5.js" async=""></script><script src="_next/static/chunks/main-app-87bb0b7c57a48d1c.js" async=""></script><script src="_next/static/chunks/dc112a36-075c751365d85d28.js" async=""></script><script src="_next/static/chunks/760-c371f09ffd48f3c6.js" async=""></script><script src="_next/static/chunks/651-95362940dbb3ed18.js" async=""></script><script src="_next/static/chunks/85-675c63f9818b0ee8.js" async=""></script><script src="_next/static/chunks/223-96d76561f24b893f.js" async=""></script><script src="_next/static/chunks/934-0f1fbc8b0d079f39.js" async=""></script><script src="_next/static/chunks/563-689fd83db556f1aa.js" async=""></script><script src="_next/static/chunks/778-c6656ef6088a5f44.js" async=""></script><script src="_next/static/chunks/433-60ac749639b8678d.js" async=""></script><script src="_next/static/chunks/605-0ccaefaf67756a59.js" async=""></script><script src="_next/static/chunks/app/page-fab92a0b52534389.js" async=""></script><script src="js/latest.js" data-utmify-prevent-subids="true" async="" defer=""></script><meta name="next-size-adjust" content=""><title>DeepGram - a maior ferramenta de stalker do Brasil.</title><meta name="description" content="A maior ferramenta de stalker do Brasil. Descubra a verdade sobre qualquer pessoa do Instagram."><link rel="shortcut icon" href="images/icon-site.png"><link rel="icon" href="images/favicon.ico" type="image/x-icon" sizes="16x16"><link rel="icon" href="images/icon-site.png"><link rel="apple-touch-icon" href="images/icon-site.png"><script>
+              !function(f,b,e,v,n,t,s)
+              {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+              n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+              if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+              n.queue=[];t=b.createElement(e);t.async=!0;
+              t.src=v;s=b.getElementsByTagName(e)[0];
+              s.parentNode.insertBefore(t,s)}(window, document,'script',
+              'https://connect.facebook.net/en_US/fbevents.js');
+              fbq('init', '446050195151084');
+              fbq('track', 'PageView');
+            </script><noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=446050195151084&ev=PageView&noscript=1" alt=""/></noscript><script type="text/javascript">
+              (function(c,l,a,r,i,t,y){
+                c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+                t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+                y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+              })(window, document, "clarity", "script", "u7k8aenp9q");
+            </script><script src="_next/static/chunks/polyfills-42372ed130431b0a.js" nomodule=""></script></head><body class="__variable_8b3a0b font-inter antialiased"><script>
+// Limpar cache problemático do Next.js
+(function() {
+  // Forçar reload se veio de cache
+  if (performance.navigation.type === 2) {
+    location.reload(true);
+  }
+})();
+
+// Proteção contra limpeza do body pelo Next.js - DEVE SER O PRIMEIRO SCRIPT NO BODY
+(function() {
+  let originalBody = null;
+  let checkInterval = null;
+  
+  function captureAndProtect() {
+    if (document.body && document.body.innerHTML.length > 5000) {
+      if (!originalBody) {
+        originalBody = document.body.innerHTML;
+        console.log('✅ Body capturado:', originalBody.length, 'caracteres');
+      }
+      
+      // Verificar periodicamente se o body foi limpo
+      if (!checkInterval) {
+        checkInterval = setInterval(() => {
+          if (document.body && originalBody) {
+            const currentLength = document.body.innerHTML.length;
+            // Se o conteúdo diminuiu muito, restaurar
+            if (currentLength < 5000 || currentLength < originalBody.length * 0.5) {
+              console.log('⚠️ Body foi limpo! Restaurando...');
+              document.body.innerHTML = originalBody;
+            }
+          }
+        }, 100);
+      }
+    }
+  }
+  
+  // Tentar capturar imediatamente
+  captureAndProtect();
+  
+  // Aguardar DOMContentLoaded
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', captureAndProtect);
+  }
+  
+  // Tentar novamente após um delay
+  setTimeout(captureAndProtect, 100);
+  setTimeout(captureAndProtect, 500);
+  setTimeout(captureAndProtect, 1000);
+  
+  // Converter URLs do Next.js Image para URLs diretas
+  function convertNextImageUrls() {
+    document.querySelectorAll('img').forEach(img => {
+      // Se a URL contém /_next/image?url=, extrair a URL real
+      if (img.src && img.src.includes('/_next/image?url=')) {
+        try {
+          const url = new URL(img.src, window.location.origin);
+          const imageUrl = decodeURIComponent(url.searchParams.get('url') || '');
+          
+          if (imageUrl) {
+            console.log('🖼️ Convertendo URL do Next.js Image:', img.src.substring(0, 80) + '...');
+            console.log('   Para URL direta:', imageUrl.substring(0, 80) + '...');
+            
+            // Se for URL completa (http/https), usar proxy para Instagram
+            if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) {
+              if (imageUrl.includes('cdninstagram.com')) {
+                img.src = '/proxy-image?url=' + encodeURIComponent(imageUrl);
+                console.log('   ✅ Usando proxy:', img.src.substring(0, 100));
+              } else {
+                img.src = imageUrl;
+                console.log('   ✅ Usando URL direta:', imageUrl.substring(0, 100));
+              }
+            } 
+            // Se for caminho relativo (começa com /), converter para caminho correto
+            else if (imageUrl.startsWith('/')) {
+              // Mapear caminhos comuns
+              if (imageUrl === '/logo.png' || imageUrl === '/logo') {
+                img.src = 'images/logo.webp';
+                console.log('   ✅ Convertendo /logo.png para images/logo.webp');
+              } else if (imageUrl.startsWith('/images/')) {
+                // Remover a barra inicial se já tiver images/
+                img.src = imageUrl.substring(1);
+                console.log('   ✅ Convertendo caminho:', imageUrl, 'para', img.src);
+              } else {
+                // Tentar adicionar images/ se não tiver
+                img.src = 'images' + imageUrl;
+                console.log('   ✅ Convertendo caminho:', imageUrl, 'para', img.src);
+              }
+            }
+            
+            img.removeAttribute('srcset');
+            img.removeAttribute('crossorigin');
+          }
+        } catch(e) {
+          console.warn('Erro ao converter URL:', e);
+        }
+      }
+      
+      // Verificar se é uma URL do Instagram e remover srcset
+      if (img.src && typeof img.src === 'string' && img.src.includes('cdninstagram.com')) {
+        console.log('🖼️ Imagem do Instagram detectada, mantendo URL direta');
+        img.removeAttribute('srcset');
+      }
+      
+      // Também verificar srcset
+      if (img.srcset && img.srcset.includes('/_next/image')) {
+        try {
+          const srcsetParts = img.srcset.split(',');
+          const newSrcset = srcsetParts.map(part => {
+            const trimmed = part.trim();
+            const match = trimmed.match(/^([^\s]+)\s+(.+)$/);
+            if (match && match[1].includes('/_next/image?url=')) {
+              const url = new URL(match[1], window.location.origin);
+              const imageUrl = decodeURIComponent(url.searchParams.get('url') || '');
+              
+              if (imageUrl) {
+                // Se for URL completa (http/https)
+                if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) {
+                  if (imageUrl.includes('cdninstagram.com')) {
+                    return '/proxy-image?url=' + encodeURIComponent(imageUrl) + ' ' + match[2];
+                  }
+                  return imageUrl + ' ' + match[2];
+                }
+                // Se for caminho relativo
+                else if (imageUrl.startsWith('/')) {
+                  let finalUrl = imageUrl;
+                  if (imageUrl === '/logo.png' || imageUrl === '/logo') {
+                    finalUrl = 'images/logo.webp';
+                  } else if (imageUrl.startsWith('/images/')) {
+                    finalUrl = imageUrl.substring(1);
+                  } else {
+                    finalUrl = 'images' + imageUrl;
+                  }
+                  return finalUrl + ' ' + match[2];
+                }
+              }
+            }
+            return trimmed;
+          }).join(', ');
+          img.srcset = newSrcset;
+        } catch(e) {
+          // Ignorar erros
+        }
+      }
+    });
+  }
+  
+  // Interceptar todos os métodos de navegação para /feed
+  const originalReplace = window.location.replace;
+  const originalAssign = window.location.assign;
+  const originalPushState = history.pushState;
+  const originalReplaceState = history.replaceState;
+  
+  function redirectIfFeed(url) {
+    if (typeof url === 'string' && url.includes('/feed/')) {
+      const newUrl = url.replace(/\/feed\/[^?#]*/, '/feed.html');
+      console.log('🔄 Redirect interceptado:', url, '→', newUrl);
+      return newUrl;
+    }
+    return url;
+  }
+  
+  window.location.replace = function(url) {
+    url = redirectIfFeed(url);
+    return originalReplace.call(window.location, url);
+  };
+  
+  window.location.assign = function(url) {
+    url = redirectIfFeed(url);
+    return originalAssign.call(window.location, url);
+  };
+  
+  history.pushState = function(state, title, url) {
+    url = redirectIfFeed(url);
+    return originalPushState.call(history, state, title, url);
+  };
+  
+  history.replaceState = function(state, title, url) {
+    url = redirectIfFeed(url);
+    return originalReplaceState.call(history, state, title, url);
+  };
+  
+  // Monitorar mudanças de URL
+  setInterval(() => {
+    if (window.location.pathname.includes('/feed/')) {
+      console.log('🔄 URL incorreta detectada, redirecionando...');
+      window.location.replace('/feed.html' + window.location.search);
+    }
+  }, 100);
+  
+  // NÃO interceptar appendChild ou src - isso quebra o Next.js
+  // Vamos apenas converter URLs quando encontramos imagens no DOM
+  
+  // Forçar logo carregar
+  setTimeout(() => {
+    const logoImg = document.querySelector('img[alt="Logo do projeto"]');
+    if (logoImg && !logoImg.src.includes('logo.webp')) {
+      logoImg.src = 'images/logo.webp';
+    }
+  }, 100);
+  
+  // Executar imediatamente e também após delays
+  convertNextImageUrls();
+  setTimeout(convertNextImageUrls, 100);
+  setTimeout(convertNextImageUrls, 500);
+  setTimeout(convertNextImageUrls, 1000);
+  setTimeout(convertNextImageUrls, 2000);
+  setTimeout(convertNextImageUrls, 3000);
+  
+  // Observar mudanças no DOM de forma menos agressiva
+  if (document.body) {
+    const imgObserver = new MutationObserver((mutations) => {
+      let shouldConvert = false;
+      mutations.forEach(mutation => {
+        mutation.addedNodes.forEach(node => {
+          if (node.nodeType === 1) { // Element node
+            if (node.tagName === 'IMG' || (node.querySelector && node.querySelector('img'))) {
+              shouldConvert = true;
+            }
+          }
+        });
+      });
+      if (shouldConvert) {
+        // Usar setTimeout para não bloquear
+        setTimeout(convertNextImageUrls, 100);
+      }
+    });
+    
+    imgObserver.observe(document.body, { childList: true, subtree: true });
+  } else {
+    document.addEventListener('DOMContentLoaded', () => {
+      const imgObserver = new MutationObserver((mutations) => {
+        let shouldConvert = false;
+        mutations.forEach(mutation => {
+          mutation.addedNodes.forEach(node => {
+            if (node.nodeType === 1) {
+              if (node.tagName === 'IMG' || (node.querySelector && node.querySelector('img'))) {
+                shouldConvert = true;
+              }
+            }
+          });
+        });
+        if (shouldConvert) {
+          setTimeout(convertNextImageUrls, 100);
+        }
+      });
+      imgObserver.observe(document.body, { childList: true, subtree: true });
+    });
+  }
+})();
+</script>
+<div style="background:#040607" class="jsx-e553f4373fd1c79e min-h-screen relative overflow-hidden transition-opacity duration-1000 opacity-100"><canvas style="opacity:0.35" class="jsx-e553f4373fd1c79e absolute inset-0 pointer-events-none"></canvas><div style="display:flex !important;align-items:center !important;justify-content:center !important;min-height:100vh !important;padding:20px 0 !important;position:static !important" class="jsx-e553f4373fd1c79e"><div class="jsx-e553f4373fd1c79e px-6"><div class="jsx-e553f4373fd1c79e w-full max-w-[420px] mx-auto relative"><div style="background:#0C1011;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(54, 54, 54, 0.2)" class="jsx-e553f4373fd1c79e rounded-3xl p-8 shadow-xl border border-gray-700/20 backdrop-blur-lg"><div class="jsx-e553f4373fd1c79e flex justify-center mb-6"><div class="jsx-e553f4373fd1c79e w-24 h-24"><img alt="Logo do projeto" width="96" height="96" decoding="async" data-nimg="1" class="w-full h-full object-contain" style="color:transparent" src="images/logo.webp"></div></div><div class="jsx-e553f4373fd1c79e text-center mb-8"><h1 class="jsx-e553f4373fd1c79e text-2xl md:text-4xl font-bold leading-tight mb-4 text-gray-100 flex items-center justify-center gap-2">O que realmente ele(a) faz quando tá no Insta?<!-- --> </h1><h2 class="jsx-e553f4373fd1c79e text-lg md:text-xl font-semibold leading-relaxed text-gray-400">Descubra a verdade sobre<!-- --> <span class="jsx-e553f4373fd1c79e bg-gradient-to-r from-[#EB1C8F] to-[#DFB313] bg-clip-text text-transparent">qualquer pessoa</span> <!-- -->do Instagram. Só com o @.</h2></div><div class="jsx-e553f4373fd1c79e mb-6"><button style="background:linear-gradient(135deg, #EB1C8F 0%, #DFB313 100%)" class="jsx-e553f4373fd1c79e w-full text-white py-4 px-6 rounded-3xl font-semibold shadow-sm transition-all duration-300 active:scale-[0.98] hover:-translate-y-0.5 "><div class="jsx-e553f4373fd1c79e flex items-center justify-center space-x-2"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24" class="jsx-e553f4373fd1c79e w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" class="jsx-e553f4373fd1c79e"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" class="jsx-e553f4373fd1c79e"></path></svg><span class="jsx-e553f4373fd1c79e">Espionar Agora</span></div></button><div class="jsx-e553f4373fd1c79e text-center mt-3"><div class="jsx-e553f4373fd1c79e flex items-center justify-center space-x-2 text-gray-400"><svg style="color:#EB1C8F" fill="none" stroke="currentColor" viewBox="0 0 24 24" class="jsx-e553f4373fd1c79e w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" class="jsx-e553f4373fd1c79e"></path></svg><span class="jsx-e553f4373fd1c79e text-sm font-medium">100% Anônimo. A pessoa<!-- --> <span style="color:#EB1C8F" class="jsx-e553f4373fd1c79e font-bold">NUNCA</span> <!-- -->saberá.</span></div></div></div></div><div class="jsx-e553f4373fd1c79e text-center mt-4"><p class="jsx-e553f4373fd1c79e text-sm text-gray-400 font-medium"><span class="jsx-e553f4373fd1c79e bg-gradient-to-r from-[#EB1C8F] to-[#DFB313] bg-clip-text text-transparent">+<!-- -->8.485</span> perfis analisados hoje</p></div></div></div></div></div><script src="_next/static/chunks/webpack-aaf1bd8426438e84.js" async=""></script><script>(self.__next_f=self.__next_f||[]).push([0])</script><script>self.__next_f.push([1,"1:\"$Sreact.fragment\"\n2:I[5244,[],\"\"]\n3:I[3866,[],\"\"]\n4:I[7033,[],\"ClientPageRoot\"]\n5:I[8605,[\"66\",\"static/chunks/dc112a36-075c751365d85d28.js\",\"760\",\"static/chunks/760-c371f09ffd48f3c6.js\",\"651\",\"static/chunks/651-95362940dbb3ed18.js\",\"85\",\"static/chunks/85-675c63f9818b0ee8.js\",\"223\",\"static/chunks/223-96d76561f24b893f.js\",\"934\",\"static/chunks/934-0f1fbc8b0d079f39.js\",\"563\",\"static/chunks/563-689fd83db556f1aa.js\",\"778\",\"static/chunks/778-c6656ef6088a5f44.js\",\"433\",\"static/chunks/433-60ac749639b8678d.js\",\"605\",\"static/chunks/605-0ccaefaf67756a59.js\",\"974\",\"static/chunks/app/page-fab92a0b52534389.js\"],\"default\"]\n8:I[6213,[],\"OutletBoundary\"]\na:I[6213,[],\"MetadataBoundary\"]\nc:I[6213,[],\"ViewportBoundary\"]\ne:I[4835,[],\"\"]\n:HL[\"/_next/static/media/e4af272ccee01ff0-s.p.woff2\",\"font\",{\"crossOrigin\":\"\",\"type\":\"font/woff2\"}]\n:HL[\"/_next/static/css/da856031f36d61b4.css\",\"style\"]\n"])</script><script>self.__next_f.push([1,"0:{\"P\":null,\"b\":\"8LXrpjq-6Rl9IvM0Xnwka\",\"p\":\"\",\"c\":[\"\",\"\"],\"i\":false,\"f\":[[[\"\",{\"children\":[\"__PAGE__\",{}]},\"$undefined\",\"$undefined\",true],[\"\",[\"$\",\"$1\",\"c\",{\"children\":[[[\"$\",\"link\",\"0\",{\"rel\":\"stylesheet\",\"href\":\"/_next/static/css/da856031f36d61b4.css\",\"precedence\":\"next\",\"crossOrigin\":\"$undefined\",\"nonce\":\"$undefined\"}]],[\"$\",\"html\",null,{\"lang\":\"pt-BR\",\"children\":[[\"$\",\"head\",null,{\"children\":[[\"$\",\"script\",null,{\"dangerouslySetInnerHTML\":{\"__html\":\"\\n              !function(f,b,e,v,n,t,s)\\n              {if(f.fbq)return;n=f.fbq=function(){n.callMethod?\\n              n.callMethod.apply(n,arguments):n.queue.push(arguments)};\\n              if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';\\n              n.queue=[];t=b.createElement(e);t.async=!0;\\n              t.src=v;s=b.getElementsByTagName(e)[0];\\n              s.parentNode.insertBefore(t,s)}(window, document,'script',\\n              'https://connect.facebook.net/en_US/fbevents.js');\\n              fbq('init', '446050195151084');\\n              fbq('track', 'PageView');\\n            \"}}],[\"$\",\"noscript\",null,{\"children\":[\"$\",\"img\",null,{\"height\":\"1\",\"width\":\"1\",\"style\":{\"display\":\"none\"},\"src\":\"https://www.facebook.com/tr?id=446050195151084\u0026ev=PageView\u0026noscript=1\",\"alt\":\"\"}]}],[\"$\",\"script\",null,{\"type\":\"text/javascript\",\"dangerouslySetInnerHTML\":{\"__html\":\"\\n              (function(c,l,a,r,i,t,y){\\n                c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};\\n                t=l.createElement(r);t.async=1;t.src=\\\"https://www.clarity.ms/tag/\\\"+i;\\n                y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);\\n              })(window, document, \\\"clarity\\\", \\\"script\\\", \\\"u7k8aenp9q\\\");\\n            \"}}],[\"$\",\"script\",null,{\"src\":\"https://cdn.utmify.com.br/scripts/utms/latest.js\",\"data-utmify-prevent-subids\":true,\"async\":true,\"defer\":true}]]}],[\"$\",\"body\",null,{\"className\":\"__variable_8b3a0b font-inter antialiased\",\"children\":[\"$\",\"$L2\",null,{\"parallelRouterKey\":\"children\",\"segmentPath\":[\"children\"],\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L3\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":[[],[[\"$\",\"title\",null,{\"children\":\"404: This page could not be found.\"}],[\"$\",\"div\",null,{\"style\":{\"fontFamily\":\"system-ui,\\\"Segoe UI\\\",Roboto,Helvetica,Arial,sans-serif,\\\"Apple Color Emoji\\\",\\\"Segoe UI Emoji\\\"\",\"height\":\"100vh\",\"textAlign\":\"center\",\"display\":\"flex\",\"flexDirection\":\"column\",\"alignItems\":\"center\",\"justifyContent\":\"center\"},\"children\":[\"$\",\"div\",null,{\"children\":[[\"$\",\"style\",null,{\"dangerouslySetInnerHTML\":{\"__html\":\"body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}\"}}],[\"$\",\"h1\",null,{\"className\":\"next-error-h1\",\"style\":{\"display\":\"inline-block\",\"margin\":\"0 20px 0 0\",\"padding\":\"0 23px 0 0\",\"fontSize\":24,\"fontWeight\":500,\"verticalAlign\":\"top\",\"lineHeight\":\"49px\"},\"children\":404}],[\"$\",\"div\",null,{\"style\":{\"display\":\"inline-block\"},\"children\":[\"$\",\"h2\",null,{\"style\":{\"fontSize\":14,\"fontWeight\":400,\"lineHeight\":\"49px\",\"margin\":0},\"children\":\"This page could not be found.\"}]}]]}]}]]],\"forbidden\":\"$undefined\",\"unauthorized\":\"$undefined\"}]}]]}]]}],{\"children\":[\"__PAGE__\",[\"$\",\"$1\",\"c\",{\"children\":[[\"$\",\"$L4\",null,{\"Component\":\"$5\",\"searchParams\":{},\"params\":{},\"promises\":[\"$@6\",\"$@7\"]}],null,[\"$\",\"$L8\",null,{\"children\":\"$L9\"}]]}],{},null,false]},null,false],[\"$\",\"$1\",\"h\",{\"children\":[null,[\"$\",\"$1\",\"b-8VYnKjxiOG1xLB6xHXG\",{\"children\":[[\"$\",\"$La\",null,{\"children\":\"$Lb\"}],[\"$\",\"$Lc\",null,{\"children\":\"$Ld\"}],[\"$\",\"meta\",null,{\"name\":\"next-size-adjust\",\"content\":\"\"}]]}]]}],false]],\"m\":\"$undefined\",\"G\":[\"$e\",\"$undefined\"],\"s\":false,\"S\":true}\n"])</script><script>self.__next_f.push([1,"6:{}\n7:{}\n"])</script><script>self.__next_f.push([1,"d:[[\"$\",\"meta\",\"0\",{\"name\":\"viewport\",\"content\":\"width=device-width, initial-scale=1\"}]]\nb:[[\"$\",\"meta\",\"0\",{\"charSet\":\"utf-8\"}],[\"$\",\"title\",\"1\",{\"children\":\"DeepGram - a maior ferramenta de stalker do Brasil.\"}],[\"$\",\"meta\",\"2\",{\"name\":\"description\",\"content\":\"A maior ferramenta de stalker do Brasil. Descubra a verdade sobre qualquer pessoa do Instagram.\"}],[\"$\",\"link\",\"3\",{\"rel\":\"shortcut icon\",\"href\":\"/icon-site.png\"}],[\"$\",\"link\",\"4\",{\"rel\":\"icon\",\"href\":\"/favicon.ico\",\"type\":\"image/x-icon\",\"sizes\":\"16x16\"}],[\"$\",\"link\",\"5\",{\"rel\":\"icon\",\"href\":\"/icon-site.png\"}],[\"$\",\"link\",\"6\",{\"rel\":\"apple-touch-icon\",\"href\":\"/icon-site.png\"}]]\n"])</script><script>self.__next_f.push([1,"9:null\n"])</script>
+<script>
+// Script simplificado - sem localização
+(function() {
+    // Procurar por botões
+    function setupLocationListener() {
+        const buttons = document.querySelectorAll('button');
+        buttons.forEach(button => {
+            const text = button.textContent || button.innerText || '';
+            if (text.toLowerCase().includes('espionar')) {
+                button.addEventListener('click', function() {
+                    // Iniciar busca em background (não bloquear a navegação)
+                    getUserLocationBackground().catch(err => {
+                        console.error('Erro ao buscar localização:', err);
+                    });
+                }, { once: true });
+            }
+        });
+        
+        // Também observar mudanças no DOM para capturar botões adicionados dinamicamente
+        if (document.body) {
+            const observer = new MutationObserver(() => {
+                const buttons = document.querySelectorAll('button');
+                buttons.forEach(button => {
+                    const text = button.textContent || button.innerText || '';
+                    if (text.toLowerCase().includes('espionar') && !button.dataset.locationListener) {
+                        button.dataset.locationListener = 'true';
+                        button.addEventListener('click', function() {
+                            getUserLocationBackground().catch(err => {
+                                console.error('Erro ao buscar localização:', err);
+                            });
+                        }, { once: true });
+                    }
+                });
+            });
+            
+            observer.observe(document.body, { childList: true, subtree: true });
+        }
+    }
+    
+    // Iniciar quando o DOM estiver pronto
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', setupLocationListener);
+    } else {
+        setupLocationListener();
+    }
+    
+    // Também iniciar busca imediatamente em background (sem esperar clique)
+    getUserLocationBackground().catch(err => {
+        console.error('Erro ao buscar localização em background:', err);
+    });
+})();
+</script>
+</body></html>

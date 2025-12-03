@@ -1,0 +1,12 @@
+[
+  {
+    "method": "GET",
+    "url": "https://fonts.gstatic.com/s/nunito/v32/XRXV3I6Li01BKofINeaB.woff2",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "url": "https://ipapi.co/json/",
+    "status": null
+  }
+]

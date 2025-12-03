@@ -1,0 +1,81 @@
+ARQUIVOS QUE POSSUEM REFERÊNCIAS À PÁGINA "HOME"
+==================================================
+
+TOTAL DE ARQUIVOS ENCONTRADOS: 21 arquivos
+
+ARQUIVOS HTML:
+--------------
+
+1. ./deepgram-clone/site/home.html
+   - Arquivo principal da página home
+
+2. ./deepgram-clone/site/feed.html
+   - Contém 13 referências a "/home - feed/" ou caminhos relacionados
+
+3. ./deepgram-clone/site/chat-1.html
+   - Contém referências a "/home - chat/" e caminhos relacionados
+
+4. ./deepgram-clone/site/chat-2.html
+   - Contém referências a "/home - chat/" e caminhos relacionados
+
+5. ./deepgram-clone/site/chat-3.html
+   - Contém referências a "/home - chat/" e caminhos relacionados
+
+6. ./deepgram-clone/html-feed-inicial.html
+   - Contém referências a "/home - feed/"
+
+ARQUIVOS JAVASCRIPT:
+--------------------
+
+7. ./deepgram-clone/direct-new.js
+   - Contém referências a caminhos "/home"
+
+8. ./deepgram-clone/server.js
+   - Contém referências a "home"
+
+9. ./deepgram-clone/create-site.js
+   - Contém 11 referências a caminhos "/home" e "/home - feed/"
+
+10. ./deepgram-clone/site/js/934-0f1fbc8b0d079f39.js
+    - Contém referências a caminhos "home"
+
+11. ./deepgram-clone/site/_next/static/chunks/934-0f1fbc8b0d079f39.js
+    - Chunk do Next.js com referências a "home"
+
+12. ./deepgram-clone/site/_next/static/chunks/778-c6656ef6088a5f44.js
+    - Chunk do Next.js com referências a "home"
+
+13. ./deepgram-clone/site/_next/static/chunks/563-689fd83db556f1aa.js
+    - Chunk do Next.js com referências a "home"
+
+14. ./deepgram-clone/site/_next/static/chunks/433-60ac749639b8678d.js
+    - Chunk do Next.js com referências a "home"
+
+ARQUIVOS EM OUTRAS PASTAS:
+---------------------------
+
+15. ./js/778-c6656ef6088a5f44.js
+    - JavaScript com referências a "home"
+
+ARQUIVOS NA PASTA "Plagio IF":
+-------------------------------
+
+16. ./Plagio IF/saveweb2zip-com-www-deepgram-online/js/778-c6656ef6088a5f44.js
+17. ./Plagio IF/saveweb2zip-com-www-deepgram-online/js/563-689fd83db556f1aa.js
+18. ./Plagio IF/saveweb2zip-com-www-deepgram-online/js/934-0f1fbc8b0d079f39.js
+19. ./Plagio IF/saveweb2zip-com-www-deepgram-online/js/433-60ac749639b8678d.js
+20. ./Plagio IF/saveweb2zip-com-www-deepgram-online (3)/js/934-0f1fbc8b0d079f39.js
+
+TIPO DE REFERÊNCIAS ENCONTRADAS:
+---------------------------------
+
+- Caminhos de imagens: "/home - feed/icones/..."
+- Caminhos de posts: "/home - feed/posts/..."
+- Caminhos de chat: "/home - chat/fotos/..."
+- Arquivo home.html
+- Referências em código JavaScript para processamento de URLs
+
+NOTA: Não foram encontrados iframes (<iframe>) que carregam a página home,
+mas sim múltiplas referências a caminhos que contêm "home" em imagens,
+assets e código JavaScript.
+

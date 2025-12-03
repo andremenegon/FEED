@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>In'Stalker - Chat</title>
+    <link rel="stylesheet" href="mensagem.css">
+    <script src="../js/geral.js"></script>
+</head>
+<body>
+    <div class="chat-container">
+        <!-- Header do Chat -->
+        <div class="chat-header">
+            <div class="chat-header-left">
+                <button class="back-button" id="backButton" aria-label="Voltar">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M15 18L9 12L15 6" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                    </svg>
+                </button>
+                <div class="chat-user-info">
+                    <button class="chat-avatar-btn">
+                        <div class="chat-avatar-gradient">
+                            <div class="chat-avatar-inner">
+                                <img id="chatUserAvatar" alt="" loading="lazy" width="40" height="40" class="chat-avatar-img">
+                            </div>
+                        </div>
+                    </button>
+                    <button class="chat-name-btn">
+                        <h1 id="chatUserName" class="chat-user-name"></h1>
+                        <p id="chatUserStatus" class="chat-user-status">online</p>
+                    </button>
+                </div>
+            </div>
+            <div class="chat-header-right">
+                <button class="header-icon-btn" aria-label="Telefone">
+                    <img alt="Telefone" loading="lazy" width="22" height="22" src="../icon/telefone.svg" class="header-icon-img">
+                </button>
+                <button class="header-icon-btn" aria-label="Chamada de vídeo">
+                    <img alt="Chamada de vídeo" loading="lazy" width="22" height="22" src="../icon/chamada video[.svg" class="header-icon-img">
+                </button>
+            </div>
+        </div>
+
+        <!-- Área de Mensagens -->
+        <div class="messages-container" id="messagesContainer">
+            <div class="message-date">
+                <span>ONTEM</span>, <span>••</span>:31
+            </div>
+
+            <!-- Mensagem recebida -->
+            <div class="message-row message-received">
+                <div class="message-avatar">
+                    <img id="messageAvatar1" alt="" loading="lazy" width="32" height="32" class="message-avatar-img">
+                </div>
+                <button class="message-bubble message-bubble-received">
+                    <p class="message-text">Oi, você já chegou?</p>
+                </button>
+            </div>
+
+            <!-- Mensagem enviada -->
+            <div class="message-row message-sent">
+                <button class="message-bubble message-bubble-sent">
+                    <p class="message-text">Não... ainda estou com esposa</p>
+                </button>
+            </div>
+
+            <!-- Mensagem recebida -->
+            <div class="message-row message-received">
+                <div class="message-avatar">
+                    <img id="messageAvatar2" alt="" loading="lazy" width="32" height="32" class="message-avatar-img">
+                </div>
+                <button class="message-bubble message-bubble-received">
+                    <p class="message-text">Denovo? Você disse que iria na casa da Gatinha 😡</p>
+                </button>
+            </div>
+
+            <!-- Mensagem enviada (conteúdo oculto) -->
+            <div class="message-row message-sent">
+                <button class="message-bubble message-bubble-sent">
+                    <div class="message-hidden">
+                        <p class="message-text">Mensagem oculta mais longa com conteúdo sensível sobre Crush 😘</p>
+            </div>
+                </button>
+            </div>
+
+            <!-- Mensagem recebida (sem avatar - continuação) -->
+            <div class="message-row message-received message-no-avatar">
+                <div class="message-avatar-empty"></div>
+                <button class="message-bubble message-bubble-received">
+                    <p class="message-text">Não acredito!!! Você sempre faz isso quando está com esposa</p>
+                </button>
+            </div>
+
+            <!-- Mensagem recebida com áudio -->
+            <div class="message-row message-received">
+                <div class="message-avatar">
+                    <img id="messageAvatar3" alt="" loading="lazy" width="32" height="32" class="message-avatar-img">
+                </div>
+                <button class="message-bubble message-bubble-received message-audio">
+                    <div class="audio-wrapper">
+                        <div class="audio-content">
+                            <button class="audio-play-btn">
+                                <svg width="auto" height="40" viewBox="0 0 381 79" fill="none">
+                                    <path d="M24.3758 37.8167C25.6026 38.6037 25.6026 40.3965 24.3758 41.1835L3.0799 54.8448C1.74878 55.6987 -6.91281e-08 54.7429 0 53.1614L1.19431e-06 25.8387C1.26344e-06 24.2573 1.74878 23.3014 3.0799 24.1553L24.3758 37.8167Z" fill="#5653FC"></path>
+                                    <rect x="44.7969" y="34.5" width="6" height="10" rx="3" fill="white"></rect>
+                                    <rect x="55.7969" y="34.5" width="6" height="10" rx="3" fill="white"></rect>
+                                    <circle cx="69.7969" cy="39.5" r="3" fill="white"></circle>
+                                    <rect x="77.7969" y="22" width="6" height="35" rx="3" fill="white"></rect>
+                                    <rect x="88.7969" y="4.5" width="6" height="70" rx="3" fill="white"></rect>
+                                    <rect x="99.7969" y="4.5" width="6" height="70" rx="3" fill="white"></rect>
+                                    <rect x="110.797" y="7" width="6" height="65" rx="3" fill="white"></rect>
+                                    <rect x="121.797" y="9.5" width="6" height="60" rx="3" fill="white"></rect>
+                                    <rect x="132.797" y="8" width="6" height="63" rx="3" fill="white"></rect>
+                                    <rect x="143.797" y="2" width="6" height="75" rx="3" fill="white"></rect>
+                                    <rect x="154.797" y="8" width="6" height="63" rx="3" fill="white"></rect>
+                                    <rect x="165.797" width="6" height="79" rx="3" fill="white"></rect>
+                                    <rect x="176.797" y="4" width="6" height="71" rx="3" fill="white"></rect>
+                                    <rect x="187.797" y="4" width="6" height="71" rx="3" fill="white"></rect>
+                                    <rect x="198.797" y="4" width="6" height="71" rx="3" fill="white"></rect>
+                                    <rect x="209.797" y="4" width="6" height="71" rx="3" fill="white"></rect>
+                                    <rect x="220.797" y="9" width="6" height="61" rx="3" fill="white"></rect>
+                                    <rect x="231.797" y="11" width="6" height="57" rx="3" fill="white"></rect>
+                                    <rect x="242.797" y="8" width="6" height="63" rx="3" fill="white"></rect>
+                                    <rect x="253.797" y="8" width="6" height="63" rx="3" fill="white"></rect>
+                                    <rect x="264.797" y="2" width="6" height="75" rx="3" fill="white"></rect>
+                                    <rect x="275.797" y="5" width="6" height="69" rx="3" fill="white"></rect>
+                                    <rect x="286.797" y="2" width="6" height="75" rx="3" fill="white"></rect>
+                                    <rect x="297.797" width="6" height="79" rx="3" fill="white"></rect>
+                                    <rect x="308.797" y="2" width="6" height="75" rx="3" fill="white"></rect>
+                                    <rect x="319.797" y="5" width="6" height="69" rx="3" fill="white"></rect>
+                                    <rect x="330.797" y="5" width="6" height="69" rx="3" fill="white"></rect>
+                                    <rect x="341.797" y="2" width="6" height="75" rx="3" fill="white"></rect>
+                                    <rect x="352.797" y="5" width="6" height="69" rx="3" fill="white"></rect>
+                                    <rect x="363.797" y="4" width="6" height="71" rx="3" fill="white"></rect>
+                                    <rect x="374.797" y="9" width="6" height="61" rx="3" fill="white"></rect>
+                        </svg>
+                            </button>
+                            <span class="audio-duration">0:32</span>
+                        </div>
+                        <div class="audio-transcript">
+                            <span class="transcript-text">Ver transcrição</span>
+                        </div>
+                    </div>
+                </button>
+            </div>
+
+            <!-- Mensagem enviada com áudio -->
+            <div class="message-row message-sent">
+                <button class="message-bubble message-bubble-sent message-audio">
+                    <div class="audio-wrapper">
+                        <div class="audio-content audio-sent">
+                            <button class="audio-play-btn">
+                                <svg width="auto" height="40" viewBox="0 0 382 79" fill="none">
+                                    <path d="M24.3758 37.8167C25.6026 38.6037 25.6026 40.3965 24.3758 41.1835L3.0799 54.8448C1.74878 55.6987 -6.91281e-08 54.7429 0 53.1614L1.19431e-06 25.8387C1.26344e-06 24.2573 1.74878 23.3014 3.0799 24.1553L24.3758 37.8167Z" fill="white"></path>
+                                    <rect x="45.2969" width="6" height="79" rx="3" fill="white"></rect>
+                                    <rect x="56.2969" y="2" width="6" height="75" rx="3" fill="white"></rect>
+                                    <rect x="67.2969" y="4" width="6" height="71" rx="3" fill="white"></rect>
+                                    <rect x="78.2969" y="4" width="6" height="71" rx="3" fill="white"></rect>
+                                    <rect x="89.2969" y="8" width="6" height="63" rx="3" fill="white"></rect>
+                                    <rect x="100.297" y="2" width="6" height="75" rx="3" fill="white"></rect>
+                                    <rect x="111.297" y="8" width="6" height="63" rx="3" fill="white"></rect>
+                                    <rect x="122.297" y="11" width="6" height="57" rx="3" fill="white"></rect>
+                                    <rect x="133.297" y="11" width="6" height="57" rx="3" fill="white"></rect>
+                                    <rect x="144.297" y="14" width="6" height="51" rx="3" fill="white"></rect>
+                                    <rect x="155.297" y="14" width="6" height="51" rx="3" fill="white"></rect>
+                                    <rect x="166.297" y="11" width="6" height="57" rx="3" fill="white"></rect>
+                                    <rect x="177.297" y="19" width="6" height="41" rx="3" fill="white"></rect>
+                                    <rect x="188.297" y="16" width="6" height="47" rx="3" fill="white"></rect>
+                                    <rect x="199.297" y="19" width="6" height="41" rx="3" fill="white"></rect>
+                                    <rect x="210.297" y="14" width="6" height="51" rx="3" fill="white"></rect>
+                                    <rect x="221.297" y="11" width="6" height="57" rx="3" fill="white"></rect>
+                                    <rect x="232.297" y="5" width="6" height="69" rx="3" fill="white"></rect>
+                                    <rect x="243.297" y="2" width="6" height="75" rx="3" fill="white"></rect>
+                                    <rect x="254.297" width="6" height="79" rx="3" fill="white"></rect>
+                                    <rect x="265.297" y="11" width="6" height="57" rx="3" fill="white"></rect>
+                                    <rect x="276.297" y="14" width="6" height="51" rx="3" fill="white"></rect>
+                                    <rect x="287.297" y="9" width="6" height="61" rx="3" fill="white"></rect>
+                                    <rect x="298.297" y="7" width="6" height="65" rx="3" fill="white"></rect>
+                                    <rect x="309.297" y="5" width="6" height="69" rx="3" fill="white"></rect>
+                                    <rect x="320.297" y="4" width="6" height="71" rx="3" fill="white"></rect>
+                                    <rect x="331.297" y="9" width="6" height="61" rx="3" fill="white"></rect>
+                                    <rect x="342.297" y="14" width="6" height="51" rx="3" fill="white"></rect>
+                                    <rect x="353.297" y="21" width="6" height="37" rx="3" fill="white"></rect>
+                                    <rect x="364.297" y="28" width="6" height="23" rx="3" fill="white"></rect>
+                                    <rect x="375.297" y="36.5" width="6" height="6" rx="3" fill="white"></rect>
+                        </svg>
+                            </button>
+                            <span class="audio-duration audio-duration-sent">1:47</span>
+                        </div>
+                        <div class="audio-transcript audio-transcript-sent">
+                            <span class="transcript-text">Ver transcrição</span>
+                        </div>
+                    </div>
+                </button>
+            </div>
+
+            <!-- Mensagem recebida -->
+            <div class="message-row message-received">
+                <div class="message-avatar">
+                    <img id="messageAvatar4" alt="" loading="lazy" width="32" height="32" class="message-avatar-img">
+                </div>
+                <button class="message-bubble message-bubble-received">
+                    <p class="message-text">Não quero mais saber, vou texto borrado</p>
+                </button>
+            </div>
+
+            <!-- Mensagem enviada -->
+            <div class="message-row message-sent">
+                <button class="message-bubble message-bubble-sent">
+                    <p class="message-text">Vamos conversar pessoalmente na terça-feira pode ser?</p>
+                </button>
+            </div>
+        </div>
+
+        <!-- Input de Mensagem (Footer) -->
+        <button class="message-input-container">
+            <div class="message-input-wrapper">
+                <div class="message-input-icon">
+                    <svg width="24" height="24" viewBox="0 0 83 83" fill="none">
+                        <rect width="83" height="83" rx="41.5" fill="#5653FC"></rect>
+                        <path d="M35.8701 20.2324C36.9037 20.1103 40.2042 20.1112 43.2041 20.2353C48.5793 20.4576 48.6938 20.5 51.0635 23.1396C52.8362 25.1135 54.0022 25.8192 55.4961 25.8212C58.2213 25.8249 61.6439 28.0118 62.9863 30.6074C63.9033 32.3815 64.0484 34.7832 63.8711 45.2441C63.6631 57.5071 63.6245 57.7946 61.9541 59.6035C58.8194 62.9971 57.0546 63.3183 41.5352 63.3183C24.8984 63.3183 22.8723 62.8636 20.4717 58.5927C19.1271 56.2009 19 54.9883 19 44.624C19 31.7827 19.5716 29.4239 23.2207 27.1992C24.4616 26.4425 26.4228 25.8227 27.5791 25.8212C29.2039 25.8192 30.1703 25.2094 31.8359 23.1367C33.2186 21.4158 34.664 20.3756 35.8701 20.2324ZM41.5 33.0625C35.6751 33.0625 30.9532 37.7845 30.9531 43.6093C30.9531 49.4342 35.6751 54.1562 41.5 54.1562C47.3249 54.1562 52.0469 49.4342 52.0469 43.6093C52.0468 37.7845 47.3249 33.0625 41.5 33.0625ZM41.5 36.5781C45.3832 36.5781 48.5312 39.7261 48.5312 43.6093C48.5312 47.4926 45.3833 50.6406 41.5 50.6406C37.6167 50.6406 34.4688 47.4926 34.4688 43.6093C34.4688 39.7261 37.6168 36.5781 41.5 36.5781Z" fill="white"></path>
+                    </svg>
+                </div>
+                <input type="text" placeholder="Mensagem..." disabled class="message-input">
+                <div class="message-input-actions">
+                    <div class="input-action-icon">
+                        <img alt="Microfone" loading="lazy" width="20" height="20" src="../icon/microfone.svg" class="input-icon-img">
+                    </div>
+                    <div class="input-action-icon">
+                        <img alt="Galeria" loading="lazy" width="20" height="20" src="../icon/galeria.svg" class="input-icon-img">
+                    </div>
+                    <div class="input-action-icon">
+                        <img alt="Adesivos" loading="lazy" width="20" height="20" src="../icon/rosto.svg" class="input-icon-img">
+                    </div>
+                </div>
+            </div>
+        </button>
+        </div>
+
+    <!-- Pop-up de bloqueio VIP -->
+    <div id="blocked-popup-overlay"></div>
+    <div id="blocked-popup">
+        <!-- Conteúdo será inserido dinamicamente -->
+    </div>
+
+    <script src="mensagem.js"></script>
+</body>
+</html>
+

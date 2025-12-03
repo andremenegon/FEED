@@ -1,0 +1,16 @@
+================================================================================
+CHAVE DA API DO DEEPGRAM (HIKERAPI)
+================================================================================
+
+Header: x-access-key
+Valor: w46il1jfubi68wdnkci4m1i0udru9zdc
+
+
+URL da Requisição: https://api.hikerapi.com/v2/user/stories?user_id=4340912263
+
+================================================================================
+COMO USAR:
+================================================================================
+
+curl -H 'x-access-key: w46il1jfubi68wdnkci4m1i0udru9zdc' \
+     'https://api.hikerapi.com/v2/user/by/username?username=USERNAME'

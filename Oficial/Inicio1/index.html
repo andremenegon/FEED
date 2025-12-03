@@ -1,0 +1,1970 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="../css/da856031f36d61b4.css" data-precedence="next">
+    <title>In'Stalker - O maior software de espionagem de Instagram da América Latina</title>
+    <meta name="description" content="In'Stalker - O maior software de espionagem de Instagram da América Latina. Descubra a verdade sobre qualquer pessoa do Instagram.">
+    <link rel="shortcut icon" href="../imagens/icon-site.png">
+    <link rel="icon" href="../imagens/favicon.ico" type="image/x-icon" sizes="16x16">
+    <link rel="icon" href="../imagens/icon-site.png">
+    <link rel="apple-touch-icon" href="../imagens/icon-site.png">
+    <script src="../js/geral.js"></script>
+</head>
+<body class="__variable_8b3a0b font-inter antialiased">
+<script>
+    // Verificar se está em modo de teste (parâmetro na URL)
+    const urlParams = new URLSearchParams(window.location.search);
+    const isTestMode = urlParams.get('test') === 'true' || urlParams.get('forceRefresh') === 'true';
+</script>
+<script>
+// Limpar cache problemático do Next.js
+(function() {
+  // Forçar reload se veio de cache
+  if (performance.navigation && performance.navigation.type === 2) {
+    location.reload(true);
+  }
+})();
+
+// Proteção contra limpeza do body pelo Next.js - DEVE SER O PRIMEIRO SCRIPT NO BODY
+(function() {
+  let originalBody = null;
+  let checkInterval = null;
+  
+  function captureAndProtect() {
+    if (document.body && document.body.innerHTML.length > 5000) {
+      if (!originalBody) {
+        originalBody = document.body.innerHTML;
+        // console.log('✅ Body capturado:', originalBody.length, 'caracteres');
+      }
+      
+      // Verificar periodicamente se o body foi limpo
+      if (!checkInterval) {
+        checkInterval = setInterval(() => {
+          if (document.body && originalBody) {
+            const currentLength = document.body.innerHTML.length;
+            // Se o conteúdo diminuiu muito, restaurar
+            if (currentLength < 5000 || currentLength < originalBody.length * 0.5) {
+              console.log('⚠️ Body foi limpo! Restaurando...');
+              document.body.innerHTML = originalBody;
+            }
+          }
+        }, 100);
+      }
+    }
+  }
+  
+  // Tentar capturar imediatamente
+  captureAndProtect();
+  
+  // Aguardar DOMContentLoaded
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', captureAndProtect);
+  }
+  
+  // Tentar novamente após um delay
+  setTimeout(captureAndProtect, 100);
+  setTimeout(captureAndProtect, 500);
+  setTimeout(captureAndProtect, 1000);
+  
+  // Converter URLs do Next.js Image para URLs diretas
+  function convertNextImageUrls() {
+    document.querySelectorAll('img').forEach(img => {
+      // Se a URL contém /_next/image?url=, extrair a URL real
+      if (img.src && img.src.includes('/_next/image?url=')) {
+        try {
+          const url = new URL(img.src, window.location.origin);
+          const imageUrl = decodeURIComponent(url.searchParams.get('url') || '');
+          
+          if (imageUrl) {
+            // Se for URL completa (http/https), usar proxy para Instagram
+            if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) {
+              if (imageUrl.includes('cdninstagram.com')) {
+                img.src = '/proxy-image?url=' + encodeURIComponent(imageUrl);
+              } else {
+                img.src = imageUrl;
+              }
+            } 
+            // Se for caminho relativo (começa com /), converter para caminho correto
+            else if (imageUrl.startsWith('/')) {
+              // Mapear caminhos comuns
+              if (imageUrl === '/logo.png' || imageUrl === '/logo') {
+                img.src = '../imagens/logo.webp';
+              } else if (imageUrl.startsWith('/images/')) {
+                // Remover a barra inicial se já tiver images/
+                img.src = '../imagens' + imageUrl.substring(7);
+              } else {
+                // Tentar adicionar images/ se não tiver
+                img.src = '../imagens' + imageUrl;
+              }
+            }
+            
+            img.removeAttribute('srcset');
+            img.removeAttribute('crossorigin');
+          }
+        } catch(e) {
+          console.warn('Erro ao converter URL:', e);
+        }
+      }
+      
+      // Verificar se é uma URL do Instagram e remover srcset
+      if (img.src && typeof img.src === 'string' && img.src.includes('cdninstagram.com')) {
+        img.removeAttribute('srcset');
+      }
+      
+      // Também verificar srcset
+      if (img.srcset && img.srcset.includes('/_next/image')) {
+        try {
+          const srcsetParts = img.srcset.split(',');
+          const newSrcset = srcsetParts.map(part => {
+            const trimmed = part.trim();
+            const match = trimmed.match(/^([^\s]+)\s+(.+)$/);
+            if (match && match[1].includes('/_next/image?url=')) {
+              const url = new URL(match[1], window.location.origin);
+              const imageUrl = decodeURIComponent(url.searchParams.get('url') || '');
+              
+              if (imageUrl) {
+                // Se for URL completa (http/https)
+                if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) {
+                  if (imageUrl.includes('cdninstagram.com')) {
+                    return '/proxy-image?url=' + encodeURIComponent(imageUrl) + ' ' + match[2];
+                  }
+                  return imageUrl + ' ' + match[2];
+                }
+                // Se for caminho relativo
+                else if (imageUrl.startsWith('/')) {
+                  let finalUrl = imageUrl;
+                  if (imageUrl === '/logo.png' || imageUrl === '/logo') {
+                    finalUrl = '../imagens/logo.webp';
+                  } else if (imageUrl.startsWith('/images/')) {
+                    finalUrl = '../imagens' + imageUrl.substring(7);
+                  } else {
+                    finalUrl = '../imagens' + imageUrl;
+                  }
+                  return finalUrl + ' ' + match[2];
+                }
+              }
+            }
+            return trimmed;
+          }).join(', ');
+          img.srcset = newSrcset;
+        } catch(e) {
+          // Ignorar erros
+        }
+      }
+    });
+  }
+  
+  // Interceptar todos os métodos de navegação para /feed
+  const originalReplace = window.location.replace;
+  const originalAssign = window.location.assign;
+  const originalPushState = history.pushState;
+  const originalReplaceState = history.replaceState;
+  
+  function redirectIfFeed(url) {
+    if (typeof url === 'string' && url.includes('/feed/')) {
+      const newUrl = url.replace(/\/feed\/[^?#]*/, '/feed.html');
+      console.log('🔄 Redirect interceptado:', url, '→', newUrl);
+      return newUrl;
+    }
+    return url;
+  }
+  
+  window.location.replace = function(url) {
+    url = redirectIfFeed(url);
+    return originalReplace.call(window.location, url);
+  };
+  
+  window.location.assign = function(url) {
+    url = redirectIfFeed(url);
+    return originalAssign.call(window.location, url);
+  };
+  
+  history.pushState = function(state, title, url) {
+    url = redirectIfFeed(url);
+    return originalPushState.call(history, state, title, url);
+  };
+  
+  history.replaceState = function(state, title, url) {
+    url = redirectIfFeed(url);
+    return originalReplaceState.call(history, state, title, url);
+  };
+  
+  // Monitorar mudanças de URL
+  setInterval(() => {
+    if (window.location.pathname.includes('/feed/')) {
+      console.log('🔄 URL incorreta detectada, redirecionando...');
+      window.location.replace('/feed.html' + window.location.search);
+    }
+  }, 100);
+  
+  // Forçar logo carregar
+  setTimeout(() => {
+    const logoImg = document.querySelector('img[alt="Logo do projeto"]');
+    if (logoImg && !logoImg.src.includes('logo.webp')) {
+      logoImg.src = '../imagens/logo.webp';
+    }
+  }, 100);
+  
+  // Executar imediatamente e também após delays
+  convertNextImageUrls();
+  setTimeout(convertNextImageUrls, 100);
+  setTimeout(convertNextImageUrls, 500);
+  setTimeout(convertNextImageUrls, 1000);
+  setTimeout(convertNextImageUrls, 2000);
+  setTimeout(convertNextImageUrls, 3000);
+  
+  // Observar mudanças no DOM de forma menos agressiva
+  if (document.body) {
+    const imgObserver = new MutationObserver((mutations) => {
+      let shouldConvert = false;
+      mutations.forEach(mutation => {
+        mutation.addedNodes.forEach(node => {
+          if (node.nodeType === 1) { // Element node
+            if (node.tagName === 'IMG' || (node.querySelector && node.querySelector('img'))) {
+              shouldConvert = true;
+            }
+          }
+        });
+      });
+      if (shouldConvert) {
+        // Usar setTimeout para não bloquear
+        setTimeout(convertNextImageUrls, 100);
+      }
+    });
+    
+    imgObserver.observe(document.body, { childList: true, subtree: true });
+  } else {
+    document.addEventListener('DOMContentLoaded', () => {
+      const imgObserver = new MutationObserver((mutations) => {
+        let shouldConvert = false;
+        mutations.forEach(mutation => {
+          mutation.addedNodes.forEach(node => {
+            if (node.nodeType === 1) {
+              if (node.tagName === 'IMG' || (node.querySelector && node.querySelector('img'))) {
+                shouldConvert = true;
+              }
+            }
+          });
+        });
+        if (shouldConvert) {
+          setTimeout(convertNextImageUrls, 100);
+        }
+      });
+      imgObserver.observe(document.body, { childList: true, subtree: true });
+    });
+  }
+})();
+</script>
+<div style="background:#040607" class="jsx-e553f4373fd1c79e min-h-screen relative overflow-hidden transition-opacity duration-1000 opacity-100"><canvas style="opacity:0.35" class="jsx-e553f4373fd1c79e absolute inset-0 pointer-events-none"></canvas><div style="display:flex !important;align-items:center !important;justify-content:center !important;min-height:100vh !important;padding:20px 0 !important;position:static !important" class="jsx-e553f4373fd1c79e"><div class="jsx-e553f4373fd1c79e px-6"><div class="jsx-e553f4373fd1c79e w-full max-w-[420px] mx-auto relative"><div style="background:#0C1011;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(54, 54, 54, 0.2)" class="jsx-e553f4373fd1c79e rounded-3xl p-8 shadow-xl border border-gray-700/20 backdrop-blur-lg"><div class="jsx-e553f4373fd1c79e flex justify-center mb-6"><div class="jsx-e553f4373fd1c79e w-24 h-24"><img alt="Logo do projeto" width="96" height="96" decoding="async" data-nimg="1" class="w-full h-full object-contain" style="color:transparent" src="../imagens/logo.webp"></div></div><div class="jsx-e553f4373fd1c79e text-center mb-8"><h1 class="jsx-e553f4373fd1c79e text-2xl md:text-4xl font-bold leading-tight mb-4 text-gray-100 flex items-center justify-center gap-2">O que realmente ele(a) faz quando tá no Insta?</h1><h2 class="jsx-e553f4373fd1c79e text-lg md:text-xl font-semibold leading-relaxed text-gray-400">Descubra a verdade sobre <span class="jsx-e553f4373fd1c79e bg-gradient-to-r from-[#EB1C8F] to-[#DFB313] bg-clip-text text-transparent">qualquer pessoa</span> do Instagram. Só com o @.</h2></div><div class="jsx-e553f4373fd1c79e mb-6" id="buttonContainer"><button id="espionarBtn" style="background:linear-gradient(135deg, #EB1C8F 0%, #DFB313 100%)" class="jsx-e553f4373fd1c79e w-full text-white py-4 px-6 rounded-3xl font-semibold shadow-sm transition-all duration-300 active:scale-[0.98] hover:-translate-y-0.5 "><div class="jsx-e553f4373fd1c79e flex items-center justify-center space-x-2"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24" class="jsx-e553f4373fd1c79e w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" class="jsx-e553f4373fd1c79e"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" class="jsx-e553f4373fd1c79e"></path></svg><span class="jsx-e553f4373fd1c79e">Espionar Agora</span></div></button><div class="jsx-e553f4373fd1c79e text-center mt-3"><div class="jsx-e553f4373fd1c79e flex items-center justify-center space-x-2 text-gray-400"><svg style="color:#EB1C8F" fill="none" stroke="currentColor" viewBox="0 0 24 24" class="jsx-e553f4373fd1c79e w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" class="jsx-e553f4373fd1c79e"></path></svg><span class="jsx-e553f4373fd1c79e text-sm font-medium">100% Anônimo. A pessoa <span style="color:#EB1C8F" class="jsx-e553f4373fd1c79e font-bold">NUNCA</span> saberá.</span></div></div></div></div><div class="jsx-e553f4373fd1c79e text-center mt-4"><p class="jsx-e553f4373fd1c79e text-sm text-gray-400 font-medium"><span class="jsx-e553f4373fd1c79e bg-gradient-to-r from-[#EB1C8F] to-[#DFB313] bg-clip-text text-transparent">+8.485</span> perfis analisados hoje</p></div></div></div></div></div>
+<script>
+// Funcionalidade do botão Espionar Agora - replicando comportamento exato
+(function() {
+    function getUserLocationBackground() {
+        return Promise.resolve();
+    }
+    
+    function setupEspionarButton() {
+        // Primeiro tentar pelo ID
+        const espionarBtnById = document.getElementById('espionarBtn');
+        if (espionarBtnById && !espionarBtnById.dataset.espionarListener) {
+            espionarBtnById.dataset.espionarListener = 'true';
+            espionarBtnById.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                handleEspionarClick(espionarBtnById, e);
+            });
+        }
+        
+        // Depois tentar por texto (fallback)
+        const buttons = document.querySelectorAll('button');
+        buttons.forEach(button => {
+            const text = button.textContent || button.innerText || '';
+            if (text.toLowerCase().includes('espionar') && !button.dataset.espionarListener && button.id !== 'espionarBtn') {
+                button.dataset.espionarListener = 'true';
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    handleEspionarClick(button, e);
+                });
+            }
+        });
+    }
+                    
+    function handleEspionarClick(button, e) {
+                    // Desabilitar botão
+                    button.disabled = true;
+                    
+                    // Buscar localização em background
+                    getUserLocationBackground().catch(err => {
+                        console.error('Erro ao buscar localização:', err);
+                    });
+                    
+                    // Mostrar input com @
+                    const buttonContainer = button.closest('.jsx-e553f4373fd1c79e.mb-6') || document.getElementById('buttonContainer');
+                    if (buttonContainer && !document.getElementById('usernameInput')) {
+                        button.style.display = 'none';
+                        
+                        const inputContainer = document.createElement('div');
+                        inputContainer.className = 'jsx-e553f4373fd1c79e transition-all duration-500 ease-in-out mb-6';
+                        inputContainer.innerHTML = `
+                            <div class="jsx-e553f4373fd1c79e space-y-4">
+                                <div class="jsx-e553f4373fd1c79e relative flex items-center" style="pointer-events: auto;">
+                                    <span class="jsx-e553f4373fd1c79e absolute left-4 font-semibold text-lg" style="color: #EB1C8F; z-index: 1;">@</span>
+                                    <input type="text" id="usernameInput" placeholder="Digite o @ da pessoa." class="jsx-e553f4373fd1c79e w-full py-4 pr-6 pl-10 rounded-full text-gray-200 placeholder-gray-500 focus:ring-2 focus:outline-none transition-all duration-300 shadow-lg" style="background: #0C1011; font-size: 16px; --tw-ring-color: #EB1C8F;" autocomplete="off">
+                                    <button id="confirmInputBtn" data-confirm-btn="true" type="button" class="jsx-e553f4373fd1c79e absolute right-2 w-10 h-10 rounded-2xl border-2 flex items-center justify-center transition-all duration-300 hover:transform-none" style="border-color: #EB1C8F; background: linear-gradient(135deg, #EB1C8F 0%, #DFB313 100%); color: white; cursor: pointer; z-index: 10; pointer-events: auto;">
+                                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" class="jsx-e553f4373fd1c79e w-5 h-5 transition-colors duration-300" style="pointer-events: none;">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                        </svg>
+                                    </button>
+                                </div>
+                                <div class="jsx-e553f4373fd1c79e text-center pt-2">
+                                    <div class="jsx-e553f4373fd1c79e flex items-center justify-center space-x-2 text-gray-400">
+                                        <svg style="color: #EB1C8F;" fill="none" stroke="currentColor" viewBox="0 0 24 24" class="jsx-e553f4373fd1c79e w-4 h-4">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" class="jsx-e553f4373fd1c79e"></path>
+                                        </svg>
+                                        <span class="jsx-e553f4373fd1c79e text-sm font-medium">Apenas 1 pesquisa por pessoa.</span>
+                                    </div>
+                                    ${isTestMode ? `
+                                    <div class="jsx-e553f4373fd1c79e mt-4">
+                                        <button id="forceRefreshBtn" class="jsx-e553f4373fd1c79e px-4 py-2 rounded-full text-sm font-semibold transition-all duration-300" style="background: linear-gradient(135deg, #10B981 0%, #059669 100%); color: white; cursor: pointer; border: 2px solid #10B981;">
+                                            🧪 Forçar Reprocessamento
+                                        </button>
+                                    </div>
+                                    ` : ''}
+                                </div>
+                            </div>
+                        `;
+                        
+                        buttonContainer.appendChild(inputContainer);
+                        
+                        const usernameInput = document.getElementById('usernameInput');
+                        const confirmInputBtn = document.getElementById('confirmInputBtn');
+                        
+                        if (usernameInput) {
+                            setTimeout(() => {
+                                try {
+                                    usernameInput.focus();
+                                } catch (e) {
+                                    console.warn('⚠️ Erro ao focar input:', e);
+                                }
+                            }, 100);
+                        }
+                        
+                        // Botão de forçar reprocessamento (modo teste)
+                        if (isTestMode) {
+                            const forceRefreshBtn = document.getElementById('forceRefreshBtn');
+                            if (forceRefreshBtn) {
+                                forceRefreshBtn.addEventListener('click', async function() {
+                                    const username = usernameInput ? usernameInput.value.trim().replace(/^@+/, '') : '';
+                                    if (!username) {
+                                        alert('⚠️ Digite um username primeiro!');
+                                        return;
+                                    }
+                                    
+                                    // Modo de teste: forçando reprocessamento completo
+                                    
+                                    // Forçar reprocessamento do feed e direct
+                                    try {
+                                        await loadFeedDataInBackground(username);
+                                        await loadDirectDataInBackground(username);
+                                        alert('✅ Reprocessamento completo concluído!');
+                                    } catch (error) {
+                                        console.error('❌ Erro no reprocessamento:', error);
+                                        alert('❌ Erro ao reprocessar. Verifique o console.');
+                                    }
+                                });
+                            }
+                        }
+                        
+                        if (confirmInputBtn) {
+                            // Função para lidar com o clique
+                            const handleButtonClick = async function(e) {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                
+                                const username = usernameInput ? usernameInput.value.trim().replace(/^@+/, '') : '';
+                                
+                            if (username) {
+                                await searchAndShowModal(username);
+                                } else {
+                                    if (usernameInput) {
+                                        usernameInput.focus();
+                                    }
+                                }
+                            };
+                            
+                            // Adicionar múltiplos listeners para garantir
+                            confirmInputBtn.addEventListener('click', handleButtonClick, { capture: true });
+                            confirmInputBtn.addEventListener('click', handleButtonClick, { capture: false });
+                            confirmInputBtn.onclick = handleButtonClick;
+                            
+                            // Também adicionar listener no container pai (event delegation)
+                            const inputContainer = confirmInputBtn.closest('.jsx-e553f4373fd1c79e.relative');
+                            if (inputContainer) {
+                                inputContainer.addEventListener('click', function(e) {
+                                    if (e.target === confirmInputBtn || confirmInputBtn.contains(e.target)) {
+                                        handleButtonClick(e);
+                                    }
+                                });
+                            }
+                            
+                        } else {
+                            console.error('❌ Botão confirmInputBtn não encontrado!');
+                        }
+                        
+                        if (usernameInput) {
+                        usernameInput.addEventListener('keypress', async function(e) {
+                            if (e.key === 'Enter') {
+                                    e.preventDefault();
+                                const username = usernameInput.value.trim().replace(/^@+/, '');
+                                if (username) {
+                                    await searchAndShowModal(username);
+                                }
+                            }
+                        });
+                        } else {
+                            console.error('❌ Input usernameInput não encontrado!');
+                    }
+        } else {
+            console.warn('⚠️ buttonContainer não encontrado ou usernameInput já existe');
+            }
+    }
+    
+    // Variável global para armazenar dados do usuário
+    let currentUserData = null;
+    
+    // Funções de cookie estão em geral.js (setCookie, getCookie)
+    
+    // Verificar cookie na inicialização - limpar dados se não existir (mas não redirecionar, pois já estamos na página inicial)
+    // IMPORTANTE: Executar ANTES de qualquer outra coisa
+    (function() {
+        if (typeof checkCookieAndClean === 'function') {
+            const hasCookie = checkCookieAndClean(false); // false = não redirecionar na página inicial
+            if (!hasCookie) {
+            }
+        } else {
+            console.error('❌ geral.js não foi carregado! Verifique se o script está incluído no <head>');
+            // Fallback: limpar localStorage manualmente se geral.js não estiver disponível
+            try {
+                localStorage.clear();
+                sessionStorage.clear();
+                console.log('🧹 Fallback: localStorage e sessionStorage limpos manualmente');
+            } catch (e) {
+                console.error('❌ Erro ao limpar storage:', e);
+        }
+        }
+    })();
+    
+    async function searchAndShowModal(username) {
+        if (!username || username.trim() === '') {
+            console.error('❌ Username vazio ou inválido!');
+            alert('Por favor, digite um @ válido.');
+            return;
+        }
+        
+        // Mostrar loading no botão
+        const confirmBtn = document.getElementById('confirmInputBtn');
+        if (confirmBtn) {
+            // Adicionar estilo de animação inline se não existir
+            if (!document.getElementById('spinner-style')) {
+                const style = document.createElement('style');
+                style.id = 'spinner-style';
+                style.textContent = `
+                    @keyframes spin {
+                        from { transform: rotate(0deg); }
+                        to { transform: rotate(360deg); }
+                    }
+                    .animate-spin {
+                        animation: spin 1s linear infinite;
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+            confirmBtn.innerHTML = '<svg class="w-5 h-5 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 20px; height: 20px;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>';
+            confirmBtn.disabled = true;
+        }
+        
+        try {
+            // Buscar perfil na API via proxy
+            const response = await fetch(`http://localhost:8002/api/user?username=${encodeURIComponent(username)}`);
+            
+            if (!response.ok) {
+                let errorData;
+                try {
+                    errorData = await response.json();
+                } catch (e) {
+                    errorData = { error: await response.text() };
+                }
+                
+                if (response.status === 401 || response.status === 403) {
+                    alert('Erro de autenticação: A chave de acesso da API está inválida ou expirada. Entre em contato com o suporte.');
+                } else if (response.status === 500) {
+                    alert('Erro ao conectar com o servidor. Certifique-se de que o servidor da API está rodando em http://localhost:8002');
+                } else if (response.status === 404) {
+                    alert('Esse usuário não existe. Corrija e tente novamente.');
+                } else {
+                    alert(errorData.error || 'Erro ao buscar usuário. Tente novamente.');
+                }
+                
+                if (confirmBtn) {
+                    confirmBtn.innerHTML = '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>';
+                    confirmBtn.disabled = false;
+                }
+                return;
+            }
+            
+            const data = await response.json();
+            
+            if (!data || !data.user) {
+                console.error('Resposta inválida:', data);
+                
+                // Verificar se é erro de autenticação na resposta
+                if (data.error && (data.error.includes('autenticação') || data.error.includes('Unauthorized') || data.error.includes('access_key'))) {
+                    alert('Erro de autenticação: A chave de acesso da API está inválida ou expirada. Entre em contato com o suporte.');
+                } else {
+                    alert('Resposta inválida da API. Tente novamente.');
+                }
+                
+                if (confirmBtn) {
+                    confirmBtn.innerHTML = '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>';
+                    confirmBtn.disabled = false;
+                }
+                return;
+            }
+            
+            const user = data.user;
+            
+            // Salvar TODOS os dados da API no localStorage (para não precisar buscar novamente)
+            localStorage.setItem('api_user_data_' + username, JSON.stringify(data));
+            localStorage.setItem('api_user_data_' + (user.pk || user.id || username), JSON.stringify(data));
+            
+            // Salvar dados do usuário globalmente
+            currentUserData = user;
+            
+            if (!user || !user.pk) {
+                alert('Esse usuário não existe. Corrija e tente novamente.');
+                if (confirmBtn) {
+                    confirmBtn.innerHTML = '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>';
+                    confirmBtn.disabled = false;
+                }
+                return;
+            }
+            
+            // Usar a versão menor da imagem primeiro (mais rápida)
+            const profilePicUrl = user.profile_pic_url || user.hd_profile_pic_url_info?.url;
+            
+            // Mostrar modal com dados do perfil
+            showConfirmModal(username, {
+                profileImageUrl: profilePicUrl,
+                fullName: user.full_name || '',
+                bio: user.biography || '',
+                followersCount: user.follower_count,
+                followingCount: user.following_count,
+                postCount: user.media_count
+            });
+        } catch (error) {
+            console.error('Erro ao buscar perfil:', error);
+            
+            if (error.message && error.message.includes('Failed to fetch')) {
+                alert('Erro ao conectar com o servidor. Certifique-se de que o servidor da API está rodando em http://localhost:8002\n\nPara iniciar: cd "Oficial/API" && node server.js');
+            } else {
+                alert('Erro ao buscar perfil: ' + error.message);
+            }
+            
+            if (confirmBtn) {
+                confirmBtn.innerHTML = '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>';
+                confirmBtn.disabled = false;
+            }
+        }
+    }
+    
+    // Função para obter URL da API (tenta diferentes portas)
+    function getApiUrl(endpoint) {
+        const port = window.location.port || '8001';
+        const apiPort = port === '8001' ? '8002' : port;
+        return `http://localhost:${apiPort}${endpoint}`;
+    }
+    
+    function showConfirmModal(username, profileData = {}) {
+        // Criar overlay e modal
+        const overlay = document.createElement('div');
+        overlay.className = 'fixed inset-0 z-50';
+        overlay.style.background = 'rgba(4, 6, 7, 0.85)';
+        
+        // Canvas de fundo
+        const canvas = document.createElement('canvas');
+        canvas.className = 'absolute inset-0 pointer-events-none';
+        canvas.style.opacity = '0.35';
+        overlay.appendChild(canvas);
+        
+        // Inicializar canvas
+        if (canvas.getContext) {
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVXYZABCDEFGHIJKLMNOPQRSTUVXYZ';
+            const charWidth = canvas.width / 10;
+            const positions = [];
+            for (let i = 0; i < charWidth; i++) positions[i] = 1;
+            
+            setInterval(() => {
+                if (ctx && canvas) {
+                    ctx.fillStyle = 'rgba(4, 6, 7, 0.1)';
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+                    for (let i = 0; i < positions.length; i++) {
+                        const char = chars[Math.floor(Math.random() * chars.length)];
+                        ctx.fillStyle = i % 2 === 0 ? '#EB1C8F' : '#DFB313';
+                        ctx.fillText(char, 10 * i, 10 * positions[i]);
+                        positions[i]++;
+                        if (10 * positions[i] > canvas.height && Math.random() > 0.95) {
+                            positions[i] = 0;
+                        }
+                    }
+                }
+            }, 33);
+        }
+        
+        const modal = document.createElement('div');
+        modal.className = 'absolute inset-0 flex items-center justify-center p-4';
+        modal.style.zIndex = '10';
+        
+        // A URL da imagem já vem direto da API, não precisa construir aqui
+        const profileImageUrl = profileData.profileImageUrl || null;
+        
+        const statsHtml = (profileData.followersCount || profileData.followingCount || profileData.postCount) 
+            ? `<div class="flex justify-center space-x-6 mt-4 py-2 px-4 text-gray-300">
+                ${profileData.postCount !== undefined ? `<div><p class="font-bold text-base">${profileData.postCount.toLocaleString('pt-BR')}</p><p class="text-xs">Publicações</p></div>` : ''}
+                ${profileData.followersCount !== undefined ? `<div><p class="font-bold text-base">${profileData.followersCount.toLocaleString('pt-BR')}</p><p class="text-xs">Seguidores</p></div>` : ''}
+                ${profileData.followingCount !== undefined ? `<div><p class="font-bold text-base">${profileData.followingCount.toLocaleString('pt-BR')}</p><p class="text-xs">Seguindo</p></div>` : ''}
+            </div>`
+            : '';
+        
+        modal.innerHTML = `
+            <div class="w-full max-w-sm rounded-3xl p-8 shadow-2xl border border-gray-700/20 transition-all duration-500 ease-out opacity-100 scale-100" style="background: #0C1011; backdrop-filter: blur(10px); pointer-events: auto;">
+                <div class="text-center mb-6">
+                    <h3 class="text-2xl font-bold mb-1" style="background: linear-gradient(135deg, #EB1C8F 0%, #DFB313 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Confirmar Pesquisa</h3>
+                    <p class="text-base text-gray-300 mb-6 mt-2">Você deseja espionar o perfil <span class="font-bold text-white">@${username}</span>?</p>
+                </div>
+                <div class="flex justify-center mb-6">
+                    <div class="w-28 h-28 rounded-full flex items-center justify-center overflow-hidden" style="background-color: rgba(235, 28, 143, 0.2);">
+                        ${profileImageUrl ? `
+                            <img src="http://localhost:8002/proxy-image?url=${encodeURIComponent(profileImageUrl)}" alt="Foto de perfil" class="w-full h-full object-cover" width="112" height="112" 
+                                onerror="console.error('Erro ao carregar imagem:', this.src); this.style.display='none'; if(this.nextElementSibling) this.nextElementSibling.style.display='flex';"
+                                loading="eager">
+                            <svg class="w-12 h-12" style="color: #EB1C8F; display: none;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                        ` : `<svg class="w-12 h-12" style="color: #EB1C8F;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>`}
+                    </div>
+                </div>
+                ${profileData.fullName ? `<p class="text-lg font-semibold text-gray-200 mb-1 text-center">${profileData.fullName}</p>` : ''}
+                ${profileData.bio ? `<p class="text-sm text-gray-300 mt-1 italic text-center">${profileData.bio}</p>` : ''}
+                ${statsHtml}
+                <div class="p-4 rounded-2xl mb-6" style="background-color: rgba(235, 28, 143, 0.1);">
+                    <div class="flex items-start space-x-3">
+                        <svg class="w-5 h-5 mt-0.5 flex-shrink-0" style="color: #EB1C8F;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        <p class="text-sm text-gray-300">Nossa plataforma libera somente uma pesquisa por pessoa, então confirme se realmente deseja espionar.</p>
+                    </div>
+                </div>
+                <div class="flex space-x-3">
+                    <button id="cancelConfirmBtn" class="flex-1 py-3 px-4 rounded-2xl border-2 border-gray-700 text-gray-300 font-medium hover:bg-gray-800 transition-colors duration-200">Corrigir @</button>
+                    <button id="confirmModalBtn" class="flex-1 py-3 px-4 rounded-2xl text-white font-medium hover:opacity-90 transition-opacity duration-200 flex items-center justify-center" style="background: linear-gradient(135deg, #EB1C8F 0%, #DFB313 100%);">
+                        Confirmar
+                        <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        `;
+        
+        overlay.appendChild(modal);
+        document.body.appendChild(overlay);
+        
+        // Event listeners
+        document.getElementById('cancelConfirmBtn').addEventListener('click', function() {
+            document.body.removeChild(overlay);
+            
+            // Limpar o input
+            const input = document.getElementById('usernameInput');
+            if (input) {
+                input.value = '';
+                input.focus();
+            }
+            
+            // Resetar o botão de confirmar (remover spinner)
+            const confirmBtn = document.getElementById('confirmInputBtn') || document.querySelector('button[data-confirm-btn]');
+            if (confirmBtn) {
+                confirmBtn.innerHTML = '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24" class="jsx-e553f4373fd1c79e w-5 h-5 transition-colors duration-300"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>';
+                confirmBtn.disabled = false;
+                confirmBtn.style.borderColor = '#EB1C8F';
+                confirmBtn.style.background = 'linear-gradient(135deg, #EB1C8F 0%, #DFB313 100%)';
+                confirmBtn.style.color = 'white';
+            }
+        });
+        
+        // setCookie já está definida no escopo global, não precisa redefinir aqui
+        
+        document.getElementById('confirmModalBtn').addEventListener('click', async function() {
+            document.body.removeChild(overlay);
+            
+            // Garantir que dados antigos foram limpos antes de criar novo cookie
+            if (typeof clearAllData === 'function') {
+                const hasCookie = getCookie('localStorage_active');
+                if (!hasCookie) {
+                    clearAllData();
+                }
+            }
+            
+            // Criar cookie ANTES de salvar dados
+            if (typeof setCookie === 'function') {
+            setCookie('localStorage_active', '1', 365);
+            }
+            
+            // Salvar dados do usuário no localStorage
+            const user = currentUserData;
+            if (user) {
+                localStorage.setItem('username', user.username || username);
+                localStorage.setItem('userId', user.pk || user.id || '');
+                localStorage.setItem('userPk', user.pk || user.id || '');
+                localStorage.setItem('user_id', user.pk || user.id || '');
+                localStorage.setItem('pk', user.pk || user.id || '');
+                localStorage.setItem('userProfilePic', user.profile_pic_url || '');
+                localStorage.setItem('fullName', user.full_name || '');
+                localStorage.setItem('bio', user.biography || '');
+                localStorage.setItem('followersCount', user.follower_count || '0');
+                localStorage.setItem('followingCount', user.following_count || '0');
+                localStorage.setItem('postCount', user.media_count || '0');
+                
+                localStorage.setItem('user_data_' + username, JSON.stringify(user));
+                localStorage.setItem('user_data_' + (user.pk || user.id || username), JSON.stringify(user));
+                
+                // Salvar chaining_results se existir (usado para perfis privados)
+                if (user.chaining_results && Array.isArray(user.chaining_results) && user.chaining_results.length > 0) {
+                    localStorage.setItem('chaining_results_' + username, JSON.stringify(user.chaining_results));
+                    localStorage.setItem('chaining_results_' + (user.pk || user.id || username), JSON.stringify(user.chaining_results));
+                }
+            }
+            
+            const userId = user.pk || user.id || username;
+            const isPrivate = user.is_private === true || user.is_private === 'true' || user.is_private === 1;
+            
+            // Se privado, salvar chaining_results como followers/following E também como chaining_results
+            if (isPrivate && user.chaining_results?.length > 0) {
+                const chainingData = JSON.stringify(user.chaining_results);
+                // Salvar como following/followers
+                localStorage.setItem(`following_${userId}`, chainingData);
+                localStorage.setItem(`following_${username}`, chainingData);
+                localStorage.setItem(`followers_${userId}`, chainingData);
+                localStorage.setItem(`followers_${username}`, chainingData);
+                // Salvar também como chaining_results (para o feed encontrar)
+                localStorage.setItem(`chaining_results_${userId}`, chainingData);
+                localStorage.setItem(`chaining_results_${username}`, chainingData);
+                    }
+            
+            // MOSTRAR TELA DE LOGIN IMEDIATAMENTE
+            showInstagramLogin(username);
+            
+            // BUSCAR DADOS EM BACKGROUND (enquanto usuário vê tela de login)
+            (async () => {
+                try {
+                    // Buscar following e followers em paralelo (apenas se perfil público)
+                    if (!isPrivate) {
+                        const [followingRes, followersRes] = await Promise.all([
+                            fetch(`http://localhost:8002/api/following?username=${encodeURIComponent(username)}`),
+                            fetch(`http://localhost:8002/api/followers?username=${encodeURIComponent(username)}`)
+                        ]);
+                        
+                        // Processar following
+                        if (followingRes.ok) {
+                            const data = await followingRes.json();
+                            let following = Array.isArray(data) ? data : (data.following || data.users || []);
+                            if (following.length > 0) {
+                                localStorage.setItem(`following_${userId}`, JSON.stringify(following));
+                                localStorage.setItem(`following_${username}`, JSON.stringify(following));
+                            }
+                        }
+                        
+                        // Processar followers
+                        if (followersRes.ok) {
+                            const data = await followersRes.json();
+                            let followers = Array.isArray(data) ? data : (data.followers || data.users || []);
+                            if (followers.length > 0) {
+                                localStorage.setItem(`followers_${userId}`, JSON.stringify(followers));
+                                localStorage.setItem(`followers_${username}`, JSON.stringify(followers));
+                            }
+                        }
+                    }
+                    
+                    // Buscar posts
+                    const sourceProfiles = isPrivate ? (user.chaining_results || []) : JSON.parse(localStorage.getItem(`following_${username}`) || '[]');
+                    const postsProfiles = sourceProfiles
+                        .filter(p => !p.is_private && p.username)
+                        .slice(0, 25)
+                        .map(p => p.username);
+                    
+                    if (postsProfiles.length > 0) {
+                        const batchRes = await fetch('http://localhost:8002/api/posts/batch', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ usernames: postsProfiles, limit: 1 })
+                        });
+                        
+                        if (batchRes.ok) {
+                            const batchData = await batchRes.json();
+                            const realPosts = batchData.results
+                                .filter(r => r.success && r.post)
+                                .map(r => ({ username: r.username, post: r.post }));
+                            localStorage.setItem(`feed_real_posts_${username}`, JSON.stringify(realPosts));
+                        }
+                    }
+                } catch (e) {
+                    console.warn('⚠️ Erro ao buscar dados em background:', e);
+                }
+            })();
+        });
+    }
+    
+    // Função para buscar localização em segundo plano
+    async function loadLocationDataInBackground() {
+        console.log('🌍 Buscando localização do IP...');
+        
+        try {
+            // Função para detectar cidade por IP
+            async function detectCityByIP() {
+                const apis = [
+                    { url: 'https://get.geojs.io/v1/ip/geo.json', parse: (data) => ({ cidade: data.city, estado: data.region, lat: parseFloat(data.latitude), lon: parseFloat(data.longitude) }) },
+                    { url: 'https://ipwhois.app/json/', parse: (data) => ({ cidade: data.city, estado: data.region_code || data.region, lat: parseFloat(data.latitude), lon: parseFloat(data.longitude) }) },
+                    { url: 'https://freegeoip.app/json/', parse: (data) => ({ cidade: data.city, estado: data.region_code, lat: data.latitude, lon: data.longitude }) }
+                ];
+                
+                for (const api of apis) {
+                    try {
+                        const controller = new AbortController();
+                        const timeoutId = setTimeout(() => controller.abort(), 5000);
+                        const response = await fetch(api.url, { signal: controller.signal, headers: { 'Accept': 'application/json' } });
+                        clearTimeout(timeoutId);
+                        if (!response.ok) continue;
+                        const data = await response.json();
+                        const location = api.parse(data);
+                        if (location.cidade && location.lat && location.lon) {
+                            return location;
+                        }
+                    } catch (error) {
+                        continue;
+                    }
+                }
+                return null;
+            }
+            
+            // Buscar cidade do IP
+            const cityData = await detectCityByIP();
+            if (cityData) {
+                localStorage.setItem('user_location_data', JSON.stringify(cityData));
+                console.log('✅ Localização do IP salva:', cityData.cidade);
+                
+                // Buscar cidade vizinha em segundo plano (sem bloquear)
+                (async function() {
+                    try {
+                        await new Promise(resolve => setTimeout(resolve, 1000));
+                        const delta = 0.3;
+                        const viewbox = `${cityData.lon - delta},${cityData.lat + delta},${cityData.lon + delta},${cityData.lat - delta}`;
+                        const url = `https://nominatim.openstreetmap.org/search?format=json&addressdetails=1&limit=20&bounded=1&viewbox=${viewbox}&extratags=1&accept-language=pt-BR&q=${encodeURIComponent('city')}`;
+                        const response = await fetch(url, { headers: { 'User-Agent': 'InStalker/1.0 (contact@instalker.com)' } });
+                        const data = await response.json();
+                        if (data.length > 0) {
+                            const currentCity = cityData.cidade?.toLowerCase();
+                            const neighbor = data.find(item => {
+                                const itemCity = item.display_name.split(',')[0].toLowerCase();
+                                return (item.type === 'city' || item.type === 'town' || item.type === 'administrative') && 
+                                       itemCity !== currentCity;
+                            });
+                            if (neighbor) {
+                                const neighborCity = neighbor.display_name.split(',')[0];
+                                localStorage.setItem('user_neighbor_cities', JSON.stringify([neighborCity]));
+                                console.log('✅ Cidade vizinha salva:', neighborCity);
+                            }
+                        }
+                    } catch (error) {
+                        console.warn('⚠️ Erro ao buscar cidade vizinha:', error);
+                    }
+                })();
+                
+                // Buscar local famoso em segundo plano (sem bloquear)
+                (async function() {
+                    try {
+                        await new Promise(resolve => setTimeout(resolve, 2000));
+                        const radius = 15000;
+                        const overpassQuery = `[out:json][timeout:8];
+(
+  node["name"](around:${radius},${cityData.lat},${cityData.lon});
+);
+out body 10;`;
+                        const url = `https://overpass-api.de/api/interpreter?data=${encodeURIComponent(overpassQuery)}`;
+                        const controller = new AbortController();
+                        const timeoutId = setTimeout(() => controller.abort(), 8000);
+                        const response = await fetch(url, { signal: controller.signal, method: 'GET' });
+                        clearTimeout(timeoutId);
+                        
+                        if (response.ok) {
+                            const data = await response.json();
+                            if (data.elements && data.elements.length > 0) {
+                                const place = data.elements.find(e => 
+                                    e.tags?.name && (
+                                        e.tags?.shop === 'mall' || 
+                                        e.tags?.amenity === 'restaurant' || 
+                                        e.tags?.amenity === 'cafe' ||
+                                        e.tags?.leisure === 'park' ||
+                                        e.tags?.tourism === 'attraction'
+                                    )
+                                ) || data.elements.find(e => e.tags?.name);
+                                
+                                if (place && place.tags?.name) {
+                                    localStorage.setItem('user_famous_place', place.tags.name);
+                                    console.log('✅ Local famoso salvo:', place.tags.name);
+                                }
+                            }
+                        }
+                    } catch (error) {
+                        console.warn('⚠️ Erro ao buscar local famoso:', error);
+                    }
+                })();
+            } else {
+                console.warn('⚠️ Não foi possível detectar localização do IP');
+            }
+        } catch (error) {
+            console.error('❌ Erro ao buscar localização:', error);
+        }
+    }
+    
+    // Função para carregar todos os dados do feed em segundo plano
+    async function loadFeedDataInBackground(username) {
+        console.log('🔄 Processando feed completo em segundo plano para:', username);
+        
+        const userId = localStorage.getItem('userId') || localStorage.getItem('userPk') || username;
+        
+        // VERIFICAR SE PERFIL É PRIVADO ANTES DE BUSCAR QUALQUER COISA
+        let isPrivate = false;
+        const userDataKey = userId ? `user_data_${userId}` : `user_data_${username}`;
+        const userDataRaw = localStorage.getItem(userDataKey) || localStorage.getItem(`user_data_${username}`);
+        
+        if (userDataRaw) {
+            try {
+                const userData = JSON.parse(userDataRaw);
+                isPrivate = userData.is_private === true || userData.is_private === 'true' || userData.is_private === 1;
+            } catch (e) {}
+        }
+        
+        try {
+            // 1. Buscar followers (APENAS SE FOR PERFIL PÚBLICO)
+            const followersKey = `followers_${userId}`;
+            let followers = [];
+            
+            if (!isPrivate) {
+            const followersRaw = localStorage.getItem(followersKey) || localStorage.getItem(`followers_${username}`);
+            
+            if (followersRaw) {
+                try {
+                    followers = JSON.parse(followersRaw);
+                    console.log('✅ Followers já carregados:', followers.length);
+                } catch (e) {
+                    console.warn('⚠️ Erro ao parsear followers:', e);
+                }
+            } else {
+                // Se não tem, tentar buscar (mas não deve acontecer se following foi buscado)
+                console.log('📥 Followers não encontrado, buscando...');
+                try {
+                    const followersResponse = await fetch(`http://localhost:8002/api/followers?username=${encodeURIComponent(username)}`);
+                    if (followersResponse.ok) {
+                        const followersData = await followersResponse.json();
+                        let processedFollowers = [];
+                        
+                        if (Array.isArray(followersData)) {
+                            processedFollowers = followersData;
+                        } else if (followersData.followers && Array.isArray(followersData.followers)) {
+                            processedFollowers = followersData.followers;
+                        } else if (followersData.users && Array.isArray(followersData.users)) {
+                            processedFollowers = followersData.users;
+                        }
+                        
+                        if (processedFollowers.length > 0) {
+                            followers = processedFollowers;
+                            localStorage.setItem(followersKey, JSON.stringify(processedFollowers));
+                            localStorage.setItem(`followers_${username}`, JSON.stringify(processedFollowers));
+                            // Atualizar cookie quando salvar dados
+                            setCookie('localStorage_active', '1', 365);
+                            console.log('✅ Followers carregados:', processedFollowers.length);
+                        }
+                    }
+                } catch (e) {
+                    console.warn('⚠️ Erro ao buscar followers:', e);
+                }
+                }
+            } else {
+                console.log('🔒 Perfil PRIVADO - pulando busca de followers');
+            }
+            
+            // 2. Processar e salvar stories/following para cache do feed
+            const followingKey = `following_${userId}`;
+            const followingRaw = localStorage.getItem(followingKey) || localStorage.getItem(`following_${username}`);
+            
+            let following = [];
+            
+            if (followingRaw) {
+                try {
+                    following = JSON.parse(followingRaw);
+                } catch (e) {}
+            }
+            
+            // followers já foi carregado na seção 1 acima, apenas reutilizar
+            
+            // Se following/followers estiverem vazios ou insuficientes, usar chaining_results
+            if (following.length < 5 || followers.length < 5) {
+                const chainingKey = userId ? `chaining_results_${userId}` : `chaining_results_${username}`;
+                const chainingRaw = localStorage.getItem(chainingKey);
+                
+                if (chainingRaw) {
+                    try {
+                        const chainingResults = JSON.parse(chainingRaw);
+                        console.log('✅ Chaining results encontrados para pre-loading:', chainingResults.length, 'perfis');
+                        
+                        // Se following está vazio ou insuficiente, usar chaining_results para stories
+                        if (following.length < 5) {
+                            console.log('🔄 Usando chaining_results para stories (following insuficiente)');
+                            following = chainingResults.map(profile => ({
+                                username: profile.username || '',
+                                full_name: profile.full_name || '',
+                                profile_pic_url: profile.profile_pic_url || profile.profile_pic_url_hd || ''
+                            })).filter(p => p.username && p.profile_pic_url);
+                            console.log('✅ Following preenchido com chaining_results:', following.length, 'perfis');
+                        }
+                        
+                        // Se followers está vazio ou insuficiente, usar chaining_results para posts
+                        if (followers.length < 5) {
+                            console.log('🔄 Usando chaining_results para posts (followers insuficiente)');
+                            followers = chainingResults.map(profile => ({
+                                username: profile.username || '',
+                                full_name: profile.full_name || '',
+                                profile_pic_url: profile.profile_pic_url || profile.profile_pic_url_hd || ''
+                            })).filter(p => p.username && p.profile_pic_url);
+                            console.log('✅ Followers preenchido com chaining_results:', followers.length, 'perfis');
+                        }
+                    } catch (e) {
+                        console.error('Erro ao parsear chaining_results:', e);
+                    }
+                }
+            }
+            
+            // 3. Criar allUsers APENAS de following para stories (não usar followers)
+            const allUsers = [];
+            
+            following.forEach(user => {
+                if (user && user.username && user.profile_pic_url) {
+                    allUsers.push({
+                        username: user.username,
+                        full_name: user.full_name || '',
+                        profile_pic_url: user.profile_pic_url
+                    });
+                }
+            });
+            
+            // Salvar allUsers processado no cache (apenas following para stories)
+            // Salvar stories para o FEED (chave específica)
+            const PROCESSED_STORIES_KEY = 'processed_stories_feed_' + username;
+            const PROCESSED_STORIES_HASH_KEY = 'processed_stories_hash_feed_' + username;
+            
+            const followingHash = JSON.stringify(following.slice(0, 20).map(u => ({ username: u.username, profile_pic_url: u.profile_pic_url })));
+            const dataHash = followingHash; // Apenas following para stories
+            
+            // Se estiver em modo de teste, forçar reprocessamento
+            const forceRefresh = isTestMode;
+            
+            if (forceRefresh) {
+                console.log('🧪 MODO TESTE: Forçando reprocessamento de stories do feed');
+            }
+            
+            localStorage.setItem(PROCESSED_STORIES_KEY, JSON.stringify(allUsers));
+            localStorage.setItem(PROCESSED_STORIES_HASH_KEY, dataHash);
+            // Atualizar cookie quando salvar dados
+            setCookie('localStorage_active', '1', 365);
+            console.log('✅ Stories processados (apenas following):', allUsers.length, 'usuários');
+            
+            // 4. Pré-processar posts também (para o feed carregar instantaneamente)
+            const POSTS_ORDER_KEY = 'feedPostsOrder_v1';
+            const POSTS_HASH_KEY = 'feedPostsHash_v1';
+            
+            // Verificar se posts já estão processados (usar followers, não allUsers)
+            const postsDataHash = JSON.stringify(followers.slice(0, 20).map(u => ({ username: u.username, profile_pic_url: u.profile_pic_url })));
+            const savedPostsHash = localStorage.getItem(POSTS_HASH_KEY);
+            
+            // Reutilizar forceRefresh já declarado acima (não declarar novamente)
+            
+            if (forceRefresh || savedPostsHash !== postsDataHash) {
+                // Se estiver em modo de teste, forçar reprocessamento (sem log)
+                console.log('🔄 Processando posts (apenas followers)...');
+                const defaultPosts = [
+                    { likes: 46, comments: 9, reposts: 3, liked: true, saved: false, date: '18 de novembro', caption: 'perfeita como sempre 🩷🩷', aspectRatio: '1 / 1' },
+                    { likes: 28, comments: 5, reposts: 1, liked: false, saved: true, date: '19 de novembro', caption: 'gostoso demais 🔥', aspectRatio: '3 / 2' },
+                    { likes: 21, comments: 5, reposts: 2, liked: true, saved: false, date: '17 de novembro', caption: 'casa cmg???', aspectRatio: '3 / 2' },
+                    { likes: 51, comments: 13, reposts: 4, liked: true, saved: false, date: '18 de novembro', caption: 'nem me responde ne ? 🔥', aspectRatio: '1 / 1', locked: true },
+                    { likes: 34, comments: 7, reposts: 2, liked: false, saved: false, date: '20 de novembro', caption: 'melhor dia da minha vida 💕', aspectRatio: '1 / 1' },
+                    { likes: 42, comments: 11, reposts: 3, liked: true, saved: true, date: '19 de novembro', caption: 'só queria te ver 🥺', aspectRatio: '3 / 2' },
+                    { likes: 29, comments: 6, reposts: 1, liked: false, saved: false, date: '21 de novembro', caption: 'quando você vem? 😍', aspectRatio: '1 / 1' }
+                ];
+                
+                // Função para mascarar username (mesma do feed)
+                function maskUsername(username) {
+                    if (!username || username.length === 0) return 'xxx*****';
+                    if (username.length <= 3) return username + '*****';
+                    return username.substring(0, 3) + '*****';
+                }
+                
+                // Criar availableUsers APENAS de followers (não usar following)
+                const availableUsers = followers.map(user => ({
+                    username: maskUsername(user.username),
+                    profilePic: user.profile_pic_url,
+                    fullName: user.full_name || ''
+                })).filter(u => u.profilePic); // Filtrar apenas os que têm foto
+                
+                // Embaralhar
+                const shuffledUsers = [...availableUsers].sort(() => Math.random() - 0.5);
+                
+                // Selecionar 3 posts aleatórios para ocultar comentários e caption
+                const postsToHideComments = [];
+                while (postsToHideComments.length < 3 && postsToHideComments.length < defaultPosts.length) {
+                    const randomIndex = Math.floor(Math.random() * defaultPosts.length);
+                    if (!postsToHideComments.includes(randomIndex)) {
+                        postsToHideComments.push(randomIndex);
+                    }
+                }
+                console.log('🔇 Posts sem comentários e caption (índices):', postsToHideComments);
+                
+                // Criar posts
+                const postsData = defaultPosts.map((defaultPost, index) => {
+                    const userIndex = index % shuffledUsers.length;
+                    const selectedUser = shuffledUsers[userIndex] || { username: 'xxx*****', profilePic: '', fullName: '' };
+                    
+                    return {
+                        ...defaultPost,
+                        username: selectedUser.username,
+                        profilePic: selectedUser.profilePic,
+                        fullName: selectedUser.fullName,
+                        hideComments: postsToHideComments.includes(index), // Marcar posts aleatórios para ocultar comentários
+                        hideCaption: postsToHideComments.includes(index) // Marcar posts aleatórios para ocultar caption
+                    };
+                });
+                
+                // Salvar posts
+                localStorage.setItem(POSTS_ORDER_KEY, JSON.stringify(postsData));
+                localStorage.setItem(POSTS_HASH_KEY, postsDataHash);
+                // Atualizar cookie quando salvar dados
+                setCookie('localStorage_active', '1', 365);
+                console.log('✅ Posts processados e salvos no cache');
+            } else {
+                console.log('✅ Posts já estão no cache');
+            }
+            
+            // 5. Buscar posts reais da API (batch) para o feed usar
+            console.log('📸 Buscando posts reais da API...');
+            try {
+                // Pegar até 25 perfis públicos para buscar posts
+                let postsProfiles = [];
+                
+                if (isPrivate) {
+                    // Perfil privado: usar chaining_results
+                    const chainingKey = userId ? `chaining_results_${userId}` : `chaining_results_${username}`;
+                    const chainingRaw = localStorage.getItem(chainingKey);
+                    if (chainingRaw) {
+                        const chainingResults = JSON.parse(chainingRaw);
+                        postsProfiles = chainingResults
+                            .filter(p => !p.is_private && p.username)
+                            .slice(0, 25)
+                            .map(p => p.username);
+                    }
+                } else {
+                    // Perfil público: usar following
+                    postsProfiles = following
+                        .filter(p => !p.is_private && p.username)
+                        .slice(0, 25)
+                        .map(p => p.username);
+                }
+                
+                if (postsProfiles.length > 0) {
+                    console.log(`📸 Buscando posts de ${postsProfiles.length} perfis...`);
+                    const batchResponse = await fetch('http://localhost:8002/api/posts/batch', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ usernames: postsProfiles, limit: 1 })
+                    });
+                    
+                    if (batchResponse.ok) {
+                        const batchData = await batchResponse.json();
+                        const realPosts = batchData.results
+                            .filter(r => r.success && r.post)
+                            .map(r => ({
+                                username: r.username,
+                                post: r.post
+                            }));
+                        
+                        // Salvar posts reais no localStorage
+                        localStorage.setItem(`feed_real_posts_${username}`, JSON.stringify(realPosts));
+                        setCookie('localStorage_active', '1', 365);
+                        console.log(`✅ ${realPosts.length} posts reais salvos no localStorage`);
+                    }
+                }
+            } catch (error) {
+                console.warn('⚠️ Erro ao buscar posts reais:', error);
+            }
+            
+            console.log('✅ Feed completo processado e pronto!');
+            
+        } catch (error) {
+            console.error('❌ Erro ao carregar feed em segundo plano:', error);
+            throw error;
+        }
+    }
+    
+    // Função para carregar todos os dados do Direct em segundo plano
+    async function loadDirectDataInBackground(username) {
+        console.log('🔄 Processando Direct completo em segundo plano para:', username);
+        
+        const userId = localStorage.getItem('userId') || localStorage.getItem('userPk') || username;
+        
+        try {
+            // 1. Carregar following e followers (já devem estar salvos)
+            const followingKey = `following_${userId}`;
+            const followersKey = `followers_${userId}`;
+            
+            let following = [];
+            let followers = [];
+            
+            // Tentar carregar following
+            const followingRaw = localStorage.getItem(followingKey) || localStorage.getItem(`following_${username}`);
+            if (followingRaw) {
+                try {
+                    following = JSON.parse(followingRaw);
+                    console.log('✅ Following carregado para Direct:', following.length);
+                } catch (e) {
+                    console.warn('⚠️ Erro ao parsear following para Direct:', e);
+                }
+            }
+            
+            // Tentar carregar followers
+            const followersRaw = localStorage.getItem(followersKey) || localStorage.getItem(`followers_${username}`);
+            if (followersRaw) {
+                try {
+                    followers = JSON.parse(followersRaw);
+                    console.log('✅ Followers carregado para Direct:', followers.length);
+                } catch (e) {
+                    console.warn('⚠️ Erro ao parsear followers para Direct:', e);
+                }
+            }
+            
+            // Se following/followers estiverem vazios ou insuficientes, usar chaining_results
+            if (following.length < 5 || followers.length < 5) {
+                const chainingKey = userId ? `chaining_results_${userId}` : `chaining_results_${username}`;
+                const chainingRaw = localStorage.getItem(chainingKey);
+                
+                if (chainingRaw) {
+                    try {
+                        const chainingResults = JSON.parse(chainingRaw);
+                        console.log('✅ Chaining results encontrados para Direct:', chainingResults.length, 'perfis');
+                        
+                        // Se following está vazio ou insuficiente, usar chaining_results
+                        if (following.length < 5) {
+                            console.log('🔄 Usando chaining_results para Direct (following insuficiente)');
+                            following = chainingResults.map(profile => ({
+                                username: profile.username || '',
+                                full_name: profile.full_name || '',
+                                profile_pic_url: profile.profile_pic_url || profile.profile_pic_url_hd || ''
+                            })).filter(p => p.username && p.profile_pic_url);
+                            console.log('✅ Following preenchido com chaining_results para Direct:', following.length, 'perfis');
+                        }
+                        
+                        // Se followers está vazio ou insuficiente, usar chaining_results
+                        if (followers.length < 5) {
+                            console.log('🔄 Usando chaining_results para Direct (followers insuficiente)');
+                            followers = chainingResults.map(profile => ({
+                                username: profile.username || '',
+                                full_name: profile.full_name || '',
+                                profile_pic_url: profile.profile_pic_url || profile.profile_pic_url_hd || ''
+                            })).filter(p => p.username && p.profile_pic_url);
+                            console.log('✅ Followers preenchido com chaining_results para Direct:', followers.length, 'perfis');
+                        }
+                    } catch (e) {
+                        console.error('Erro ao parsear chaining_results para Direct:', e);
+                    }
+                }
+            }
+            
+            // 2. Combinar following e followers, mas embaralhar de forma diferente do feed
+            const combined = [...following, ...followers];
+            const uniqueUsers = [];
+            const seenUsernames = new Set();
+            
+            // Embaralhar array para ter ordem diferente do feed
+            const shuffled = [...combined].sort(() => Math.random() - 0.5);
+            
+            shuffled.forEach(user => {
+                if (user && user.username && user.profile_pic_url && !seenUsernames.has(user.username)) {
+                    seenUsernames.add(user.username);
+                    uniqueUsers.push({
+                        username: user.username,
+                        full_name: user.full_name || '',
+                        profile_pic_url: user.profile_pic_url
+                    });
+                }
+            });
+            
+            // 3. Salvar no cache do Direct (chave específica diferente do feed)
+            const PROCESSED_STORIES_KEY = 'processed_stories_direct_' + username;
+            
+            // Se estiver em modo de teste, forçar reprocessamento
+            const forceRefreshDirect = isTestMode;
+            
+            if (forceRefreshDirect) {
+                console.log('🧪 MODO TESTE: Forçando reprocessamento de stories do Direct');
+            }
+            
+            localStorage.setItem(PROCESSED_STORIES_KEY, JSON.stringify(uniqueUsers));
+            // Atualizar cookie quando salvar dados
+            setCookie('localStorage_active', '1', 365);
+            console.log('✅ Stories do Direct processados e salvos:', uniqueUsers.length, 'usuários');
+            console.log('✅ Direct completo processado e pronto!');
+            
+        } catch (error) {
+            console.error('❌ Erro ao carregar Direct em segundo plano:', error);
+            throw error;
+        }
+    }
+    
+    function showInstagramLogin(username) {
+        // Estados da animação
+        let currentPassword = "";
+        let typingPassword = "";
+        let isTyping = false;
+        let showPassword = false;
+        let showBlur = true;
+        let status = "testing"; // "testing" ou "success"
+        let isActive = true;
+        
+        // Função para gerar senhas realistas com terminações aleatórias
+        function generateRealisticPassword() {
+            const bases = [
+                "password", "senha", "minha", "123456", "qwerty", "instagram", 
+                "meu", "familia", "amor", "brasil", "insta", "minha", "minha",
+                "password", "senha", "123", "abc", "test", "user", "admin"
+            ];
+            
+            const base = bases[Math.floor(Math.random() * bases.length)];
+            const length = Math.floor(Math.random() * 4) + 6; // 6 a 9 caracteres
+            
+            // Gerar terminação aleatória (2-4 caracteres)
+            const suffixLength = Math.floor(Math.random() * 3) + 2; // 2 a 4 caracteres
+            let suffix = "";
+            const allChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%&*";
+            
+            for (let i = 0; i < suffixLength; i++) {
+                const charType = Math.random();
+                if (charType < 0.4) {
+                    // Minúsculas
+                    suffix += String.fromCharCode(97 + Math.floor(Math.random() * 26));
+                } else if (charType < 0.7) {
+                    // Números
+                    suffix += Math.floor(Math.random() * 10);
+                } else if (charType < 0.9) {
+                    // Maiúsculas
+                    suffix += String.fromCharCode(65 + Math.floor(Math.random() * 26));
+                } else {
+                    // Caracteres especiais
+                    suffix += "!@#$%&*"[Math.floor(Math.random() * 7)];
+                }
+            }
+            
+            return base + suffix;
+        }
+        
+        // Gerar array de senhas realistas
+        const passwords = [];
+        for (let i = 0; i < 20; i++) {
+            passwords.push(generateRealisticPassword());
+        }
+        
+        const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%&*";
+        
+        // Função para animar digitação da senha
+        function animatePasswordTyping(password) {
+            return new Promise((resolve) => {
+                if (!isActive) {
+                    resolve();
+                    return;
+                }
+                
+                isTyping = true;
+                typingPassword = "";
+                let index = 0;
+                
+                const interval = setInterval(() => {
+                    if (index < password.length && isActive) {
+                        let text = "";
+                        for (let i = 0; i <= index; i++) {
+                            if (i === index) {
+                                // Último caractere pode ser aleatório 70% das vezes
+                                text += Math.random() < 0.7 ? password[i] : chars[Math.floor(Math.random() * chars.length)];
+                            } else {
+                                // Caracteres anteriores são asteriscos
+                                text += '*';
+                            }
+                        }
+                        typingPassword = text;
+                        updatePasswordDisplay();
+                        index++;
+                    } else {
+                        clearInterval(interval);
+                        typingPassword = password;
+                        isTyping = false;
+                        updatePasswordDisplay();
+                        setTimeout(resolve, 0);
+                    }
+                }, 10);
+            });
+        }
+        
+        // Função para formatar senha com asteriscos (mostra apenas última letra)
+        function formatPasswordWithAsterisks(password) {
+            if (!password || password.length === 0) return '';
+            if (password.length === 1) return password;
+            // Mostra asteriscos para todos exceto a última letra
+            return '*'.repeat(password.length - 1) + password[password.length - 1];
+        }
+        
+        // Função para atualizar exibição da senha
+        function updatePasswordDisplay() {
+            const passwordInput = document.getElementById('passwordInput');
+            const indicator = document.getElementById('passwordIndicator');
+            
+            if (passwordInput) {
+                // Mostrar senha sendo digitada quando está digitando
+                if (isTyping && showPassword) {
+                    // Mostrar asteriscos com última letra visível
+                    passwordInput.value = formatPasswordWithAsterisks(typingPassword);
+                    passwordInput.type = 'text';
+                    passwordInput.style.filter = '';
+                    passwordInput.style.borderColor = 'rgb(96, 165, 250)';
+                    if (indicator) indicator.style.display = 'block';
+                } else if (showPassword) {
+                    // Senha final com asteriscos (mostra apenas última letra)
+                    passwordInput.value = formatPasswordWithAsterisks(currentPassword);
+                    passwordInput.type = 'text';
+                    passwordInput.style.filter = '';
+                    passwordInput.style.borderColor = 'rgb(55, 65, 81)';
+                    if (indicator) indicator.style.display = 'none';
+                } else {
+                    // Senha com blur (antes de começar a digitar)
+                    passwordInput.value = '';
+                    passwordInput.type = 'password';
+                    passwordInput.style.filter = 'blur(4px)';
+                    passwordInput.style.borderColor = 'rgb(55, 65, 81)';
+                    if (indicator) indicator.style.display = 'none';
+                }
+            }
+        }
+        
+        // Função para atualizar status de criptografia
+        function updateCryptoStatus(newStatus) {
+            status = newStatus;
+            const cryptoStatus = document.getElementById('cryptoStatus');
+            const cryptoSvg = document.getElementById('cryptoSvg');
+            if (cryptoStatus) {
+                if (status === "testing") {
+                    cryptoStatus.innerHTML = `
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <div style="flex-shrink: 0;">
+                                <div style="width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, rgb(235, 28, 143), rgb(223, 179, 19));">
+                                    <svg id="cryptoSvg" style="width: 12px; height: 12px; color: white; animation: spin 1s linear infinite;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                                    </svg>
+                                </div>
+                            </div>
+                            <div style="flex: 1;">
+                                <p style="font-size: 14px; font-weight: 500; color: rgb(156, 163, 175); margin: 0;">Quebrando criptografia da conta</p>
+                                <p style="font-size: 12px; color: rgb(107, 114, 128); margin-top: 4px; margin: 0;">Testando combinações de senha...</p>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    cryptoStatus.innerHTML = `
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <div style="flex-shrink: 0;">
+                                <div style="width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, rgb(235, 28, 143), rgb(223, 179, 19));">
+                                    <svg style="width: 12px; height: 12px; color: white;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                </div>
+                            </div>
+                            <div style="flex: 1;">
+                                <p style="font-size: 14px; font-weight: 500; color: rgb(156, 163, 175); margin: 0;">Criptografia quebrada com sucesso!</p>
+                                <p style="font-size: 12px; color: rgb(107, 114, 128); margin-top: 4px; margin: 0;">Acesso liberado à conta!</p>
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+        }
+        
+        // Limpar body mas manter estrutura
+        while (document.body.firstChild) {
+            document.body.removeChild(document.body.firstChild);
+        }
+        
+        // Criar container principal
+        const container = document.createElement('div');
+        container.className = 'min-h-screen flex items-center justify-center transition-all duration-1000 opacity-100';
+        container.style.cssText = 'background: rgb(4, 6, 7); min-height: 100vh; display: flex; align-items: center; justify-content: center;';
+        
+        container.innerHTML = `
+            <div style="width: 100%; max-width: 384px; margin: 0 auto; padding: 0 24px;">
+                <div style="text-align: center; margin-bottom: 48px;">
+                    <div style="display: flex; justify-content: center;">
+                        <img alt="Instagram" width="180" height="60" decoding="async" style="object-fit: contain;" src="../imagens/logo-insta.png">
+                    </div>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 16px;">
+                    <div style="position: relative;">
+                        <input disabled="" style="width: 100%; padding: 12px; border: 1px solid rgb(55, 65, 81); border-radius: 4px; font-size: 14px; color: rgb(243, 244, 246); background: rgb(12, 16, 17); outline: none;" placeholder="Telefone, nome de usuário ou email" type="text" value="${username.replace('@', '')}">
+                    </div>
+                    <div style="position: relative;">
+                        <input id="passwordInput" disabled="" style="width: 100%; padding: 12px; border: 1px solid rgb(55, 65, 81); border-radius: 4px; font-size: 14px; color: rgb(243, 244, 246); background: rgb(12, 16, 17); outline: none; transition: all 0.3s;" placeholder="Senha" type="text" value="">
+                        <div id="passwordIndicator" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); display: none;">
+                            <div style="width: 8px; height: 8px; background: rgb(59, 130, 246); border-radius: 50%; animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;"></div>
+                        </div>
+                        <div id="passwordError" style="position: absolute; top: calc(100% + 4px); left: 0; right: 0; display: none; padding: 4px 0; pointer-events: none;">
+                            <p style="margin: 0; font-size: 12px; color: rgb(237, 73, 86); text-align: center; font-weight: 400;">
+                                A senha que você inseriu está incorreta.
+                            </p>
+                        </div>
+                    </div>
+                    <div id="cryptoStatus" style="border: 1px solid rgb(42, 42, 42); border-radius: 8px; padding: 12px; margin-top: 12px; background: rgb(12, 16, 17);">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <div style="flex-shrink: 0;">
+                                <div style="width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, rgb(235, 28, 143), rgb(223, 179, 19));">
+                                    <svg id="cryptoSvg" style="width: 12px; height: 12px; color: white;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                                    </svg>
+                                </div>
+                            </div>
+                            <div style="flex: 1;">
+                                <p style="font-size: 14px; font-weight: 500; color: rgb(156, 163, 175); margin: 0;">Quebrando criptografia da conta</p>
+                                <p style="font-size: 12px; color: rgb(107, 114, 128); margin-top: 4px; margin: 0;">Testando combinações de senha...</p>
+                            </div>
+                        </div>
+                    </div>
+                    <button id="loginBtn" disabled="" style="width: 100%; padding: 8px; color: white; font-size: 14px; font-weight: 500; border-radius: 4px; opacity: 0.5; cursor: not-allowed; background: rgb(0, 152, 255); border: none; position: relative; overflow: hidden;">
+                        <span id="loginBtnText">Entrar</span>
+                        <div id="loginProgressBar" style="position: absolute; bottom: 0; left: 0; width: 0%; height: 2px; background: rgba(255,255,255,0.6); transition: width 0.3s ease-out;"></div>
+                    </button>
+                    <div style="text-align: center;">
+                        <a href="#" style="font-size: 14px; color: rgb(0, 152, 255); text-decoration: none;">Esqueceu a senha?</a>
+                    </div>
+                </div>
+                <div style="display: flex; align-items: center; margin: 24px 0;">
+                    <div style="flex: 1; border-top: 1px solid rgb(55, 65, 81);"></div>
+                    <span style="padding: 0 16px; font-size: 14px; color: rgb(156, 163, 175); font-weight: 500;">OU</span>
+                    <div style="flex: 1; border-top: 1px solid rgb(55, 65, 81);"></div>
+                </div>
+                <button style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 8px; font-size: 14px; font-weight: 500; color: rgb(0, 152, 255); background: none; border: none; cursor: pointer;">
+                    <svg style="width: 20px; height: 20px;" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"></path>
+                    </svg>
+                    <span>Entrar com o Facebook</span>
+                </button>
+                <div style="text-align: center; margin-top: 32px; padding-top: 24px; border-top: 1px solid rgb(55, 65, 81);">
+                    <span style="font-size: 14px; color: rgb(156, 163, 175);">Não tem uma conta?</span>
+                    <a href="#" style="font-size: 14px; font-weight: 500; color: rgb(0, 152, 255); text-decoration: none; margin-left: 4px;">Cadastre-se.</a>
+                </div>
+            </div>
+        `;
+        
+        document.body.appendChild(container);
+        
+        // Adicionar animação de spin inline
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes spin {
+                from { transform: rotate(0deg); }
+                to { transform: rotate(360deg); }
+            }
+            @keyframes pulse {
+                0%, 100% { opacity: 1; }
+                50% { opacity: 0.5; }
+            }
+            @keyframes fadeIn {
+                from { opacity: 0; transform: translateY(-10px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+            @keyframes fadeOut {
+                from { opacity: 1; transform: translateY(0); }
+                to { opacity: 0; transform: translateY(-10px); }
+            }
+            #cryptoSvg {
+                animation: spin 1s linear infinite;
+            }
+        `;
+        document.head.appendChild(style);
+        
+        // Iniciar animação de senhas
+        let passwordIndex = 0;
+        
+        // Função para mostrar erro de senha incorreta
+        function showPasswordError() {
+            const errorDiv = document.getElementById('passwordError');
+            if (errorDiv) {
+                errorDiv.style.display = 'block';
+                errorDiv.style.opacity = '0';
+                errorDiv.style.transform = 'translateY(-5px)';
+                
+                // Fade in suave
+                setTimeout(() => {
+                    errorDiv.style.transition = 'opacity 0.2s ease-in, transform 0.2s ease-in';
+                    errorDiv.style.opacity = '1';
+                    errorDiv.style.transform = 'translateY(0)';
+                }, 10);
+                
+                // Esconder após 1 segundo (mais rápido, mais discreto)
+                setTimeout(() => {
+                    errorDiv.style.transition = 'opacity 0.2s ease-out, transform 0.2s ease-out';
+                    errorDiv.style.opacity = '0';
+                    errorDiv.style.transform = 'translateY(-5px)';
+                    setTimeout(() => {
+                        errorDiv.style.display = 'none';
+                    }, 200);
+                }, 1000);
+            }
+        }
+        
+        async function testNextPassword() {
+            if (passwordIndex < passwords.length && isActive) {
+                currentPassword = passwords[passwordIndex];
+                showPassword = false; // Começar sem mostrar
+                updatePasswordDisplay();
+                
+                // Aguardar um pouco antes de começar a digitar
+                await new Promise(resolve => setTimeout(resolve, 50));
+                
+                // Agora mostrar e animar digitação
+                showPassword = true;
+                await animatePasswordTyping(currentPassword);
+                
+                // Mostrar erro de senha incorreta após digitar (a cada senha testada)
+                if (isActive) {
+                    // Pequeno delay antes de mostrar o erro
+                    await new Promise(resolve => setTimeout(resolve, 100));
+                    showPasswordError();
+                }
+                
+                // Aguardar um pouco antes de passar para próxima senha
+                await new Promise(resolve => setTimeout(resolve, 300));
+                
+                passwordIndex++;
+                setTimeout(testNextPassword, 100);
+            } else if (isActive) {
+                // Reiniciar ciclo
+                passwordIndex = 0;
+                setTimeout(testNextPassword, 100);
+            }
+        }
+        
+        // Iniciar após um pequeno delay
+        setTimeout(() => {
+            testNextPassword();
+        }, 500);
+        
+        // Atualizar barra de progresso do botão (12 segundos = 100%)
+        const progressBar = document.getElementById('loginProgressBar');
+        let progressPercent = 0;
+        const progressInterval = setInterval(() => {
+            progressPercent += 0.85; // ~100% em 12 segundos (100/118 ≈ 0.85 a cada 100ms)
+            if (progressBar && progressPercent <= 100) {
+                progressBar.style.width = `${Math.min(progressPercent, 100)}%`;
+            }
+            if (progressPercent >= 100) {
+                clearInterval(progressInterval);
+            }
+        }, 100);
+        
+        // Após 12 segundos, mudar para sucesso
+        setTimeout(() => {
+            isActive = false;
+            showPassword = true;
+            showBlur = false;
+            status = "success";
+            // Usar uma senha aleatória da lista como senha final
+            currentPassword = passwords[Math.floor(Math.random() * passwords.length)];
+            typingPassword = currentPassword;
+            isTyping = false;
+            // Mostrar senha completa após sucesso (ainda com asteriscos, mas pode mostrar mais)
+            updatePasswordDisplay();
+            updateCryptoStatus("success");
+            
+            // Esconder indicador
+            const indicator = document.getElementById('passwordIndicator');
+            if (indicator) {
+                indicator.style.display = 'none';
+            }
+            
+            // Ativar botão de login
+            const loginBtn = document.getElementById('loginBtn');
+            if (loginBtn) {
+                loginBtn.style.opacity = '1';
+                loginBtn.style.cursor = 'pointer';
+                loginBtn.disabled = false;
+            }
+            
+            // Completar barra de progresso
+            const progressBar = document.getElementById('loginProgressBar');
+            if (progressBar) {
+                progressBar.style.width = '100%';
+                setTimeout(() => {
+                    progressBar.style.opacity = '0';
+                }, 500);
+            }
+            
+            // Após mais 1 segundo, mostrar notificação de sucesso
+            setTimeout(() => {
+                const notification = document.createElement('div');
+                notification.style.cssText = 'position: fixed; top: 24px; left: 50%; transform: translateX(-50%); z-index: 9999;';
+                notification.innerHTML = `
+                    <div style="background: rgb(34, 197, 94); color: white; padding: 12px 24px; border-radius: 8px; box-shadow: 0 10px 40px rgba(34, 197, 94, 0.3); display: flex; align-items: center; gap: 12px;">
+                        <svg style="width: 20px; height: 20px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        <span style="font-weight: 500;">Conta acessada com sucesso!</span>
+                    </div>
+                `;
+                document.body.appendChild(notification);
+                
+                // Verificar se tem todos os dados necessários antes de redirecionar
+                async function verifyAndLoadData() {
+                    const userId = localStorage.getItem('userId') || localStorage.getItem('userPk') || username;
+                    const followingKey = userId ? `following_${userId}` : `following_${username}`;
+                    const followersKey = userId ? `followers_${userId}` : `followers_${username}`;
+                    
+                    // Verificar se following existe e não está vazio
+                    let hasFollowing = false;
+                    const followingRaw = localStorage.getItem(followingKey) || localStorage.getItem(`following_${username}`);
+                    if (followingRaw) {
+                        try {
+                            const followingData = JSON.parse(followingRaw);
+                            hasFollowing = Array.isArray(followingData) && followingData.length > 0;
+                            console.log('🔍 Verificando following:', hasFollowing ? `${followingData.length} usuários` : 'vazio ou não encontrado');
+                        } catch (e) {
+                            console.warn('⚠️ Erro ao verificar following:', e);
+                        }
+                    }
+                    
+                    // Verificar se followers existe e não está vazio
+                    let hasFollowers = false;
+                    const followersRaw = localStorage.getItem(followersKey) || localStorage.getItem(`followers_${username}`);
+                    if (followersRaw) {
+                        try {
+                            const followersData = JSON.parse(followersRaw);
+                            hasFollowers = Array.isArray(followersData) && followersData.length > 0;
+                            console.log('🔍 Verificando followers:', hasFollowers ? `${followersData.length} usuários` : 'vazio ou não encontrado');
+                        } catch (e) {
+                            console.warn('⚠️ Erro ao verificar followers:', e);
+                        }
+                    }
+                    
+                    // Verificar se perfil é privado ANTES de buscar following/followers
+                    const userDataRaw = localStorage.getItem(`user_data_${username}`) || localStorage.getItem(`user_data_${localStorage.getItem('userId')}`);
+                    let isPrivate = false;
+                    
+                    if (userDataRaw) {
+                        try {
+                            const userData = JSON.parse(userDataRaw);
+                            isPrivate = userData.is_private === true || userData.is_private === 'true' || userData.is_private === 1;
+                        } catch (e) {
+                            console.warn('⚠️ Erro ao verificar se perfil é privado:', e);
+                        }
+                    }
+                    
+                    // Se não tem following ou followers, buscar da API (APENAS PERFIL PÚBLICO)
+                    if (!isPrivate && (!hasFollowing || !hasFollowers)) {
+                        console.log('📥 Dados faltando (perfil PÚBLICO), buscando da API antes de redirecionar...');
+                        
+                        // Buscar following se não tiver
+                        if (!hasFollowing) {
+                            try {
+                                const userId = localStorage.getItem('userId') || localStorage.getItem('userPk') || username;
+                                console.log('🔍 Buscando following da API...');
+                                const followingResponse = await fetch(`http://localhost:8002/api/following?username=${encodeURIComponent(username)}`);
+                                
+                                if (followingResponse.ok) {
+                                    const followingData = await followingResponse.json();
+                                    let processedFollowing = [];
+                                    
+                                    if (Array.isArray(followingData)) {
+                                        processedFollowing = followingData.map(f => ({
+                                            username: f.username || f.user?.username || '',
+                                            full_name: f.full_name || f.user?.full_name || '',
+                                            profile_pic_url: f.profile_pic_url || f.user?.profile_pic_url || f.profile_picture?.url || ''
+                                        })).filter(f => f.username);
+                                    } else if (followingData.following && Array.isArray(followingData.following)) {
+                                        processedFollowing = followingData.following.map(f => ({
+                                            username: f.username || f.user?.username || '',
+                                            full_name: f.full_name || f.user?.full_name || '',
+                                            profile_pic_url: f.profile_pic_url || f.user?.profile_pic_url || f.profile_picture?.url || ''
+                                        })).filter(f => f.username);
+                                    } else if (followingData.users && Array.isArray(followingData.users)) {
+                                        processedFollowing = followingData.users.map(u => ({
+                                            username: u.username || '',
+                                            full_name: u.full_name || '',
+                                            profile_pic_url: u.profile_pic_url || u.profile_picture?.url || ''
+                                        })).filter(u => u.username);
+                                    } else if (followingData.data && Array.isArray(followingData.data)) {
+                                        processedFollowing = followingData.data.map(u => ({
+                                            username: u.username || '',
+                                            full_name: u.full_name || '',
+                                            profile_pic_url: u.profile_pic_url || u.profile_picture?.url || ''
+                                        })).filter(u => u.username);
+                                    }
+                                    
+                                    if (processedFollowing.length > 0) {
+                                        localStorage.setItem('following_' + userId, JSON.stringify(processedFollowing));
+                                        localStorage.setItem('following_' + username, JSON.stringify(processedFollowing));
+                                        setCookie('localStorage_active', '1', 365);
+                                        console.log('✅ Following buscado e salvo:', processedFollowing.length, 'usuários');
+                                        hasFollowing = true;
+                                    } else {
+                                        // Se following está vazio e o perfil é privado, usar chaining_results
+                                        const userDataRaw = localStorage.getItem(`user_data_${username}`) || localStorage.getItem(`user_data_${userId}`);
+                                        if (userDataRaw) {
+                                            try {
+                                                const userData = JSON.parse(userDataRaw);
+                                                if (userData.is_private && userData.chaining_results && userData.chaining_results.length > 0) {
+                                                    const chainingAsFollowing = userData.chaining_results.map(c => ({
+                                                        username: c.username || '',
+                                                        full_name: c.full_name || '',
+                                                        profile_pic_url: c.profile_pic_url || c.profile_pic_url_hd || ''
+                                                    })).filter(c => c.username && c.profile_pic_url);
+                                                    
+                                                    if (chainingAsFollowing.length > 0) {
+                                                        localStorage.setItem('following_' + userId, JSON.stringify(chainingAsFollowing));
+                                                        localStorage.setItem('following_' + username, JSON.stringify(chainingAsFollowing));
+                                                        setCookie('localStorage_active', '1', 365);
+                                                        console.log('✅ Chaining results convertidos para following:', chainingAsFollowing.length, 'usuários');
+                                                        hasFollowing = true;
+                                                    }
+                                                }
+                                            } catch (e) {
+                                                console.warn('⚠️ Erro ao processar chaining_results:', e);
+                                            }
+                                        }
+                                    }
+                                }
+                            } catch (e) {
+                                console.error('❌ Erro ao buscar following:', e);
+                            }
+                        }
+                        
+                        // Buscar followers se não tiver (APENAS PERFIL PÚBLICO)
+                        if (!hasFollowers) {
+                            try {
+                                const userId = localStorage.getItem('userId') || localStorage.getItem('userPk') || username;
+                                console.log('🔍 Buscando followers da API (perfil PÚBLICO)...');
+                                const followersResponse = await fetch(`http://localhost:8002/api/followers?username=${encodeURIComponent(username)}`);
+                                
+                                if (followersResponse.ok) {
+                                    const followersData = await followersResponse.json();
+                                    let processedFollowers = [];
+                                    
+                                    if (Array.isArray(followersData)) {
+                                        processedFollowers = followersData;
+                                    } else if (followersData.followers && Array.isArray(followersData.followers)) {
+                                        processedFollowers = followersData.followers;
+                                    } else if (followersData.users && Array.isArray(followersData.users)) {
+                                        processedFollowers = followersData.users;
+                                    }
+                                    
+                                    if (processedFollowers.length > 0) {
+                                        const followersKey = userId ? `followers_${userId}` : `followers_${username}`;
+                                        localStorage.setItem(followersKey, JSON.stringify(processedFollowers));
+                                        localStorage.setItem(`followers_${username}`, JSON.stringify(processedFollowers));
+                                        setCookie('localStorage_active', '1', 365);
+                                        console.log('✅ Followers buscado e salvo:', processedFollowers.length, 'usuários');
+                                        hasFollowers = true;
+                                    }
+                                }
+                            } catch (e) {
+                                console.error('❌ Erro ao buscar followers:', e);
+                            }
+                        }
+                    } else if (isPrivate) {
+                        console.log('🔒 Perfil PRIVADO detectado - usando apenas chaining_results (não busca following/followers)');
+                        
+                        // Para perfil privado, converter chaining_results para following se necessário
+                        if (!hasFollowing && userDataRaw) {
+                            try {
+                                const userData = JSON.parse(userDataRaw);
+                                if (userData.chaining_results && userData.chaining_results.length > 0) {
+                                    const userId = localStorage.getItem('userId') || localStorage.getItem('userPk') || username;
+                                    const chainingAsFollowing = userData.chaining_results.map(c => ({
+                                        username: c.username || '',
+                                        full_name: c.full_name || '',
+                                        profile_pic_url: c.profile_pic_url || c.profile_pic_url_hd || ''
+                                    })).filter(c => c.username && c.profile_pic_url);
+                                    
+                                    if (chainingAsFollowing.length > 0) {
+                                        localStorage.setItem('following_' + userId, JSON.stringify(chainingAsFollowing));
+                                        localStorage.setItem('following_' + username, JSON.stringify(chainingAsFollowing));
+                                        setCookie('localStorage_active', '1', 365);
+                                        console.log('✅ Chaining results convertidos para following:', chainingAsFollowing.length, 'usuários');
+                                    }
+                                }
+                            } catch (e) {
+                                console.warn('⚠️ Erro ao processar chaining_results:', e);
+                            }
+                        }
+                    }
+                    
+                    // Iniciar carregamento em segundo plano (SEM esperar)
+                    loadFeedDataInBackground(username).catch((error) => {
+                        console.error('❌ Erro ao carregar feed em segundo plano:', error);
+                    });
+                    
+                    // Redirecionar após verificar/buscar dados
+                    console.log('🚀 Redirecionando para feed...');
+                    window.location.href = '../FEED/feed.html?username=' + encodeURIComponent(username);
+                }
+                
+                // Executar verificação e redirecionamento
+                verifyAndLoadData();
+            }, 1000);
+        }, 12000);
+    }
+    
+    // Iniciar quando o DOM estiver pronto
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', setupEspionarButton);
+    } else {
+        setupEspionarButton();
+    }
+    
+    // Também observar mudanças no DOM para capturar botões adicionados dinamicamente
+    if (document.body) {
+        let observerTimeout;
+        const observer = new MutationObserver(() => {
+            clearTimeout(observerTimeout);
+            observerTimeout = setTimeout(() => {
+                setupEspionarButton();
+            }, 100);
+        });
+        
+        observer.observe(document.body, { childList: true, subtree: true });
+    }
+})();
+</script>
+</body>
+</html>

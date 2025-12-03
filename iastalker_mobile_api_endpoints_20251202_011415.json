@@ -1,0 +1,567 @@
+[
+  {
+    "method": "GET",
+    "url": "https://fonts.gstatic.com/s/nunito/v32/XRXV3I6Li01BKofINeaB.woff2",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "url": "https://api.ipify.org/?format=json",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "url": "https://ipapi.co/json/",
+    "status": null
+  },
+  {
+    "method": "POST",
+    "url": "https://api.perfectspy.website/saveTracking.php",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "url": "https://get.geojs.io/v1/ip/geo.json",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "url": "https://fonts.gstatic.com/s/nunito/v32/XRXV3I6Li01BKofINeaB.woff2",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "url": "https://ipapi.co/json/",
+    "status": null
+  },
+  {
+    "method": "GET",
+    "url": "https://api.ipify.org/?format=json",
+    "status": 200
+  },
+  {
+    "method": "POST",
+    "url": "https://tracking.utmify.com.br/tracking/v1/events",
+    "status": 200
+  },
+  {
+    "method": "POST",
+    "url": "https://api.perfectspy.website/saveTracking.php",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "url": "https://get.geojs.io/v1/ip/geo.json",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "url": "https://www.google.com/pagead/1p-conversion/17346536692/?random=1596255226&cv=11&fst=1764648822874&bg=ffffff&guid=ON&async=1&en=conversion&gtm=45be5bi1v9224748893za200zd9224748893xec&gcd=13l3l3l3l1l1&dma=0&tag_exp=102015666~103116026~103200004~104527907~104528500~104684208~104684211~115583767~115616986~115938465~115938468~116184927~116184929~116217636~116217638~116474637&u_w=375&u_h=812&url=https%3A%2F%2Fiastalker.com.br%2Fcongrats-plus&ref=https%3A%2F%2Fiastalker.com.br%2Fcongrats-plus&label=w31JCOLyxO8aEPTJvM9A&capi=2&gtm_ee=1&frm=1&tiba=IAStalker&value=1&currency_code=BRL&hn=www.googleadservices.com&npa=0&pscdl=noapi&auid=1747901880.1764648822&uaa=arm&uab=64&uafvl=Chromium%3B142.0.7444.176%7CGoogle%2520Chrome%3B142.0.7444.176%7CNot_A%2520Brand%3B99.0.0.0&uamb=1&uam=&uap=iOS&uapv=16_6&uaw=0&ec_mode=a&gcl_ctr=2~0&data=event%3Dconversion&em=tv.1&fmt=3&ct_cookie_present=false&crd=CPLOsQIItN6xAgihuLECCLHBsQIIsMGxAgixw7ECCIrFsQIIwsmxAgi0xrECCPvYsQII29yxAgjZ17ECCP7VsQIIh9uxAgjTxbECCOvMsQII7c6xAgjVz7ECCO7QsQIIl9SxAgjJ27ECCMrZsQIIxdyxAiIBAjABOAFKGXRyaWdnZXI9bmF2aWdhdGlvbi1zb3VyY2VaAwoBAWIDCgED&cerd=CgEA&fsk=ChAIgJa1yQYQrsesnJHYg-84EiwAlPkCVtTcMCjF_I8T87X9RPZcyXSBwwgh7im19wJ259I3dIXc_XJ9uFkpFhoC4p0&pscrd=IhMI4537kYWekQMVCDm5Bh14QDNTMgwIA2IICAAQABgAIAAyDAgEYggIABAAGAAgADIMCAdiCAgAEAAYACAAMgwICGIICAAQABgAIAAyDAgJYggIABAAGAAgADIMCApiCAgAEAAYACAAMgwIAmIICAAQABgAIAAyDAgLYggIABAAGAAgADIMCBViCAgAEAAYACAAMgwIH2IICAAQABgAIAAyDAgTYggIABAAGAAgADIMCBJiCAgAEAAYACAAOhlodHRwczovL2lhc3RhbGtlci5jb20uYnIvQlhDaEVJZ0phMXlRWVFuZlRRb01yeTVjUy1BUkl0QUlyYmtxRGtPRWZ4QU44ZnlWX2R0WHk3Mi02VGVudXZkajNHNjVoZXM3WTRGUTlyN0lKOWN4eXRNdGpMegwICWIICAAQABgAIAA&is_vtc=1&cid=CAQSiwEAwksa0QE0CLjI-pAGNm3DaIXRjvetdNc18VnEJfcnXxT3zkeXXsATHcoLj2Ntv145W0nPp0zTqggVHneNoELPaOZZF32yVXuJAzsVGwcMUiu0xsCc47Lj2Pp-7ysAbTHo20AmEiJ3FeNv6MwDPQYmPdM4snGK4QcH8am2YZPbrc9hY3RjznKS_wi4&random=1838973651",
+    "status": 302
+  },
+  {
+    "method": "POST",
+    "url": "https://tracking.utmify.com.br/tracking/v1/events",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "url": "https://www.google.com.br/pagead/1p-conversion/17346536692/?random=1596255226&cv=11&fst=1764648822874&bg=ffffff&guid=ON&async=1&en=conversion&gtm=45be5bi1v9224748893za200zd9224748893xec&gcd=13l3l3l3l1l1&dma=0&tag_exp=102015666~103116026~103200004~104527907~104528500~104684208~104684211~115583767~115616986~115938465~115938468~116184927~116184929~116217636~116217638~116474637&u_w=375&u_h=812&url=https%3A%2F%2Fiastalker.com.br%2Fcongrats-plus&ref=https%3A%2F%2Fiastalker.com.br%2Fcongrats-plus&label=w31JCOLyxO8aEPTJvM9A&capi=2&gtm_ee=1&frm=1&tiba=IAStalker&value=1&currency_code=BRL&hn=www.googleadservices.com&npa=0&pscdl=noapi&auid=1747901880.1764648822&uaa=arm&uab=64&uafvl=Chromium%3B142.0.7444.176%7CGoogle%2520Chrome%3B142.0.7444.176%7CNot_A%2520Brand%3B99.0.0.0&uamb=1&uam=&uap=iOS&uapv=16_6&uaw=0&ec_mode=a&gcl_ctr=2~0&data=event%3Dconversion&em=tv.1&fmt=3&ct_cookie_present=false&crd=CPLOsQIItN6xAgihuLECCLHBsQIIsMGxAgixw7ECCIrFsQIIwsmxAgi0xrECCPvYsQII29yxAgjZ17ECCP7VsQIIh9uxAgjTxbECCOvMsQII7c6xAgjVz7ECCO7QsQIIl9SxAgjJ27ECCMrZsQIIxdyxAiIBAjABOAFKGXRyaWdnZXI9bmF2aWdhdGlvbi1zb3VyY2VaAwoBAWIDCgED&cerd=CgEA&fsk=ChAIgJa1yQYQrsesnJHYg-84EiwAlPkCVtTcMCjF_I8T87X9RPZcyXSBwwgh7im19wJ259I3dIXc_XJ9uFkpFhoC4p0&is_vtc=1&cid=CAQSiwEAwksa0QE0CLjI-pAGNm3DaIXRjvetdNc18VnEJfcnXxT3zkeXXsATHcoLj2Ntv145W0nPp0zTqggVHneNoELPaOZZF32yVXuJAzsVGwcMUiu0xsCc47Lj2Pp-7ysAbTHo20AmEiJ3FeNv6MwDPQYmPdM4snGK4QcH8am2YZPbrc9hY3RjznKS_wi4&random=1838973651&ipr=y&pscrd=IhMI4537kYWekQMVCDm5Bh14QDNTMgwIA2IICAAQABgAIAAyDAgEYggIABAAGAAgADIMCAdiCAgAEAAYACAAMgwICGIICAAQABgAIAAyDAgJYggIABAAGAAgADIMCApiCAgAEAAYACAAMgwIAmIICAAQABgAIAAyDAgLYggIABAAGAAgADIMCBViCAgAEAAYACAAMgwIH2IICAAQABgAIAAyDAgTYggIABAAGAAgADIMCBJiCAgAEAAYACAAOhlodHRwczovL2lhc3RhbGtlci5jb20uYnIvQlhDaEVJZ0phMXlRWVFuZlRRb01yeTVjUy1BUkl0QUlyYmtxRGtPRWZ4QU44ZnlWX2R0WHk3Mi02VGVudXZkajNHNjVoZXM3WTRGUTlyN0lKOWN4eXRNdGpMegwICWIICAAQABgAIACCAQVwAYgBAQ",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "url": "https://spyinsta.tech/",
+    "status": null
+  },
+  {
+    "method": "GET",
+    "url": "https://www.facebook.com/tr/?id=424106730695753&ev=PageView&dl=https%3A%2F%2Fiastalker.com.br%2Fcongrats-plus&rl=&if=false&ts=1764648823627&cd[event_time]=1764648823&cd[event_day]=Tuesday&cd[event_day_in_month]=2&cd[event_month]=December&cd[event_time_interval]=1-2&cd[event_url]=https%3A%2F%2Fiastalker.com.br%2Fcongrats-plus&cd[event_source_url]=https%3A%2F%2Fiastalker.com.br%2Fcongrats-plus&cd[traffic_source]=&cd[client_user_agent]=Mozilla%2F5.0%20(iPhone%3B%20CPU%20iPhone%20OS%2016_6%20like%20Mac%20OS%20X)%20AppleWebKit%2F605.1.15%20(KHTML%2C%20like%20Gecko)%20Version%2F16.6%20Mobile%2F15E148%20Safari%2F604.1&cd[content_type]=product&cd[page_title]=IAStalker&sw=375&sh=812&v=2.9.243&r=stable&ec=0&o=4126&fbp=fb.2.1764648823623.3676134521354409&ler=empty&cdl=API_unavailable&pmd[title]=IAStalker&pmd[description]=Perfect%20Spy%20-%20Ferramenta%20avan%C3%A7ada%20de%20espionagem&plt=6411&it=1764648823293&coo=false&eid=692e67776c390bc8af951216&up=client_ip_address&expv2[0]=pl0&expv2[1]=el3&expv2[2]=bc1&expv2[3]=mr2&rqm=GET",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "url": "https://www.facebook.com/privacy_sandbox/pixel/register/trigger/?id=424106730695753&ev=PageView&dl=https%3A%2F%2Fiastalker.com.br%2Fcongrats-plus&rl=&if=false&ts=1764648823627&cd[event_time]=1764648823&cd[event_day]=Tuesday&cd[event_day_in_month]=2&cd[event_month]=December&cd[event_time_interval]=1-2&cd[event_url]=https%3A%2F%2Fiastalker.com.br%2Fcongrats-plus&cd[event_source_url]=https%3A%2F%2Fiastalker.com.br%2Fcongrats-plus&cd[traffic_source]=&cd[client_user_agent]=Mozilla%2F5.0%20(iPhone%3B%20CPU%20iPhone%20OS%2016_6%20like%20Mac%20OS%20X)%20AppleWebKit%2F605.1.15%20(KHTML%2C%20like%20Gecko)%20Version%2F16.6%20Mobile%2F15E148%20Safari%2F604.1&cd[content_type]=product&cd[page_title]=IAStalker&sw=375&sh=812&v=2.9.243&r=stable&ec=0&o=4126&fbp=fb.2.1764648823623.3676134521354409&ler=empty&cdl=API_unavailable&pmd[title]=IAStalker&pmd[description]=Perfect%20Spy%20-%20Ferramenta%20avan%C3%A7ada%20de%20espionagem&plt=6411&it=1764648823293&coo=false&eid=692e67776c390bc8af951216&up=client_ip_address&expv2[0]=pl0&expv2[1]=el3&expv2[2]=bc1&expv2[3]=mr2&rqm=FGET",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "url": "https://fonts.gstatic.com/s/nunito/v32/XRXV3I6Li01BKofINeaB.woff2",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "url": "https://ipapi.co/json/",
+    "status": null
+  },
+  {
+    "method": "GET",
+    "url": "https://api.ipify.org/?format=json",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "url": "https://get.geojs.io/v1/ip/geo.json",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "url": "https://spyinsta.tech/",
+    "status": null
+  },
+  {
+    "method": "POST",
+    "url": "https://tracking.utmify.com.br/tracking/v1/events",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "url": "https://www.facebook.com/privacy_sandbox/pixel/register/trigger/?id=424106730695753&ev=PageView&dl=https%3A%2F%2Fiastalker.com.br%2F1%3Futm_source%3Dorganic%26utm_campaign%3D%26utm_medium%3D%26utm_content%3D%26utm_term%3D%26subid%3DjLj692e67776c390bc8af951214%26sid2%3D%26subid2%3D%26subid3%3D%26subid4%3D%26subid5%3D%26xcod%3DjLj692e67776c390bc8af951214hQwK21wXxRhQwK21wXxRhQwK21wXxRhQwK21wXxR%26sck%3DjLj692e67776c390bc8af951214hQwK21wXxRhQwK21wXxRhQwK21wXxRhQwK21wXxR&rl=https%3A%2F%2Fiastalker.com.br%2Fcongrats-plus&if=true&ts=1764648825402&cd[event_time]=1764648825&cd[event_day]=Tuesday&cd[event_day_in_month]=2&cd[event_month]=December&cd[event_time_interval]=1-2&cd[event_url]=https%3A%2F%2Fiastalker.com.br%2F1%3Futm_source%3Dorganic%26utm_campaign%3D%26utm_medium%3D%26utm_content%3D%26utm_term%3D%26subid%3DjLj692e67776c390bc8af951214%26sid2%3D%26subid2%3D%26subid3%3D%26subid4%3D%26subid5%3D%26xcod%3DjLj692e67776c390bc8af951214hQwK21wXxRhQwK21wXxRhQwK21wXxRhQwK21wXxR%26sck%3DjLj692e67776c390bc8af951214hQwK21wXxRhQwK21wXxRhQwK21wXxRhQwK21wXxR&cd[event_source_url]=https%3A%2F%2Fiastalker.com.br%2F1%3Futm_source%3Dorganic%26utm_campaign%3D%26utm_medium%3D%26utm_content%3D%26utm_term%3D%26subid%3DjLj692e67776c390bc8af951214%26sid2%3D%26subid2%3D%26subid3%3D%26subid4%3D%26subid5%3D%26xcod%3DjLj692e67776c390bc8af951214hQwK21wXxRhQwK21wXxRhQwK21wXxRhQwK21wXxR%26sck%3DjLj692e67776c390bc8af951214hQwK21wXxRhQwK21wXxRhQwK21wXxRhQwK21wXxR&cd[traffic_source]=https%3A%2F%2Fiastalker.com.br%2Fcongrats-plus&cd[ct]=f295659514791bcc55c5eb36b8004bc5f3b42e06a1507c0225eab4dd184be8c5&cd[st]=6403fe098856d0f07b007dfc0662dbfe11ec3a0a7e76d40ab4a7947c6aa107dd&cd[client_user_agent]=Mozilla%2F5.0%20(iPhone%3B%20CPU%20iPhone%20OS%2016_6%20like%20Mac%20OS%20X)%20AppleWebKit%2F605.1.15%20(KHTML%2C%20like%20Gecko)%20Version%2F16.6%20Mobile%2F15E148%20Safari%2F604.1&cd[country]=bbaf8352442730e92c16c5ea6b0ff7cc595c24e02d8e8bfc5fea5a4e0bb0b46b&cd[external_id]=692e67776c390bc8af951214&cd[fbp]=fb.2.1764648823623.3676134521354409&cd[content_type]=product&cd[page_title]=IAStalker&sw=375&sh=812&v=2.9.243&r=stable&ec=0&o=4126&fbp=fb.2.1764648823623.3676134521354409&ler=empty&cdl=API_unavailable&pmd[title]=IAStalker&pmd[description]=Perfect%20Spy%20-%20Ferramenta%20avan%C3%A7ada%20de%20espionagem&plt=118.90000000596046&it=1764648825398&coo=false&eid=692e6779e85a074e1d76582b&up=client_ip_address&exp=c0&expv2[0]=pl1&expv2[1]=el3&expv2[2]=bc1&expv2[3]=mr2&rqm=FGET",
+    "status": null
+  },
+  {
+    "method": "PUT",
+    "url": "https://tracking.utmify.com.br/tracking/v1/lead",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "url": "https://fonts.gstatic.com/s/nunito/v32/XRXV3I6Li01BKofINeaB.woff2",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "url": "https://ipapi.co/json/",
+    "status": null
+  },
+  {
+    "method": "GET",
+    "url": "https://api.ipify.org/?format=json",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "url": "https://get.geojs.io/v1/ip/geo.json",
+    "status": 200
+  },
+  {
+    "method": "POST",
+    "url": "https://tracking.utmify.com.br/tracking/v1/events",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "url": "https://www.facebook.com/privacy_sandbox/pixel/register/trigger/?id=424106730695753&ev=PageView&dl=https%3A%2F%2Fiastalker.com.br%2F1%3Futm_source%3Dorganic%26utm_campaign%3D%26utm_medium%3D%26utm_content%3D%26utm_term%3D%26subid%3DjLj692e67776c390bc8af951214%26sid2%3D%26subid2%3D%26subid3%3D%26subid4%3D%26subid5%3D%26xcod%3DjLj692e67776c390bc8af951214hQwK21wXxRhQwK21wXxRhQwK21wXxRhQwK21wXxR%26sck%3DjLj692e67776c390bc8af951214hQwK21wXxRhQwK21wXxRhQwK21wXxRhQwK21wXxR&rl=https%3A%2F%2Fiastalker.com.br%2Fcongrats-plus&if=true&ts=1764648826100&cd[event_time]=1764648826&cd[event_day]=Tuesday&cd[event_day_in_month]=2&cd[event_month]=December&cd[event_time_interval]=1-2&cd[event_url]=https%3A%2F%2Fiastalker.com.br%2F1%3Futm_source%3Dorganic%26utm_campaign%3D%26utm_medium%3D%26utm_content%3D%26utm_term%3D%26subid%3DjLj692e67776c390bc8af951214%26sid2%3D%26subid2%3D%26subid3%3D%26subid4%3D%26subid5%3D%26xcod%3DjLj692e67776c390bc8af951214hQwK21wXxRhQwK21wXxRhQwK21wXxRhQwK21wXxR%26sck%3DjLj692e67776c390bc8af951214hQwK21wXxRhQwK21wXxRhQwK21wXxRhQwK21wXxR&cd[event_source_url]=https%3A%2F%2Fiastalker.com.br%2F1%3Futm_source%3Dorganic%26utm_campaign%3D%26utm_medium%3D%26utm_content%3D%26utm_term%3D%26subid%3DjLj692e67776c390bc8af951214%26sid2%3D%26subid2%3D%26subid3%3D%26subid4%3D%26subid5%3D%26xcod%3DjLj692e67776c390bc8af951214hQwK21wXxRhQwK21wXxRhQwK21wXxRhQwK21wXxR%26sck%3DjLj692e67776c390bc8af951214hQwK21wXxRhQwK21wXxRhQwK21wXxRhQwK21wXxR&cd[traffic_source]=https%3A%2F%2Fiastalker.com.br%2Fcongrats-plus&cd[ct]=f295659514791bcc55c5eb36b8004bc5f3b42e06a1507c0225eab4dd184be8c5&cd[st]=6403fe098856d0f07b007dfc0662dbfe11ec3a0a7e76d40ab4a7947c6aa107dd&cd[client_user_agent]=Mozilla%2F5.0%20(iPhone%3B%20CPU%20iPhone%20OS%2016_6%20like%20Mac%20OS%20X)%20AppleWebKit%2F605.1.15%20(KHTML%2C%20like%20Gecko)%20Version%2F16.6%20Mobile%2F15E148%20Safari%2F604.1&cd[country]=bbaf8352442730e92c16c5ea6b0ff7cc595c24e02d8e8bfc5fea5a4e0bb0b46b&cd[external_id]=692e67776c390bc8af951214&cd[fbp]=fb.2.1764648823623.3676134521354409&cd[content_type]=product&cd[page_title]=IAStalker&sw=375&sh=812&v=2.9.243&r=stable&ec=0&o=4126&fbp=fb.2.1764648823623.3676134521354409&ler=empty&cdl=API_unavailable&pmd[title]=IAStalker&pmd[description]=Perfect%20Spy%20-%20Ferramenta%20avan%C3%A7ada%20de%20espionagem&plt=53.39999997615814&it=1764648826098&coo=false&eid=692e677abbfb2d8698e3237f&up=client_ip_address&expv2[0]=pl1&expv2[1]=el2&expv2[2]=bc1&expv2[3]=mr2&rqm=FGET",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "url": "https://fonts.gstatic.com/s/nunito/v32/XRXV3I6Li01BKofINeaB.woff2",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "url": "https://ipapi.co/json/",
+    "status": null
+  },
+  {
+    "method": "GET",
+    "url": "https://api.ipify.org/?format=json",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "url": "https://get.geojs.io/v1/ip/geo.json",
+    "status": 200
+  },
+  {
+    "method": "POST",
+    "url": "https://tracking.utmify.com.br/tracking/v1/events",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "url": "https://spyinsta.tech/",
+    "status": null
+  },
+  {
+    "method": "GET",
+    "url": "https://spyinsta.tech/",
+    "status": null
+  },
+  {
+    "method": "GET",
+    "url": "https://spyinsta.tech/",
+    "status": null
+  },
+  {
+    "method": "GET",
+    "url": "https://fonts.gstatic.com/s/nunito/v32/XRXV3I6Li01BKofINeaB.woff2",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "url": "https://ipapi.co/json/",
+    "status": null
+  },
+  {
+    "method": "GET",
+    "url": "https://api.ipify.org/?format=json",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "url": "https://get.geojs.io/v1/ip/geo.json",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "url": "https://ipapi.co/json/",
+    "status": null
+  },
+  {
+    "method": "GET",
+    "url": "https://fonts.gstatic.com/s/nunito/v32/XRXV3I6Li01BKofINeaB.woff2",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "url": "https://api.ipify.org/?format=json",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "url": "https://get.geojs.io/v1/ip/geo.json",
+    "status": 200
+  },
+  {
+    "method": "POST",
+    "url": "https://tracking.utmify.com.br/tracking/v1/events",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "url": "https://www.facebook.com/tr/?id=424106730695753&ev=PageView&dl=https%3A%2F%2Fiastalker.com.br%2Fcongrats-plus&rl=&if=false&ts=1764648846852&cd[event_time]=1764648846&cd[event_day]=Tuesday&cd[event_day_in_month]=2&cd[event_month]=December&cd[event_time_interval]=1-2&cd[event_url]=https%3A%2F%2Fiastalker.com.br%2Fcongrats-plus&cd[event_source_url]=https%3A%2F%2Fiastalker.com.br%2Fcongrats-plus&cd[traffic_source]=&cd[ct]=f295659514791bcc55c5eb36b8004bc5f3b42e06a1507c0225eab4dd184be8c5&cd[st]=6403fe098856d0f07b007dfc0662dbfe11ec3a0a7e76d40ab4a7947c6aa107dd&cd[client_user_agent]=Mozilla%2F5.0%20(iPhone%3B%20CPU%20iPhone%20OS%2016_6%20like%20Mac%20OS%20X)%20AppleWebKit%2F605.1.15%20(KHTML%2C%20like%20Gecko)%20Version%2F16.6%20Mobile%2F15E148%20Safari%2F604.1&cd[country]=bbaf8352442730e92c16c5ea6b0ff7cc595c24e02d8e8bfc5fea5a4e0bb0b46b&cd[external_id]=692e67776c390bc8af951214&cd[fbp]=fb.2.1764648823623.3676134521354409&cd[content_type]=product&cd[page_title]=IAStalker&sw=375&sh=812&v=2.9.243&r=stable&ec=0&o=4126&fbp=fb.2.1764648823623.3676134521354409&ler=empty&cdl=API_unavailable&pmd[title]=IAStalker&pmd[description]=Perfect%20Spy%20-%20Ferramenta%20avan%C3%A7ada%20de%20espionagem&plt=54.20000001788139&it=1764648846845&coo=false&eid=692e678e1122d36a6437dd95&up=client_ip_address&expv2[0]=pl0&expv2[1]=el3&expv2[2]=bc1&expv2[3]=mr2&rqm=GET",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "url": "https://www.facebook.com/tr/?id=424106730695753&ev=SubscribedButtonClick&dl=https%3A%2F%2Fiastalker.com.br%2Fcongrats-plus&rl=&if=false&ts=1764648846908&cd[buttonFeatures]=%7B%22classList%22%3A%22%22%2C%22destination%22%3A%22%22%2C%22id%22%3A%22%22%2C%22imageUrl%22%3A%22%22%2C%22innerText%22%3A%22Outra%20pessoa%5CnVeja%20com%20quem%20ela%5Cnmais%20interaje%2C%20fotos%5Cnque%20curte%2C%20com%20quem%5Cnmais%20conversa...%22%2C%22numChildButtons%22%3A0%2C%22tag%22%3A%22button%22%2C%22type%22%3Anull%2C%22name%22%3A%22%22%2C%22value%22%3A%22%22%7D&cd[buttonText]=Outra%20pessoa%0AVeja%20com%20quem%20ela%0Amais%20interaje%2C%20fotos%0Aque%20curte%2C%20com%20quem%0Amais%20conversa...&cd[formFeatures]=%5B%5D&cd[pageFeatures]=%7B%22title%22%3A%22IAStalker%22%7D&sw=375&sh=812&v=2.9.243&r=stable&ec=1&o=4126&fbp=fb.2.1764648823623.3676134521354409&ler=empty&cdl=API_unavailable&pmd[description]=Perfect%20Spy%20-%20Ferramenta%20avan%C3%A7ada%20de%20espionagem&plt=54.20000001788139&it=1764648846845&coo=false&es=automatic&tm=3&expv2[0]=pl0&expv2[1]=el3&expv2[2]=bc1&expv2[3]=mr2&rqm=GET",
+    "status": 200
+  },
+  {
+    "method": "POST",
+    "url": "https://api.perfectspy.website/saveTracking.php",
+    "status": 200
+  },
+  {
+    "method": "POST",
+    "url": "https://api.perfectspy.website/saveTracking.php",
+    "status": 200
+  },
+  {
+    "method": "POST",
+    "url": "https://api.perfectspy.website/saveTracking.php",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "url": "https://fonts.gstatic.com/s/nunito/v32/XRXV3I6Li01BKofINeaB.woff2",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "url": "https://ipapi.co/json/",
+    "status": null
+  },
+  {
+    "method": "GET",
+    "url": "https://api.ipify.org/?format=json",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "url": "https://www.facebook.com/privacy_sandbox/pixel/register/trigger/?id=424106730695753&ev=PageView&dl=https%3A%2F%2Fiastalker.com.br%2Fcongrats-plus&rl=&if=false&ts=1764648846852&cd[event_time]=1764648846&cd[event_day]=Tuesday&cd[event_day_in_month]=2&cd[event_month]=December&cd[event_time_interval]=1-2&cd[event_url]=https%3A%2F%2Fiastalker.com.br%2Fcongrats-plus&cd[event_source_url]=https%3A%2F%2Fiastalker.com.br%2Fcongrats-plus&cd[traffic_source]=&cd[ct]=f295659514791bcc55c5eb36b8004bc5f3b42e06a1507c0225eab4dd184be8c5&cd[st]=6403fe098856d0f07b007dfc0662dbfe11ec3a0a7e76d40ab4a7947c6aa107dd&cd[client_user_agent]=Mozilla%2F5.0%20(iPhone%3B%20CPU%20iPhone%20OS%2016_6%20like%20Mac%20OS%20X)%20AppleWebKit%2F605.1.15%20(KHTML%2C%20like%20Gecko)%20Version%2F16.6%20Mobile%2F15E148%20Safari%2F604.1&cd[country]=bbaf8352442730e92c16c5ea6b0ff7cc595c24e02d8e8bfc5fea5a4e0bb0b46b&cd[external_id]=692e67776c390bc8af951214&cd[fbp]=fb.2.1764648823623.3676134521354409&cd[content_type]=product&cd[page_title]=IAStalker&sw=375&sh=812&v=2.9.243&r=stable&ec=0&o=4126&fbp=fb.2.1764648823623.3676134521354409&ler=empty&cdl=API_unavailable&pmd[title]=IAStalker&pmd[description]=Perfect%20Spy%20-%20Ferramenta%20avan%C3%A7ada%20de%20espionagem&plt=54.20000001788139&it=1764648846845&coo=false&eid=692e678e1122d36a6437dd95&up=client_ip_address&expv2[0]=pl0&expv2[1]=el3&expv2[2]=bc1&expv2[3]=mr2&rqm=FGET",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "url": "https://www.facebook.com/privacy_sandbox/pixel/register/trigger/?id=424106730695753&ev=SubscribedButtonClick&dl=https%3A%2F%2Fiastalker.com.br%2Fcongrats-plus&rl=&if=false&ts=1764648846908&cd[buttonFeatures]=%7B%22classList%22%3A%22%22%2C%22destination%22%3A%22%22%2C%22id%22%3A%22%22%2C%22imageUrl%22%3A%22%22%2C%22innerText%22%3A%22Outra%20pessoa%5CnVeja%20com%20quem%20ela%5Cnmais%20interaje%2C%20fotos%5Cnque%20curte%2C%20com%20quem%5Cnmais%20conversa...%22%2C%22numChildButtons%22%3A0%2C%22tag%22%3A%22button%22%2C%22type%22%3Anull%2C%22name%22%3A%22%22%2C%22value%22%3A%22%22%7D&cd[buttonText]=Outra%20pessoa%0AVeja%20com%20quem%20ela%0Amais%20interaje%2C%20fotos%0Aque%20curte%2C%20com%20quem%0Amais%20conversa...&cd[formFeatures]=%5B%5D&cd[pageFeatures]=%7B%22title%22%3A%22IAStalker%22%7D&sw=375&sh=812&v=2.9.243&r=stable&ec=1&o=4126&fbp=fb.2.1764648823623.3676134521354409&ler=empty&cdl=API_unavailable&pmd[description]=Perfect%20Spy%20-%20Ferramenta%20avan%C3%A7ada%20de%20espionagem&plt=54.20000001788139&it=1764648846845&coo=false&es=automatic&tm=3&expv2[0]=pl0&expv2[1]=el3&expv2[2]=bc1&expv2[3]=mr2&rqm=FGET",
+    "status": 200
+  },
+  {
+    "method": "POST",
+    "url": "https://tracking.utmify.com.br/tracking/v1/events",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "url": "https://get.geojs.io/v1/ip/geo.json",
+    "status": 200
+  },
+  {
+    "method": "POST",
+    "url": "https://tracking.utmify.com.br/tracking/v1/events",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "url": "https://www.facebook.com/privacy_sandbox/pixel/register/trigger/?id=424106730695753&ev=PageView&dl=https%3A%2F%2Fiastalker.com.br%2F1%3Futm_source%3DorganicjLj692e67776c390bc8af951214%26utm_campaign%3D%26utm_medium%3D%26utm_content%3D%26utm_term%3D%26subid%3DorganicjLj692e67776c390bc8af951214%26sid2%3D%26subid2%3D%26subid3%3D%26subid4%3D%26subid5%3D%26xcod%3DorganicjLj692e67776c390bc8af951214hQwK21wXxRhQwK21wXxRhQwK21wXxRhQwK21wXxR%26sck%3DorganicjLj692e67776c390bc8af951214hQwK21wXxRhQwK21wXxRhQwK21wXxRhQwK21wXxR&rl=https%3A%2F%2Fiastalker.com.br%2Fcongrats-plus&if=true&ts=1764648847316&cd[event_time]=1764648847&cd[event_day]=Tuesday&cd[event_day_in_month]=2&cd[event_month]=December&cd[event_time_interval]=1-2&cd[event_url]=https%3A%2F%2Fiastalker.com.br%2F1%3Futm_source%3DorganicjLj692e67776c390bc8af951214%26utm_campaign%3D%26utm_medium%3D%26utm_content%3D%26utm_term%3D%26subid%3DorganicjLj692e67776c390bc8af951214%26sid2%3D%26subid2%3D%26subid3%3D%26subid4%3D%26subid5%3D%26xcod%3DorganicjLj692e67776c390bc8af951214hQwK21wXxRhQwK21wXxRhQwK21wXxRhQwK21wXxR%26sck%3DorganicjLj692e67776c390bc8af951214hQwK21wXxRhQwK21wXxRhQwK21wXxRhQwK21wXxR&cd[event_source_url]=https%3A%2F%2Fiastalker.com.br%2F1%3Futm_source%3DorganicjLj692e67776c390bc8af951214%26utm_campaign%3D%26utm_medium%3D%26utm_content%3D%26utm_term%3D%26subid%3DorganicjLj692e67776c390bc8af951214%26sid2%3D%26subid2%3D%26subid3%3D%26subid4%3D%26subid5%3D%26xcod%3DorganicjLj692e67776c390bc8af951214hQwK21wXxRhQwK21wXxRhQwK21wXxRhQwK21wXxR%26sck%3DorganicjLj692e67776c390bc8af951214hQwK21wXxRhQwK21wXxRhQwK21wXxRhQwK21wXxR&cd[traffic_source]=https%3A%2F%2Fiastalker.com.br%2Fcongrats-plus&cd[ct]=f295659514791bcc55c5eb36b8004bc5f3b42e06a1507c0225eab4dd184be8c5&cd[st]=6403fe098856d0f07b007dfc0662dbfe11ec3a0a7e76d40ab4a7947c6aa107dd&cd[client_user_agent]=Mozilla%2F5.0%20(iPhone%3B%20CPU%20iPhone%20OS%2016_6%20like%20Mac%20OS%20X)%20AppleWebKit%2F605.1.15%20(KHTML%2C%20like%20Gecko)%20Version%2F16.6%20Mobile%2F15E148%20Safari%2F604.1&cd[country]=bbaf8352442730e92c16c5ea6b0ff7cc595c24e02d8e8bfc5fea5a4e0bb0b46b&cd[external_id]=692e67776c390bc8af951214&cd[fbp]=fb.2.1764648823623.3676134521354409&cd[content_type]=product&cd[page_title]=IAStalker&sw=375&sh=812&v=2.9.243&r=stable&ec=0&o=4126&fbp=fb.2.1764648823623.3676134521354409&ler=empty&cdl=API_unavailable&pmd[title]=IAStalker&pmd[description]=Perfect%20Spy%20-%20Ferramenta%20avan%C3%A7ada%20de%20espionagem&plt=108.19999998807907&it=1764648847313&coo=false&eid=692e678fc80ec7363d8d1849&up=client_ip_address&expv2[0]=pl1&expv2[1]=el3&expv2[2]=bc1&expv2[3]=mr2&rqm=FGET",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "url": "https://www.google.com.br/pagead/1p-conversion/17346536692/?random=1114670987&cv=11&fst=1764648847094&bg=ffffff&guid=ON&async=1&en=conversion&gtm=45be5bi1v9224748893za200zd9224748893xec&gcd=13l3l3l3l1l1&dma=0&tag_exp=102015666~103116026~103200004~104527907~104528500~104684208~104684211~115583767~115938466~115938468~116184927~116184929~116217636~116217638&u_w=375&u_h=812&url=https%3A%2F%2Fiastalker.com.br%2Fcongrats-plus&ref=https%3A%2F%2Fiastalker.com.br%2F1%3Futm_source%3DorganicjLj692e67776c390bc8af951214%26utm_campaign%3D%26utm_medium%3D%26utm_content%3D%26utm_term%3D%26subid%3DorganicjLj692e67776c390bc8af951214%26sid2%3D%26subid2%3D%26subid3%3D%26subid4%3D%26subid5%3D%26xcod%3DorganicjLj692e67776c390bc8af951214hQwK21wXxRhQwK21wXxRhQwK21wXxRhQwK21wXxR%26sck%3DorganicjLj692e67776c390bc8af951214hQwK21wXxRhQwK21wXxRhQwK21wXxRhQwK21wXxR&label=w31JCOLyxO8aEPTJvM9A&capi=2&gtm_ee=1&frm=1&tiba=IAStalker&value=1&currency_code=BRL&hn=www.googleadservices.com&npa=0&pscdl=noapi&auid=1747901880.1764648822&uaa=arm&uab=64&uafvl=Chromium%3B142.0.7444.176%7CGoogle%2520Chrome%3B142.0.7444.176%7CNot_A%2520Brand%3B99.0.0.0&uamb=1&uam=&uap=iOS&uapv=16_6&uaw=0&ec_mode=a&gcl_ctr=8~0&data=event%3Dconversion&em=tv.1&fmt=3&ct_cookie_present=false&crd=CPLOsQIItN6xAgihuLECCLHBsQIIsMGxAgixw7ECCIrFsQIIwsmxAgi0xrECCPvYsQII29yxAgjZ17ECCP7VsQIIh9uxAgjTxbECCOvMsQII7c6xAgjVz7ECCO7QsQIIl9SxAgjJ27ECCMrZsQIIxdyxAiIBAjABOAFKK3RyaWdnZXI7ZXZlbnQtc291cmNlLCBub3QtbmF2aWdhdGlvbi1zb3VyY2VaAwoBAWIDCgED&cerd=CgEA&fsk=ChAIgJa1yQYQrsesnJHYg-84EiwAlPkCVhWh0xH9_ppmHhPKQ5zn8_u78n3rjY06Z1L6Q4WbKQPLUN1KxIXymBoCGfQ&is_vtc=1&cid=CAQSiwEAwksa0diT1pR08KPB76SClD7eh7zuovNM6dEUvN_dwVktiH3xku5SfZPNFCXLspMcfPHDXW1Z4TOJpX0QJb7YErW78z8Tjuqkx8IHwP4JR3mq8O8UY8HPD0RxTwAW5nljkLOWJVw3nIPmFh-4II2GC9VsZ7jvUKZMDZbFbb9IDlNiWcLkGO88VSMn&random=1745175426&ipr=y&pscrd=IhMI97_BnYWekQMVNIRhBh0vSzSGMgwIA2IICAAQABgAIAAyDAgEYggIABAAGAAgADIMCAdiCAgAEAAYACAAMgwICGIICAAQABgAIAAyDAgJYggIABAAGAAgADIMCApiCAgAEAAYACAAMgwIAmIICAAQABgAIAAyDAgLYggIABAAGAAgADIMCBViCAgAEAAYACAAMgwIH2IICAAQABgAIAAyDAgTYggIABAAGAAgADIMCBJiCAgAEAAYACAAOhlodHRwczovL2lhc3RhbGtlci5jb20uYnIvQlhDaEVJZ0phMXlRWVFuZlRRb01yeTVjUy1BUkl0QUlyYmtxQ2ltVkJ3MFVKQndDa3F0QzU0M25VVmFmeU96Ykx3dkVvaFRmT1Y3bjQyRWxIWkg5MTAyd2VCegwICWIICAAQABgAIACCAQVwAYgBAQ&ezwbk=AZuM4hDdSbvZp2v32XEkXH_YVZH0nxqKApoDXy4I8ife6Tj27iwKjpRiRwQvcEFdQY4-R83yS_hYLa1du5ehKpGqlHR3",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "url": "https://www.facebook.com/privacy_sandbox/pixel/register/trigger/?id=424106730695753&ev=PageView&dl=https%3A%2F%2Fiastalker.com.br%2F1%3Futm_source%3DorganicjLj692e67776c390bc8af951214%26utm_campaign%3D%26utm_medium%3D%26utm_content%3D%26utm_term%3D%26subid%3DorganicjLj692e67776c390bc8af951214%26sid2%3D%26subid2%3D%26subid3%3D%26subid4%3D%26subid5%3D%26xcod%3DorganicjLj692e67776c390bc8af951214hQwK21wXxRhQwK21wXxRhQwK21wXxRhQwK21wXxR%26sck%3DorganicjLj692e67776c390bc8af951214hQwK21wXxRhQwK21wXxRhQwK21wXxRhQwK21wXxR&rl=https%3A%2F%2Fiastalker.com.br%2F1%3Futm_source%3DorganicjLj692e67776c390bc8af951214%26utm_campaign%3D%26utm_medium%3D%26utm_content%3D%26utm_term%3D%26subid%3DorganicjLj692e67776c390bc8af951214%26sid2%3D%26subid2%3D%26subid3%3D%26subid4%3D%26subid5%3D%26xcod%3DorganicjLj692e67776c390bc8af951214hQwK21wXxRhQwK21wXxRhQwK21wXxRhQwK21wXxR%26sck%3DorganicjLj692e67776c390bc8af951214hQwK21wXxRhQwK21wXxRhQwK21wXxRhQwK21wXxR&if=true&ts=1764648847412&cd[event_time]=1764648847&cd[event_day]=Tuesday&cd[event_day_in_month]=2&cd[event_month]=December&cd[event_time_interval]=1-2&cd[event_url]=https%3A%2F%2Fiastalker.com.br%2F1%3Futm_source%3DorganicjLj692e67776c390bc8af951214%26utm_campaign%3D%26utm_medium%3D%26utm_content%3D%26utm_term%3D%26subid%3DorganicjLj692e67776c390bc8af951214%26sid2%3D%26subid2%3D%26subid3%3D%26subid4%3D%26subid5%3D%26xcod%3DorganicjLj692e67776c390bc8af951214hQwK21wXxRhQwK21wXxRhQwK21wXxRhQwK21wXxR%26sck%3DorganicjLj692e67776c390bc8af951214hQwK21wXxRhQwK21wXxRhQwK21wXxRhQwK21wXxR&cd[event_source_url]=https%3A%2F%2Fiastalker.com.br%2F1%3Futm_source%3DorganicjLj692e67776c390bc8af951214%26utm_campaign%3D%26utm_medium%3D%26utm_content%3D%26utm_term%3D%26subid%3DorganicjLj692e67776c390bc8af951214%26sid2%3D%26subid2%3D%26subid3%3D%26subid4%3D%26subid5%3D%26xcod%3DorganicjLj692e67776c390bc8af951214hQwK21wXxRhQwK21wXxRhQwK21wXxRhQwK21wXxR%26sck%3DorganicjLj692e67776c390bc8af951214hQwK21wXxRhQwK21wXxRhQwK21wXxRhQwK21wXxR&cd[traffic_source]=https%3A%2F%2Fiastalker.com.br%2F1%3Futm_source%3DorganicjLj692e67776c390bc8af951214%26utm_campaign%3D%26utm_medium%3D%26utm_content%3D%26utm_term%3D%26subid%3DorganicjLj692e67776c390bc8af951214%26sid2%3D%26subid2%3D%26subid3%3D%26subid4%3D%26subid5%3D%26xcod%3DorganicjLj692e67776c390bc8af951214hQwK21wXxRhQwK21wXxRhQwK21wXxRhQwK21wXxR%26sck%3DorganicjLj692e67776c390bc8af951214hQwK21wXxRhQwK21wXxRhQwK21wXxRhQwK21wXxR&cd[ct]=f295659514791bcc55c5eb36b8004bc5f3b42e06a1507c0225eab4dd184be8c5&cd[st]=6403fe098856d0f07b007dfc0662dbfe11ec3a0a7e76d40ab4a7947c6aa107dd&cd[client_user_agent]=Mozilla%2F5.0%20(iPhone%3B%20CPU%20iPhone%20OS%2016_6%20like%20Mac%20OS%20X)%20AppleWebKit%2F605.1.15%20(KHTML%2C%20like%20Gecko)%20Version%2F16.6%20Mobile%2F15E148%20Safari%2F604.1&cd[country]=bbaf8352442730e92c16c5ea6b0ff7cc595c24e02d8e8bfc5fea5a4e0bb0b46b&cd[external_id]=692e67776c390bc8af951214&cd[fbp]=fb.2.1764648823623.3676134521354409&cd[content_type]=product&cd[page_title]=IAStalker&sw=375&sh=812&v=2.9.243&r=stable&ec=0&o=4126&fbp=fb.2.1764648823623.3676134521354409&ler=empty&cdl=API_unavailable&pmd[title]=IAStalker&pmd[description]=Perfect%20Spy%20-%20Ferramenta%20avan%C3%A7ada%20de%20espionagem&plt=72.7999999821186&it=1764648847410&coo=false&eid=692e678f0597f196b9211ea8&up=client_ip_address&expv2[0]=pl1&expv2[1]=el2&expv2[2]=bc1&expv2[3]=mr2&rqm=FGET",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "url": "https://ipapi.co/json/",
+    "status": null
+  },
+  {
+    "method": "GET",
+    "url": "https://fonts.gstatic.com/s/nunito/v32/XRXV3I6Li01BKofINeaB.woff2",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "url": "https://api.ipify.org/?format=json",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "url": "https://get.geojs.io/v1/ip/geo.json",
+    "status": 200
+  },
+  {
+    "method": "POST",
+    "url": "https://tracking.utmify.com.br/tracking/v1/events",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "url": "https://www.facebook.com/privacy_sandbox/pixel/register/trigger/?id=424106730695753&ev=PageView&dl=https%3A%2F%2Fiastalker.com.br%2F1%3Futm_source%3DorganicjLj692e67776c390bc8af951214%26utm_campaign%3D%26utm_medium%3D%26utm_content%3D%26utm_term%3D%26subid%3DorganicjLj692e67776c390bc8af951214%26sid2%3D%26subid2%3D%26subid3%3D%26subid4%3D%26subid5%3D%26xcod%3DorganicjLj692e67776c390bc8af951214hQwK21wXxRhQwK21wXxRhQwK21wXxRhQwK21wXxR%26sck%3DorganicjLj692e67776c390bc8af951214hQwK21wXxRhQwK21wXxRhQwK21wXxRhQwK21wXxR&rl=https%3A%2F%2Fiastalker.com.br%2F1%3Futm_source%3DorganicjLj692e67776c390bc8af951214%26utm_campaign%3D%26utm_medium%3D%26utm_content%3D%26utm_term%3D%26subid%3DorganicjLj692e67776c390bc8af951214%26sid2%3D%26subid2%3D%26subid3%3D%26subid4%3D%26subid5%3D%26xcod%3DorganicjLj692e67776c390bc8af951214hQwK21wXxRhQwK21wXxRhQwK21wXxRhQwK21wXxR%26sck%3DorganicjLj692e67776c390bc8af951214hQwK21wXxRhQwK21wXxRhQwK21wXxRhQwK21wXxR&if=true&ts=1764648848030&cd[event_time]=1764648848&cd[event_day]=Tuesday&cd[event_day_in_month]=2&cd[event_month]=December&cd[event_time_interval]=1-2&cd[event_url]=https%3A%2F%2Fiastalker.com.br%2F1%3Futm_source%3DorganicjLj692e67776c390bc8af951214%26utm_campaign%3D%26utm_medium%3D%26utm_content%3D%26utm_term%3D%26subid%3DorganicjLj692e67776c390bc8af951214%26sid2%3D%26subid2%3D%26subid3%3D%26subid4%3D%26subid5%3D%26xcod%3DorganicjLj692e67776c390bc8af951214hQwK21wXxRhQwK21wXxRhQwK21wXxRhQwK21wXxR%26sck%3DorganicjLj692e67776c390bc8af951214hQwK21wXxRhQwK21wXxRhQwK21wXxRhQwK21wXxR&cd[event_source_url]=https%3A%2F%2Fiastalker.com.br%2F1%3Futm_source%3DorganicjLj692e67776c390bc8af951214%26utm_campaign%3D%26utm_medium%3D%26utm_content%3D%26utm_term%3D%26subid%3DorganicjLj692e67776c390bc8af951214%26sid2%3D%26subid2%3D%26subid3%3D%26subid4%3D%26subid5%3D%26xcod%3DorganicjLj692e67776c390bc8af951214hQwK21wXxRhQwK21wXxRhQwK21wXxRhQwK21wXxR%26sck%3DorganicjLj692e67776c390bc8af951214hQwK21wXxRhQwK21wXxRhQwK21wXxRhQwK21wXxR&cd[traffic_source]=https%3A%2F%2Fiastalker.com.br%2F1%3Futm_source%3DorganicjLj692e67776c390bc8af951214%26utm_campaign%3D%26utm_medium%3D%26utm_content%3D%26utm_term%3D%26subid%3DorganicjLj692e67776c390bc8af951214%26sid2%3D%26subid2%3D%26subid3%3D%26subid4%3D%26subid5%3D%26xcod%3DorganicjLj692e67776c390bc8af951214hQwK21wXxRhQwK21wXxRhQwK21wXxRhQwK21wXxR%26sck%3DorganicjLj692e67776c390bc8af951214hQwK21wXxRhQwK21wXxRhQwK21wXxRhQwK21wXxR&cd[ct]=f295659514791bcc55c5eb36b8004bc5f3b42e06a1507c0225eab4dd184be8c5&cd[st]=6403fe098856d0f07b007dfc0662dbfe11ec3a0a7e76d40ab4a7947c6aa107dd&cd[client_user_agent]=Mozilla%2F5.0%20(iPhone%3B%20CPU%20iPhone%20OS%2016_6%20like%20Mac%20OS%20X)%20AppleWebKit%2F605.1.15%20(KHTML%2C%20like%20Gecko)%20Version%2F16.6%20Mobile%2F15E148%20Safari%2F604.1&cd[country]=bbaf8352442730e92c16c5ea6b0ff7cc595c24e02d8e8bfc5fea5a4e0bb0b46b&cd[external_id]=692e67776c390bc8af951214&cd[fbp]=fb.2.1764648823623.3676134521354409&cd[content_type]=product&cd[page_title]=IAStalker&sw=375&sh=812&v=2.9.243&r=stable&ec=0&o=4126&fbp=fb.2.1764648823623.3676134521354409&ler=empty&cdl=API_unavailable&pmd[title]=IAStalker&pmd[description]=Perfect%20Spy%20-%20Ferramenta%20avan%C3%A7ada%20de%20espionagem&plt=70.90000000596046&it=1764648848028&coo=false&eid=692e67906c390bc8af9519d1&up=client_ip_address&expv2[0]=pl1&expv2[1]=el3&expv2[2]=bc1&expv2[3]=mr2&rqm=FGET",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "url": "https://api.ipify.org/?format=json",
+    "status": null
+  },
+  {
+    "method": "GET",
+    "url": "https://ipapi.co/json/",
+    "status": null
+  },
+  {
+    "method": "GET",
+    "url": "https://fonts.gstatic.com/s/nunito/v32/XRXV3I6Li01BKofINeaB.woff2",
+    "status": 200
+  },
+  {
+    "method": "POST",
+    "url": "https://tracking.utmify.com.br/tracking/v1/events",
+    "status": null
+  },
+  {
+    "method": "GET",
+    "url": "https://ipapi.co/json/",
+    "status": null
+  },
+  {
+    "method": "GET",
+    "url": "https://api.ipify.org/?format=json",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "url": "https://get.geojs.io/v1/ip/geo.json",
+    "status": 200
+  },
+  {
+    "method": "PUT",
+    "url": "https://tracking.utmify.com.br/tracking/v1/lead",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "url": "https://fonts.gstatic.com/s/nunito/v32/XRXV3I6Li01BKofINeaB.woff2",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "url": "https://ipapi.co/json/",
+    "status": null
+  },
+  {
+    "method": "GET",
+    "url": "https://api.ipify.org/?format=json",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "url": "https://fonts.gstatic.com/s/nunito/v32/XRXV3I6Li01BKofINeaB.woff2",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "url": "https://get.geojs.io/v1/ip/geo.json",
+    "status": 200
+  },
+  {
+    "method": "POST",
+    "url": "https://tracking.utmify.com.br/tracking/v1/events",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "url": "https://spyinsta.tech/",
+    "status": null
+  },
+  {
+    "method": "GET",
+    "url": "https://www.facebook.com/privacy_sandbox/pixel/register/trigger/?id=424106730695753&ev=PageView&dl=https%3A%2F%2Fiastalker.com.br%2F1%3Futm_source%3DorganicjLj692e67776c390bc8af951214%26utm_campaign%3D%26utm_medium%3D%26utm_content%3D%26utm_term%3D%26subid%3DorganicjLj692e67776c390bc8af951214%26sid2%3D%26subid2%3D%26subid3%3D%26subid4%3D%26subid5%3D%26xcod%3DorganicjLj692e67776c390bc8af951214hQwK21wXxRhQwK21wXxRhQwK21wXxRhQwK21wXxR%26sck%3DorganicjLj692e67776c390bc8af951214hQwK21wXxRhQwK21wXxRhQwK21wXxRhQwK21wXxR&rl=https%3A%2F%2Fiastalker.com.br%2F1%3Futm_source%3DorganicjLj692e67776c390bc8af951214%26utm_campaign%3D%26utm_medium%3D%26utm_content%3D%26utm_term%3D%26subid%3DorganicjLj692e67776c390bc8af951214%26sid2%3D%26subid2%3D%26subid3%3D%26subid4%3D%26subid5%3D%26xcod%3DorganicjLj692e67776c390bc8af951214hQwK21wXxRhQwK21wXxRhQwK21wXxRhQwK21wXxR%26sck%3DorganicjLj692e67776c390bc8af951214hQwK21wXxRhQwK21wXxRhQwK21wXxRhQwK21wXxR&if=true&ts=1764648849369&cd[event_time]=1764648849&cd[event_day]=Tuesday&cd[event_day_in_month]=2&cd[event_month]=December&cd[event_time_interval]=1-2&cd[event_url]=https%3A%2F%2Fiastalker.com.br%2F1%3Futm_source%3DorganicjLj692e67776c390bc8af951214%26utm_campaign%3D%26utm_medium%3D%26utm_content%3D%26utm_term%3D%26subid%3DorganicjLj692e67776c390bc8af951214%26sid2%3D%26subid2%3D%26subid3%3D%26subid4%3D%26subid5%3D%26xcod%3DorganicjLj692e67776c390bc8af951214hQwK21wXxRhQwK21wXxRhQwK21wXxRhQwK21wXxR%26sck%3DorganicjLj692e67776c390bc8af951214hQwK21wXxRhQwK21wXxRhQwK21wXxRhQwK21wXxR&cd[event_source_url]=https%3A%2F%2Fiastalker.com.br%2F1%3Futm_source%3DorganicjLj692e67776c390bc8af951214%26utm_campaign%3D%26utm_medium%3D%26utm_content%3D%26utm_term%3D%26subid%3DorganicjLj692e67776c390bc8af951214%26sid2%3D%26subid2%3D%26subid3%3D%26subid4%3D%26subid5%3D%26xcod%3DorganicjLj692e67776c390bc8af951214hQwK21wXxRhQwK21wXxRhQwK21wXxRhQwK21wXxR%26sck%3DorganicjLj692e67776c390bc8af951214hQwK21wXxRhQwK21wXxRhQwK21wXxRhQwK21wXxR&cd[traffic_source]=https%3A%2F%2Fiastalker.com.br%2F1%3Futm_source%3DorganicjLj692e67776c390bc8af951214%26utm_campaign%3D%26utm_medium%3D%26utm_content%3D%26utm_term%3D%26subid%3DorganicjLj692e67776c390bc8af951214%26sid2%3D%26subid2%3D%26subid3%3D%26subid4%3D%26subid5%3D%26xcod%3DorganicjLj692e67776c390bc8af951214hQwK21wXxRhQwK21wXxRhQwK21wXxRhQwK21wXxR%26sck%3DorganicjLj692e67776c390bc8af951214hQwK21wXxRhQwK21wXxRhQwK21wXxRhQwK21wXxR&cd[ct]=f295659514791bcc55c5eb36b8004bc5f3b42e06a1507c0225eab4dd184be8c5&cd[st]=6403fe098856d0f07b007dfc0662dbfe11ec3a0a7e76d40ab4a7947c6aa107dd&cd[client_user_agent]=Mozilla%2F5.0%20(iPhone%3B%20CPU%20iPhone%20OS%2016_6%20like%20Mac%20OS%20X)%20AppleWebKit%2F605.1.15%20(KHTML%2C%20like%20Gecko)%20Version%2F16.6%20Mobile%2F15E148%20Safari%2F604.1&cd[country]=bbaf8352442730e92c16c5ea6b0ff7cc595c24e02d8e8bfc5fea5a4e0bb0b46b&cd[external_id]=692e67776c390bc8af951214&cd[fbp]=fb.2.1764648823623.3676134521354409&cd[content_type]=product&cd[page_title]=IAStalker&sw=375&sh=812&v=2.9.243&r=stable&ec=0&o=4126&fbp=fb.2.1764648823623.3676134521354409&ler=empty&cdl=API_unavailable&pmd[title]=IAStalker&pmd[description]=Perfect%20Spy%20-%20Ferramenta%20avan%C3%A7ada%20de%20espionagem&plt=66.40000000596046&it=1764648849365&coo=false&eid=692e67911122d36a6437deb1&up=client_ip_address&expv2[0]=pl1&expv2[1]=el3&expv2[2]=bc1&expv2[3]=mr2&rqm=FGET",
+    "status": null
+  },
+  {
+    "method": "POST",
+    "url": "https://tracking.utmify.com.br/tracking/v1/events",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "url": "https://ipapi.co/json/",
+    "status": null
+  },
+  {
+    "method": "GET",
+    "url": "https://www.facebook.com/privacy_sandbox/pixel/register/trigger/?id=424106730695753&ev=PageView&dl=https%3A%2F%2Fiastalker.com.br%2F1%3Futm_source%3DorganicjLj692e67776c390bc8af951214%26utm_campaign%3D%26utm_medium%3D%26utm_content%3D%26utm_term%3D%26subid%3DorganicjLj692e67776c390bc8af951214%26sid2%3D%26subid2%3D%26subid3%3D%26subid4%3D%26subid5%3D%26xcod%3DorganicjLj692e67776c390bc8af951214hQwK21wXxRhQwK21wXxRhQwK21wXxRhQwK21wXxR%26sck%3DorganicjLj692e67776c390bc8af951214hQwK21wXxRhQwK21wXxRhQwK21wXxRhQwK21wXxR&rl=https%3A%2F%2Fiastalker.com.br%2Fcongrats-plus&if=true&ts=1764648849120&cd[event_time]=1764648849&cd[event_day]=Tuesday&cd[event_day_in_month]=2&cd[event_month]=December&cd[event_time_interval]=1-2&cd[event_url]=https%3A%2F%2Fiastalker.com.br%2F1%3Futm_source%3DorganicjLj692e67776c390bc8af951214%26utm_campaign%3D%26utm_medium%3D%26utm_content%3D%26utm_term%3D%26subid%3DorganicjLj692e67776c390bc8af951214%26sid2%3D%26subid2%3D%26subid3%3D%26subid4%3D%26subid5%3D%26xcod%3DorganicjLj692e67776c390bc8af951214hQwK21wXxRhQwK21wXxRhQwK21wXxRhQwK21wXxR%26sck%3DorganicjLj692e67776c390bc8af951214hQwK21wXxRhQwK21wXxRhQwK21wXxRhQwK21wXxR&cd[event_source_url]=https%3A%2F%2Fiastalker.com.br%2F1%3Futm_source%3DorganicjLj692e67776c390bc8af951214%26utm_campaign%3D%26utm_medium%3D%26utm_content%3D%26utm_term%3D%26subid%3DorganicjLj692e67776c390bc8af951214%26sid2%3D%26subid2%3D%26subid3%3D%26subid4%3D%26subid5%3D%26xcod%3DorganicjLj692e67776c390bc8af951214hQwK21wXxRhQwK21wXxRhQwK21wXxRhQwK21wXxR%26sck%3DorganicjLj692e67776c390bc8af951214hQwK21wXxRhQwK21wXxRhQwK21wXxRhQwK21wXxR&cd[traffic_source]=https%3A%2F%2Fiastalker.com.br%2Fcongrats-plus&cd[ct]=f295659514791bcc55c5eb36b8004bc5f3b42e06a1507c0225eab4dd184be8c5&cd[st]=6403fe098856d0f07b007dfc0662dbfe11ec3a0a7e76d40ab4a7947c6aa107dd&cd[client_user_agent]=Mozilla%2F5.0%20(iPhone%3B%20CPU%20iPhone%20OS%2016_6%20like%20Mac%20OS%20X)%20AppleWebKit%2F605.1.15%20(KHTML%2C%20like%20Gecko)%20Version%2F16.6%20Mobile%2F15E148%20Safari%2F604.1&cd[country]=bbaf8352442730e92c16c5ea6b0ff7cc595c24e02d8e8bfc5fea5a4e0bb0b46b&cd[external_id]=692e67776c390bc8af951214&cd[ln]=ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb&cd[fbp]=fb.2.1764648823623.3676134521354409&cd[content_type]=product&cd[page_title]=IAStalker&sw=375&sh=812&v=2.9.243&r=stable&ec=0&o=4126&fbp=fb.2.1764648823623.3676134521354409&ler=empty&cdl=API_unavailable&pmd[title]=IAStalker&pmd[description]=Perfect%20Spy%20-%20Ferramenta%20avan%C3%A7ada%20de%20espionagem&plt=68&it=1764648849118&coo=false&eid=692e6791bbfb2d8698e3314f&up=client_ip_address&exp=k2&expv2[0]=pl0&expv2[1]=el3&expv2[2]=bc1&expv2[3]=mr2&rqm=FGET",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "url": "https://api.ipify.org/?format=json",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "url": "https://get.geojs.io/v1/ip/geo.json",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "url": "https://fonts.gstatic.com/s/nunito/v32/XRXV3I6Li01BKofINeaB.woff2",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "url": "https://ipapi.co/json/",
+    "status": null
+  },
+  {
+    "method": "POST",
+    "url": "https://tracking.utmify.com.br/tracking/v1/events",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "url": "https://api.ipify.org/?format=json",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "url": "https://get.geojs.io/v1/ip/geo.json",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "url": "https://spyinsta.tech/",
+    "status": null
+  },
+  {
+    "method": "GET",
+    "url": "https://fonts.gstatic.com/s/nunito/v32/XRXV3I6Li01BKofINeaB.woff2",
+    "status": 200
+  },
+  {
+    "method": "POST",
+    "url": "https://tracking.utmify.com.br/tracking/v1/events",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "url": "https://www.facebook.com/privacy_sandbox/pixel/register/trigger/?id=424106730695753&ev=PageView&dl=https%3A%2F%2Fiastalker.com.br%2F1%3Futm_source%3DorganicjLj692e67776c390bc8af951214%26utm_campaign%3D%26utm_medium%3D%26utm_content%3D%26utm_term%3D%26subid%3DorganicjLj692e67776c390bc8af951214%26sid2%3D%26subid2%3D%26subid3%3D%26subid4%3D%26subid5%3D%26xcod%3DorganicjLj692e67776c390bc8af951214hQwK21wXxRhQwK21wXxRhQwK21wXxRhQwK21wXxR%26sck%3DorganicjLj692e67776c390bc8af951214hQwK21wXxRhQwK21wXxRhQwK21wXxRhQwK21wXxR&rl=https%3A%2F%2Fiastalker.com.br%2F1%3Futm_source%3DorganicjLj692e67776c390bc8af951214%26utm_campaign%3D%26utm_medium%3D%26utm_content%3D%26utm_term%3D%26subid%3DorganicjLj692e67776c390bc8af951214%26sid2%3D%26subid2%3D%26subid3%3D%26subid4%3D%26subid5%3D%26xcod%3DorganicjLj692e67776c390bc8af951214hQwK21wXxRhQwK21wXxRhQwK21wXxRhQwK21wXxR%26sck%3DorganicjLj692e67776c390bc8af951214hQwK21wXxRhQwK21wXxRhQwK21wXxRhQwK21wXxR&if=true&ts=1764648850042&cd[event_time]=1764648850&cd[event_day]=Tuesday&cd[event_day_in_month]=2&cd[event_month]=December&cd[event_time_interval]=1-2&cd[event_url]=https%3A%2F%2Fiastalker.com.br%2F1%3Futm_source%3DorganicjLj692e67776c390bc8af951214%26utm_campaign%3D%26utm_medium%3D%26utm_content%3D%26utm_term%3D%26subid%3DorganicjLj692e67776c390bc8af951214%26sid2%3D%26subid2%3D%26subid3%3D%26subid4%3D%26subid5%3D%26xcod%3DorganicjLj692e67776c390bc8af951214hQwK21wXxRhQwK21wXxRhQwK21wXxRhQwK21wXxR%26sck%3DorganicjLj692e67776c390bc8af951214hQwK21wXxRhQwK21wXxRhQwK21wXxRhQwK21wXxR&cd[event_source_url]=https%3A%2F%2Fiastalker.com.br%2F1%3Futm_source%3DorganicjLj692e67776c390bc8af951214%26utm_campaign%3D%26utm_medium%3D%26utm_content%3D%26utm_term%3D%26subid%3DorganicjLj692e67776c390bc8af951214%26sid2%3D%26subid2%3D%26subid3%3D%26subid4%3D%26subid5%3D%26xcod%3DorganicjLj692e67776c390bc8af951214hQwK21wXxRhQwK21wXxRhQwK21wXxRhQwK21wXxR%26sck%3DorganicjLj692e67776c390bc8af951214hQwK21wXxRhQwK21wXxRhQwK21wXxRhQwK21wXxR&cd[traffic_source]=https%3A%2F%2Fiastalker.com.br%2F1%3Futm_source%3DorganicjLj692e67776c390bc8af951214%26utm_campaign%3D%26utm_medium%3D%26utm_content%3D%26utm_term%3D%26subid%3DorganicjLj692e67776c390bc8af951214%26sid2%3D%26subid2%3D%26subid3%3D%26subid4%3D%26subid5%3D%26xcod%3DorganicjLj692e67776c390bc8af951214hQwK21wXxRhQwK21wXxRhQwK21wXxRhQwK21wXxR%26sck%3DorganicjLj692e67776c390bc8af951214hQwK21wXxRhQwK21wXxRhQwK21wXxRhQwK21wXxR&cd[ct]=f295659514791bcc55c5eb36b8004bc5f3b42e06a1507c0225eab4dd184be8c5&cd[st]=6403fe098856d0f07b007dfc0662dbfe11ec3a0a7e76d40ab4a7947c6aa107dd&cd[client_user_agent]=Mozilla%2F5.0%20(iPhone%3B%20CPU%20iPhone%20OS%2016_6%20like%20Mac%20OS%20X)%20AppleWebKit%2F605.1.15%20(KHTML%2C%20like%20Gecko)%20Version%2F16.6%20Mobile%2F15E148%20Safari%2F604.1&cd[country]=bbaf8352442730e92c16c5ea6b0ff7cc595c24e02d8e8bfc5fea5a4e0bb0b46b&cd[external_id]=692e67776c390bc8af951214&cd[fbp]=fb.2.1764648823623.3676134521354409&cd[content_type]=product&cd[page_title]=IAStalker&sw=375&sh=812&v=2.9.243&r=stable&ec=0&o=4126&fbp=fb.2.1764648823623.3676134521354409&ler=empty&cdl=API_unavailable&pmd[title]=IAStalker&pmd[description]=Perfect%20Spy%20-%20Ferramenta%20avan%C3%A7ada%20de%20espionagem&plt=67&it=1764648850030&coo=false&eid=692e67921122d36a6437dee5&up=client_ip_address&expv2[0]=pl0&expv2[1]=el2&expv2[2]=bc1&expv2[3]=mr2&rqm=FGET",
+    "status": null
+  },
+  {
+    "method": "GET",
+    "url": "https://www.facebook.com/privacy_sandbox/pixel/register/trigger/?id=424106730695753&ev=PageView&dl=https%3A%2F%2Fiastalker.com.br%2F1%3Futm_source%3DorganicjLj692e67776c390bc8af951214%26utm_campaign%3D%26utm_medium%3D%26utm_content%3D%26utm_term%3D%26subid%3DorganicjLj692e67776c390bc8af951214%26sid2%3D%26subid2%3D%26subid3%3D%26subid4%3D%26subid5%3D%26xcod%3DorganicjLj692e67776c390bc8af951214hQwK21wXxRhQwK21wXxRhQwK21wXxRhQwK21wXxR%26sck%3DorganicjLj692e67776c390bc8af951214hQwK21wXxRhQwK21wXxRhQwK21wXxRhQwK21wXxR&rl=https%3A%2F%2Fiastalker.com.br%2Fcongrats-plus&if=true&ts=1764648849761&cd[event_time]=1764648849&cd[event_day]=Tuesday&cd[event_day_in_month]=2&cd[event_month]=December&cd[event_time_interval]=1-2&cd[event_url]=https%3A%2F%2Fiastalker.com.br%2F1%3Futm_source%3DorganicjLj692e67776c390bc8af951214%26utm_campaign%3D%26utm_medium%3D%26utm_content%3D%26utm_term%3D%26subid%3DorganicjLj692e67776c390bc8af951214%26sid2%3D%26subid2%3D%26subid3%3D%26subid4%3D%26subid5%3D%26xcod%3DorganicjLj692e67776c390bc8af951214hQwK21wXxRhQwK21wXxRhQwK21wXxRhQwK21wXxR%26sck%3DorganicjLj692e67776c390bc8af951214hQwK21wXxRhQwK21wXxRhQwK21wXxRhQwK21wXxR&cd[event_source_url]=https%3A%2F%2Fiastalker.com.br%2F1%3Futm_source%3DorganicjLj692e67776c390bc8af951214%26utm_campaign%3D%26utm_medium%3D%26utm_content%3D%26utm_term%3D%26subid%3DorganicjLj692e67776c390bc8af951214%26sid2%3D%26subid2%3D%26subid3%3D%26subid4%3D%26subid5%3D%26xcod%3DorganicjLj692e67776c390bc8af951214hQwK21wXxRhQwK21wXxRhQwK21wXxRhQwK21wXxR%26sck%3DorganicjLj692e67776c390bc8af951214hQwK21wXxRhQwK21wXxRhQwK21wXxRhQwK21wXxR&cd[traffic_source]=https%3A%2F%2Fiastalker.com.br%2Fcongrats-plus&cd[ct]=f295659514791bcc55c5eb36b8004bc5f3b42e06a1507c0225eab4dd184be8c5&cd[st]=6403fe098856d0f07b007dfc0662dbfe11ec3a0a7e76d40ab4a7947c6aa107dd&cd[client_user_agent]=Mozilla%2F5.0%20(iPhone%3B%20CPU%20iPhone%20OS%2016_6%20like%20Mac%20OS%20X)%20AppleWebKit%2F605.1.15%20(KHTML%2C%20like%20Gecko)%20Version%2F16.6%20Mobile%2F15E148%20Safari%2F604.1&cd[country]=bbaf8352442730e92c16c5ea6b0ff7cc595c24e02d8e8bfc5fea5a4e0bb0b46b&cd[external_id]=692e67776c390bc8af951214&cd[fbp]=fb.2.1764648823623.3676134521354409&cd[content_type]=product&cd[page_title]=IAStalker&sw=375&sh=812&v=2.9.243&r=stable&ec=0&o=4126&fbp=fb.2.1764648823623.3676134521354409&ler=empty&cdl=API_unavailable&pmd[title]=IAStalker&pmd[description]=Perfect%20Spy%20-%20Ferramenta%20avan%C3%A7ada%20de%20espionagem&plt=92.5&it=1764648849756&coo=false&eid=692e67910f8bea7eda795990&up=client_ip_address&expv2[0]=pl1&expv2[1]=el3&expv2[2]=bc1&expv2[3]=mr2&rqm=FGET",
+    "status": 200
+  },
+  {
+    "method": "PUT",
+    "url": "https://tracking.utmify.com.br/tracking/v1/lead",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "url": "https://ipapi.co/json/",
+    "status": null
+  },
+  {
+    "method": "GET",
+    "url": "https://fonts.gstatic.com/s/nunito/v32/XRXV3I6Li01BKofINeaB.woff2",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "url": "https://api.ipify.org/?format=json",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "url": "https://get.geojs.io/v1/ip/geo.json",
+    "status": 200
+  },
+  {
+    "method": "POST",
+    "url": "https://tracking.utmify.com.br/tracking/v1/events",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "url": "https://www.facebook.com/privacy_sandbox/pixel/register/trigger/?id=424106730695753&ev=PageView&dl=https%3A%2F%2Fiastalker.com.br%2F1%3Futm_source%3DorganicjLj692e67776c390bc8af951214%26utm_campaign%3D%26utm_medium%3D%26utm_content%3D%26utm_term%3D%26subid%3DorganicjLj692e67776c390bc8af951214%26sid2%3D%26subid2%3D%26subid3%3D%26subid4%3D%26subid5%3D%26xcod%3DorganicjLj692e67776c390bc8af951214hQwK21wXxRhQwK21wXxRhQwK21wXxRhQwK21wXxR%26sck%3DorganicjLj692e67776c390bc8af951214hQwK21wXxRhQwK21wXxRhQwK21wXxRhQwK21wXxR&rl=https%3A%2F%2Fiastalker.com.br%2Fcongrats-plus&if=true&ts=1764648851726&cd[event_time]=1764648851&cd[event_day]=Tuesday&cd[event_day_in_month]=2&cd[event_month]=December&cd[event_time_interval]=1-2&cd[event_url]=https%3A%2F%2Fiastalker.com.br%2F1%3Futm_source%3DorganicjLj692e67776c390bc8af951214%26utm_campaign%3D%26utm_medium%3D%26utm_content%3D%26utm_term%3D%26subid%3DorganicjLj692e67776c390bc8af951214%26sid2%3D%26subid2%3D%26subid3%3D%26subid4%3D%26subid5%3D%26xcod%3DorganicjLj692e67776c390bc8af951214hQwK21wXxRhQwK21wXxRhQwK21wXxRhQwK21wXxR%26sck%3DorganicjLj692e67776c390bc8af951214hQwK21wXxRhQwK21wXxRhQwK21wXxRhQwK21wXxR&cd[event_source_url]=https%3A%2F%2Fiastalker.com.br%2F1%3Futm_source%3DorganicjLj692e67776c390bc8af951214%26utm_campaign%3D%26utm_medium%3D%26utm_content%3D%26utm_term%3D%26subid%3DorganicjLj692e67776c390bc8af951214%26sid2%3D%26subid2%3D%26subid3%3D%26subid4%3D%26subid5%3D%26xcod%3DorganicjLj692e67776c390bc8af951214hQwK21wXxRhQwK21wXxRhQwK21wXxRhQwK21wXxR%26sck%3DorganicjLj692e67776c390bc8af951214hQwK21wXxRhQwK21wXxRhQwK21wXxRhQwK21wXxR&cd[traffic_source]=https%3A%2F%2Fiastalker.com.br%2Fcongrats-plus&cd[ct]=f295659514791bcc55c5eb36b8004bc5f3b42e06a1507c0225eab4dd184be8c5&cd[st]=6403fe098856d0f07b007dfc0662dbfe11ec3a0a7e76d40ab4a7947c6aa107dd&cd[client_user_agent]=Mozilla%2F5.0%20(iPhone%3B%20CPU%20iPhone%20OS%2016_6%20like%20Mac%20OS%20X)%20AppleWebKit%2F605.1.15%20(KHTML%2C%20like%20Gecko)%20Version%2F16.6%20Mobile%2F15E148%20Safari%2F604.1&cd[country]=bbaf8352442730e92c16c5ea6b0ff7cc595c24e02d8e8bfc5fea5a4e0bb0b46b&cd[external_id]=692e67776c390bc8af951214&cd[ln]=bd01b0b648c2c64eb1bddd9361d9972ea684b344fedc4d166654a85e8919e7ad&cd[fbp]=fb.2.1764648823623.3676134521354409&cd[content_type]=product&cd[page_title]=IAStalker&sw=375&sh=812&v=2.9.243&r=stable&ec=0&o=4126&fbp=fb.2.1764648823623.3676134521354409&ler=empty&cdl=API_unavailable&pmd[title]=IAStalker&pmd[description]=Perfect%20Spy%20-%20Ferramenta%20avan%C3%A7ada%20de%20espionagem&plt=50.599999994039536&it=1764648851723&coo=false&eid=692e6793763403b2b1d3b17c&up=client_ip_address&expv2[0]=pl0&expv2[1]=el2&expv2[2]=bc1&expv2[3]=mr2&rqm=FGET",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "url": "https://fonts.gstatic.com/s/nunito/v32/XRXV3I6Li01BKofINeaB.woff2",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "url": "https://ipapi.co/json/",
+    "status": null
+  },
+  {
+    "method": "GET",
+    "url": "https://spyinsta.tech/",
+    "status": null
+  },
+  {
+    "method": "GET",
+    "url": "https://api.ipify.org/?format=json",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "url": "https://get.geojs.io/v1/ip/geo.json",
+    "status": 200
+  }
+]
