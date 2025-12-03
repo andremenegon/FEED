@@ -276,10 +276,11 @@
         </div>
         
         <div class="test-section">
-            <h2>3. Estilo Concorrente (/_next/image)</h2>
+            <h2>3. Estilo Concorrente (/_next/image) ⭐</h2>
             <div class="test-item" id="test-next">
                 <h3>Next.js Style <span class="status loading" id="status-next">Carregando...</span></h3>
                 <div class="url" id="url-next"></div>
+                <div class="info">💡 Esta é a rota que o concorrente usa (/_next/image)</div>
                 <div class="image-container">
                     <img id="img-next" alt="Teste Next.js" onload="updateStatus('next', 'success')" onerror="updateStatus('next', 'error', this)">
                 </div>
@@ -369,29 +370,53 @@
             try {
                 // Buscar dados do usuário via API
                 const apiUrl = getApiUrl(`/api/user?username=${encodeURIComponent(username)}`);
+                console.log('🔍 Buscando usuário na URL:', apiUrl);
                 const response = await fetch(apiUrl);
                 
+                console.log('📡 Resposta da API:', response.status, response.statusText);
+                
                 if (!response.ok) {
-                    throw new Error(`Erro ${response.status}: ${response.statusText}`);
+                    const errorText = await response.text();
+                    console.error('❌ Erro na resposta:', errorText);
+                    throw new Error(`Erro ${response.status}: ${response.statusText}\n${errorText.substring(0, 200)}`);
                 }
                 
                 const data = await response.json();
+                console.log('📦 Dados recebidos:', data);
                 
-                if (data.error || !data.profile_pic_url) {
-                    throw new Error(data.error || 'Foto de perfil não encontrada');
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+                
+                // A API retorna: data.user.profile_pic_url ou data.user.hd_profile_pic_url_info?.url
+                // Verificar como o código principal faz (Inicio1/index.html linha 563)
+                let profilePicUrl = null;
+                
+                if (data.user) {
+                    profilePicUrl = data.user.profile_pic_url || data.user.hd_profile_pic_url_info?.url;
+                } else if (data.profile_pic_url) {
+                    profilePicUrl = data.profile_pic_url;
+                } else if (data.profile_pic_url_hd) {
+                    profilePicUrl = data.profile_pic_url_hd;
+                }
+                
+                if (!profilePicUrl) {
+                    console.error('❌ Foto de perfil não encontrada. Estrutura dos dados:', JSON.stringify(data, null, 2).substring(0, 500));
+                    throw new Error('Foto de perfil não encontrada. Verifique o console para ver a estrutura dos dados retornados.');
                 }
                 
                 // Atualizar URL da imagem
-                INSTAGRAM_URL = data.profile_pic_url;
+                INSTAGRAM_URL = profilePicUrl;
                 encodedUrl = encodeURIComponent(INSTAGRAM_URL);
                 
                 // Mostrar informações do usuário
+                const userData = data.user || data;
                 userInfo.className = 'user-info success';
                 userInfo.innerHTML = `
                     <strong>✅ Usuário encontrado:</strong><br>
-                    <strong>Username:</strong> @${data.username || username}<br>
-                    <strong>Nome:</strong> ${data.full_name || 'N/A'}<br>
-                    <strong>Seguidores:</strong> ${data.followers_count || 'N/A'}<br>
+                    <strong>Username:</strong> @${userData.username || username}<br>
+                    <strong>Nome:</strong> ${userData.full_name || data.full_name || 'N/A'}<br>
+                    <strong>Seguidores:</strong> ${userData.follower_count || data.followers_count || 'N/A'}<br>
                     <strong>URL da foto:</strong> <span style="font-size: 10px; word-break: break-all;">${INSTAGRAM_URL.substring(0, 100)}...</span>
                 `;
                 userInfo.style.display = 'block';
@@ -458,9 +483,9 @@
             document.getElementById('url-next').textContent = urlNext;
             imgNext.src = urlNext;
             
-            // 4. API Proxy
+            // 4. API Proxy (via getApiUrl - mesma rota que o código usa)
             const imgApiProxy = document.getElementById('img-api-proxy');
-            const urlApiProxy = `/api/proxy-image?url=${encodedUrl}`;
+            const urlApiProxy = getApiUrl('/proxy-image') + '?url=' + encodedUrl;
             document.getElementById('url-api-proxy').textContent = urlApiProxy;
             imgApiProxy.src = urlApiProxy;
             
@@ -522,10 +547,26 @@
             };
             
             if (status === 'error' && imgElement) {
+                // Remover mensagem de erro anterior se existir
+                const testItem = document.getElementById(`test-${testId}`);
+                const existingError = testItem.querySelector('.error-message');
+                if (existingError) existingError.remove();
+                
                 const errorMsg = document.createElement('div');
                 errorMsg.className = 'error-message';
-                errorMsg.textContent = `Erro ao carregar: ${imgElement.src.substring(0, 100)}...`;
-                document.getElementById(`test-${testId}`).appendChild(errorMsg);
+                
+                // Tentar obter mais informações do erro
+                let errorText = `Erro ao carregar: ${imgElement.src.substring(0, 100)}...`;
+                
+                // Se a imagem falhou, pode ser 404, CORS, etc.
+                if (imgElement.src.includes('in-stalker.site')) {
+                    errorText += '\n💡 Dica: Verifique se o Apache está fazendo proxy de /proxy-image e /_next/image';
+                }
+                
+                errorMsg.textContent = errorText;
+                testItem.appendChild(errorMsg);
+                
+                console.error(`❌ Erro no teste ${testId}:`, imgElement.src);
             }
             
             updateSummary();

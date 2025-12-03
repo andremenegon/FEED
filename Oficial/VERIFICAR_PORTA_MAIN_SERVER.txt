@@ -1,0 +1,16 @@
+🔍 VERIFICAR PORTA DO MAIN-SERVER
+==================================
+
+Execute no servidor:
+
+npx pm2 logs main-server --lines 20
+
+Isso vai mostrar os logs do servidor principal, incluindo a porta onde ele está rodando.
+
+Ou execute:
+
+netstat -tulpn | grep 3831982
+
+(Onde 3831982 é o PID do main-server)
+
+Isso vai mostrar em qual porta ele está escutando.

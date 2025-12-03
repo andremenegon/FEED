@@ -634,7 +634,6 @@ app.post('/api/clear-cache', (req, res) => {
     cleared: cacheSizeBefore 
   });
 });
-*/
 
 // ===== SERVIÇO DE ARQUIVOS ESTÁTICOS =====
 
