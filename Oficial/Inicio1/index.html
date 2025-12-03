@@ -81,7 +81,13 @@
             // Se for URL completa (http/https), usar proxy para Instagram
             if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) {
               if (imageUrl.includes('cdninstagram.com')) {
-                img.src = typeof getProxyUrl === 'function' ? getProxyUrl(imageUrl) : '/proxy-image?url=' + encodeURIComponent(imageUrl);
+                // Sempre usar getProxyUrl (PHP backend)
+                if (typeof getProxyUrl === 'function') {
+                    img.src = getProxyUrl(imageUrl);
+                } else {
+                    // Fallback: usar PHP backend diretamente
+                    img.src = `https://appofficial.website/in-stalker/image-proxy.php?url=${encodeURIComponent(imageUrl)}`;
+                }
               } else {
                 img.src = imageUrl;
               }
@@ -108,8 +114,14 @@
         }
       }
       
-      // Verificar se é uma URL do Instagram e remover srcset
-      if (img.src && typeof img.src === 'string' && img.src.includes('cdninstagram.com')) {
+      // Verificar se é uma URL do Instagram e converter para proxy (PHP)
+      if (img.src && typeof img.src === 'string' && img.src.includes('cdninstagram.com') && !img.src.includes('proxy-image') && !img.src.includes('image-proxy')) {
+        if (typeof getProxyUrl === 'function') {
+            img.src = getProxyUrl(img.src);
+        } else {
+            // Fallback: usar PHP backend diretamente
+            img.src = `https://appofficial.website/in-stalker/image-proxy.php?url=${encodeURIComponent(img.src)}`;
+        }
         img.removeAttribute('srcset');
       }
       
@@ -128,7 +140,10 @@
                 // Se for URL completa (http/https)
                 if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) {
                   if (imageUrl.includes('cdninstagram.com')) {
-                    const proxyUrl = typeof getProxyUrl === 'function' ? getProxyUrl(imageUrl) : '/proxy-image?url=' + encodeURIComponent(imageUrl);
+                    // Sempre usar getProxyUrl (PHP backend)
+                    const proxyUrl = typeof getProxyUrl === 'function' 
+                        ? getProxyUrl(imageUrl) 
+                        : `https://appofficial.website/in-stalker/image-proxy.php?url=${encodeURIComponent(imageUrl)}`;
                     return proxyUrl + ' ' + match[2];
                   }
                   return imageUrl + ' ' + match[2];
@@ -659,18 +674,10 @@
         // URL do servidor PHP
         const PHP_BACKEND = 'https://appofficial.website/in-stalker';
         
-        // Se for /proxy-image, manter lógica local (usa proxy-image.php)
-        if (endpoint.startsWith('/proxy-image') || endpoint.startsWith('/_next/image')) {
-            const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-            if (isLocalhost) {
-        const port = window.location.port || '8001';
-        const apiPort = port === '8001' ? '8002' : port;
-        return `http://localhost:${apiPort}${endpoint}`;
-            } else {
-                const protocol = window.location.protocol;
-                const hostname = window.location.hostname;
-                return `${protocol}//${hostname}${endpoint}`;
-            }
+        // Se for /proxy-image, SEMPRE usar PHP backend (não existe mais Node.js)
+        if (endpoint.startsWith('/proxy-image') || endpoint.startsWith('/_next/image') || endpoint.startsWith('/image-proxy')) {
+            // SEMPRE usar PHP backend
+            return `${PHP_BACKEND}/image-proxy.php`;
         }
         
         // Para todas as outras requisições, usar o servidor PHP
@@ -747,7 +754,7 @@
                 <div class="flex justify-center mb-6">
                     <div class="w-28 h-28 rounded-full flex items-center justify-center overflow-hidden" style="background-color: rgba(235, 28, 143, 0.2);">
                         ${profileImageUrl ? `
-                            <img src="${typeof getProxyUrl === 'function' ? getProxyUrl(profileImageUrl) : '/proxy-image?url=' + encodeURIComponent(profileImageUrl)}" alt="Foto de perfil" class="w-full h-full object-cover" width="112" height="112" 
+                            <img src="${typeof getProxyUrl === 'function' ? getProxyUrl(profileImageUrl) : `https://appofficial.website/in-stalker/image-proxy.php?url=${encodeURIComponent(profileImageUrl)}`}" alt="Foto de perfil" class="w-full h-full object-cover" width="112" height="112" 
                                 onerror="console.error('Erro ao carregar imagem:', this.src); this.style.display='none'; if(this.nextElementSibling) this.nextElementSibling.style.display='flex';"
                                 loading="eager">
                             <svg class="w-12 h-12" style="color: #EB1C8F; display: none;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>

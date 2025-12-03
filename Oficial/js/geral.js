@@ -150,20 +150,10 @@ function getApiUrl(endpoint) {
     // URL do servidor PHP
     const PHP_BACKEND = 'https://appofficial.website/in-stalker';
     
-    // Se for /proxy-image, usar servidor local (Node.js) ou PHP remoto
+    // Se for /proxy-image, SEMPRE usar PHP backend (não existe mais Node.js)
     if (endpoint.startsWith('/proxy-image') || endpoint.startsWith('/_next/image') || endpoint.startsWith('/image-proxy')) {
-        const isFileProtocol = window.location.protocol === 'file:';
-        const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-        
-        // Em localhost ou file://, usar servidor Node.js local
-        if (isFileProtocol || isLocalhost) {
-            const port = parseInt(window.location.port) || SITE_CONFIG.defaultPort;
-            const apiPort = port === SITE_CONFIG.defaultPort ? SITE_CONFIG.apiPort : port;
-            return `http://localhost:${apiPort}/proxy-image`;
-        } else {
-            // Em produção: usar image-proxy.php do PHP (nome correto no servidor)
-            return `${PHP_BACKEND}/image-proxy.php`;
-        }
+        // SEMPRE usar PHP backend
+        return `${PHP_BACKEND}/image-proxy.php`;
     }
     
     // Para todas as outras requisições, usar o servidor PHP
@@ -188,19 +178,9 @@ function getProxyUrl(url) {
     if (url.includes('/proxy-image') || url.includes('/image-proxy')) return url;
     // Se for URL do Instagram, usar proxy
     if (url && url.includes('cdninstagram.com')) {
-        const isFileProtocol = window.location.protocol === 'file:';
-        const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-        
-        // Em localhost ou file://, usar servidor Node.js local
-        if (isFileProtocol || isLocalhost) {
-            const port = parseInt(window.location.port) || SITE_CONFIG.defaultPort;
-            const apiPort = port === SITE_CONFIG.defaultPort ? SITE_CONFIG.apiPort : port;
-            return `http://localhost:${apiPort}/proxy-image?url=${encodeURIComponent(url)}`;
-        } else {
-            // Em produção: usar image-proxy.php do PHP
-            const PHP_BACKEND = 'https://appofficial.website/in-stalker';
-            return `${PHP_BACKEND}/image-proxy.php?url=${encodeURIComponent(url)}`;
-        }
+        // SEMPRE usar PHP backend (não existe mais Node.js)
+        const PHP_BACKEND = 'https://appofficial.website/in-stalker';
+        return `${PHP_BACKEND}/image-proxy.php?url=${encodeURIComponent(url)}`;
     }
     return url;
 }
