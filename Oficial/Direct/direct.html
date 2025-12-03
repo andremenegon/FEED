@@ -2475,9 +2475,9 @@ async function init() {
         backButton.addEventListener('click', () => {
             const u = localStorage.getItem('username') || '';
             if (u) {
-                window.location.href = `../FEED/feed.html?username=${encodeURIComponent(u)}`;
+                window.location.href = `../feed/feed.html?username=${encodeURIComponent(u)}`;
             } else {
-                window.location.href = '../FEED/feed.html';
+                window.location.href = '../feed/feed.html';
             }
         });
     }
