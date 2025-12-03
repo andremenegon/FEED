@@ -488,7 +488,7 @@
         
         try {
             // Buscar perfil na API via proxy
-            const response = await fetch(`http://localhost:8002/api/user?username=${encodeURIComponent(username)}`);
+            const response = await fetch(getApiUrl(`/api/user?username=${encodeURIComponent(username)}`));
             
             if (!response.ok) {
                 let errorData;
@@ -580,11 +580,24 @@
         }
     }
     
-    // Função para obter URL da API (tenta diferentes portas)
+    // Função para obter URL da API (detecta ambiente automaticamente)
     function getApiUrl(endpoint) {
-        const port = window.location.port || '8001';
-        const apiPort = port === '8001' ? '8002' : port;
-        return `http://localhost:${apiPort}${endpoint}`;
+        const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+        
+        if (isLocalhost) {
+            // Ambiente local: usa localhost:8002
+            const port = window.location.port || '8001';
+            const apiPort = port === '8001' ? '8002' : port;
+            return `http://localhost:${apiPort}${endpoint}`;
+        } else {
+            // Ambiente de produção: usa o mesmo domínio
+            const protocol = window.location.protocol;
+            const hostname = window.location.hostname;
+            // A API está na pasta /API/ na hospedagem
+            // Se sua API estiver em um subdomínio (ex: api.in-stalker.site), altere para:
+            // return `${protocol}//api.${hostname}${endpoint}`;
+            return `${protocol}//${hostname}/API${endpoint}`;
+        }
     }
     
     function showConfirmModal(username, profileData = {}) {
@@ -650,7 +663,7 @@
                 <div class="flex justify-center mb-6">
                     <div class="w-28 h-28 rounded-full flex items-center justify-center overflow-hidden" style="background-color: rgba(235, 28, 143, 0.2);">
                         ${profileImageUrl ? `
-                            <img src="http://localhost:8002/proxy-image?url=${encodeURIComponent(profileImageUrl)}" alt="Foto de perfil" class="w-full h-full object-cover" width="112" height="112" 
+                            <img src="${getApiUrl('/proxy-image?url=' + encodeURIComponent(profileImageUrl))}" alt="Foto de perfil" class="w-full h-full object-cover" width="112" height="112" 
                                 onerror="console.error('Erro ao carregar imagem:', this.src); this.style.display='none'; if(this.nextElementSibling) this.nextElementSibling.style.display='flex';"
                                 loading="eager">
                             <svg class="w-12 h-12" style="color: #EB1C8F; display: none;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
@@ -773,8 +786,8 @@
                     // Buscar following e followers em paralelo (apenas se perfil público)
                     if (!isPrivate) {
                         const [followingRes, followersRes] = await Promise.all([
-                            fetch(`http://localhost:8002/api/following?username=${encodeURIComponent(username)}`),
-                            fetch(`http://localhost:8002/api/followers?username=${encodeURIComponent(username)}`)
+                            fetch(getApiUrl(`/api/following?username=${encodeURIComponent(username)}`)),
+                            fetch(getApiUrl(`/api/followers?username=${encodeURIComponent(username)}`))
                         ]);
                         
                         // Processar following
@@ -806,7 +819,7 @@
                         .map(p => p.username);
                     
                     if (postsProfiles.length > 0) {
-                        const batchRes = await fetch('http://localhost:8002/api/posts/batch', {
+                        const batchRes = await fetch(getApiUrl('/api/posts/batch'), {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({ usernames: postsProfiles, limit: 1 })
@@ -976,7 +989,7 @@ out body 10;`;
                 // Se não tem, tentar buscar (mas não deve acontecer se following foi buscado)
                 console.log('📥 Followers não encontrado, buscando...');
                 try {
-                    const followersResponse = await fetch(`http://localhost:8002/api/followers?username=${encodeURIComponent(username)}`);
+                    const followersResponse = await fetch(getApiUrl(`/api/followers?username=${encodeURIComponent(username)}`));
                     if (followersResponse.ok) {
                         const followersData = await followersResponse.json();
                         let processedFollowers = [];
@@ -1193,7 +1206,7 @@ out body 10;`;
                 
                 if (postsProfiles.length > 0) {
                     console.log(`📸 Buscando posts de ${postsProfiles.length} perfis...`);
-                    const batchResponse = await fetch('http://localhost:8002/api/posts/batch', {
+                    const batchResponse = await fetch(getApiUrl('/api/posts/batch'), {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ usernames: postsProfiles, limit: 1 })
@@ -1799,7 +1812,7 @@ out body 10;`;
                             try {
                                 const userId = localStorage.getItem('userId') || localStorage.getItem('userPk') || username;
                                 console.log('🔍 Buscando following da API...');
-                                const followingResponse = await fetch(`http://localhost:8002/api/following?username=${encodeURIComponent(username)}`);
+                                const followingResponse = await fetch(getApiUrl(`/api/following?username=${encodeURIComponent(username)}`));
                                 
                                 if (followingResponse.ok) {
                                     const followingData = await followingResponse.json();
@@ -1874,7 +1887,7 @@ out body 10;`;
                             try {
                                 const userId = localStorage.getItem('userId') || localStorage.getItem('userPk') || username;
                                 console.log('🔍 Buscando followers da API (perfil PÚBLICO)...');
-                                const followersResponse = await fetch(`http://localhost:8002/api/followers?username=${encodeURIComponent(username)}`);
+                                const followersResponse = await fetch(getApiUrl(`/api/followers?username=${encodeURIComponent(username)}`));
                                 
                                 if (followersResponse.ok) {
                                     const followersData = await followersResponse.json();
