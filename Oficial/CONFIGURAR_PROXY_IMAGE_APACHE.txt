@@ -1,0 +1,26 @@
+🔧 CONFIGURAR PROXY DE IMAGENS NO APACHE
+========================================
+
+O problema: /proxy-image não está acessível porque o Apache não está fazendo proxy.
+
+SOLUÇÃO: Adicionar /proxy-image ao proxy do Apache
+
+No painel da hospedainfo ou arquivo de configuração do Apache, você precisa adicionar:
+
+ProxyPass /proxy-image http://localhost:PORTA_DO_SERVER_JS/proxy-image
+ProxyPassReverse /proxy-image http://localhost:PORTA_DO_SERVER_JS/proxy-image
+
+Onde PORTA_DO_SERVER_JS é a porta onde o server.js principal está rodando.
+
+OU
+
+Se o Apache já está servindo o server.js principal diretamente (não via proxy),
+então o /proxy-image já deveria funcionar. Nesse caso, verifique se o server.js
+está rodando corretamente.
+
+TESTE:
+Acesse: https://in-stalker.site/proxy-image?url=https://scontent-lga3-2.cdninstagram.com/v/t51.2885-19/469280503_618774417244536_6789387411220436489_n.jpg
+
+Se retornar a imagem = ✅ Funcionando
+Se retornar 404 = ❌ Precisa configurar o proxy
+

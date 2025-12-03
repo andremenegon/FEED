@@ -174,20 +174,13 @@ function getApiUrl(endpoint) {
 }
 
 /**
- * Converte URL do Instagram para URL do proxy
+ * Retorna a URL diretamente (sem proxy)
  * @param {string} url - URL original
- * @returns {string} - URL do proxy ou URL original
+ * @returns {string} - URL original
  */
 function getProxyUrl(url) {
-    if (!url) return '';
-    // Se já é uma URL do proxy, retornar como está
-    if (url.includes('/proxy-image')) return url;
-    // Se for URL do Instagram, usar proxy
-    if (url && url.includes('cdninstagram.com')) {
-        const apiUrl = getApiUrl('/proxy-image');
-        return `${apiUrl}?url=${encodeURIComponent(url)}`;
-    }
-    return url;
+    // Usar URL diretamente da API, sem proxy
+    return url || '';
 }
 
 // ============================================
