@@ -174,13 +174,31 @@ function getApiUrl(endpoint) {
 }
 
 /**
- * Retorna a URL diretamente (sem proxy)
+ * Converte URL do Instagram para URL do proxy
  * @param {string} url - URL original
- * @returns {string} - URL original
+ * @returns {string} - URL do proxy ou URL original
  */
 function getProxyUrl(url) {
-    // Usar URL diretamente da API, sem proxy
-    return url || '';
+    if (!url) return '';
+    // Se já é uma URL do proxy, retornar como está
+    if (url.includes('/proxy-image')) return url;
+    // Se for URL do Instagram, usar proxy
+    if (url && url.includes('cdninstagram.com')) {
+        const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+        
+        if (isLocalhost) {
+            // Ambiente local: usar getApiUrl
+            const apiUrl = getApiUrl('/proxy-image');
+            return `${apiUrl}?url=${encodeURIComponent(url)}`;
+        } else {
+            // Ambiente de produção: usar a API (Apache faz proxy de /api/*)
+            // A API tem a rota /proxy-image, então usamos /api/proxy-image
+            // Mas na verdade, a API tem /proxy-image diretamente, então vamos usar getApiUrl
+            // que já retorna a URL correta em produção
+            return getApiUrl('/proxy-image') + '?url=' + encodeURIComponent(url);
+        }
+    }
+    return url;
 }
 
 // ============================================

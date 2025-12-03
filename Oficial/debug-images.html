@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug - Teste de Imagens</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #000;
+            color: #fff;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            color: #EB1C8F;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .test-section {
+            background: #1a1a1a;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+            border: 1px solid #333;
+        }
+        
+        .test-section h2 {
+            color: #EB1C8F;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+        
+        .test-item {
+            background: #0a0a0a;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 1px solid #222;
+        }
+        
+        .test-item h3 {
+            color: #fff;
+            font-size: 14px;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        
+        .test-item .url {
+            color: #888;
+            font-size: 11px;
+            word-break: break-all;
+            margin-bottom: 10px;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .test-item .image-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-top: 10px;
+        }
+        
+        .test-item img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #333;
+        }
+        
+        .status {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+        
+        .status.loading {
+            background: #ffa500;
+            color: #000;
+        }
+        
+        .status.success {
+            background: #00ff00;
+            color: #000;
+        }
+        
+        .status.error {
+            background: #ff0000;
+            color: #fff;
+        }
+        
+        .info {
+            color: #888;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+        
+        .error-message {
+            color: #ff4444;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+        
+        .summary {
+            background: #1a1a1a;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 30px;
+            border: 1px solid #333;
+        }
+        
+        .summary h2 {
+            color: #EB1C8F;
+            margin-bottom: 15px;
+        }
+        
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #333;
+        }
+        
+        .summary-item:last-child {
+            border-bottom: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Debug - Teste de Carregamento de Imagens</h1>
+        
+        <div class="test-section">
+            <h2>1. URL Direta do Instagram (sem proxy)</h2>
+            <div class="test-item" id="test-direct">
+                <h3>URL Direta <span class="status loading" id="status-direct">Carregando...</span></h3>
+                <div class="url" id="url-direct"></div>
+                <div class="image-container">
+                    <img id="img-direct" alt="Teste direto" onload="updateStatus('direct', 'success')" onerror="updateStatus('direct', 'error', this)">
+                </div>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h2>2. Proxy Atual (/proxy-image)</h2>
+            <div class="test-item" id="test-proxy">
+                <h3>Proxy Atual <span class="status loading" id="status-proxy">Carregando...</span></h3>
+                <div class="url" id="url-proxy"></div>
+                <div class="image-container">
+                    <img id="img-proxy" alt="Teste proxy" onload="updateStatus('proxy', 'success')" onerror="updateStatus('proxy', 'error', this)">
+                </div>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h2>3. Estilo Concorrente (/_next/image)</h2>
+            <div class="test-item" id="test-next">
+                <h3>Next.js Style <span class="status loading" id="status-next">Carregando...</span></h3>
+                <div class="url" id="url-next"></div>
+                <div class="image-container">
+                    <img id="img-next" alt="Teste Next.js" onload="updateStatus('next', 'success')" onerror="updateStatus('next', 'error', this)">
+                </div>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h2>4. Proxy via API (/api/proxy-image)</h2>
+            <div class="test-item" id="test-api-proxy">
+                <h3>API Proxy <span class="status loading" id="status-api-proxy">Carregando...</span></h3>
+                <div class="url" id="url-api-proxy"></div>
+                <div class="image-container">
+                    <img id="img-api-proxy" alt="Teste API proxy" onload="updateStatus('api-proxy', 'success')" onerror="updateStatus('api-proxy', 'error', this)">
+                </div>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h2>5. Com srcset (múltiplas resoluções)</h2>
+            <div class="test-item" id="test-srcset">
+                <h3>Srcset <span class="status loading" id="status-srcset">Carregando...</span></h3>
+                <div class="url" id="url-srcset"></div>
+                <div class="image-container">
+                    <img id="img-srcset" alt="Teste srcset" 
+                         srcset="/proxy-image?url=INSTAGRAM_URL&w=96&q=75 1x, /proxy-image?url=INSTAGRAM_URL&w=256&q=75 2x"
+                         onload="updateStatus('srcset', 'success')" 
+                         onerror="updateStatus('srcset', 'error', this)">
+                </div>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h2>6. Com parâmetros de qualidade</h2>
+            <div class="test-item" id="test-quality">
+                <h3>Quality 75 <span class="status loading" id="status-quality">Carregando...</span></h3>
+                <div class="url" id="url-quality"></div>
+                <div class="image-container">
+                    <img id="img-quality" alt="Teste quality" onload="updateStatus('quality', 'success')" onerror="updateStatus('quality', 'error', this)">
+                </div>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h2>7. Via getApiUrl() (função do código)</h2>
+            <div class="test-item" id="test-getapi">
+                <h3>getApiUrl() <span class="status loading" id="status-getapi">Carregando...</span></h3>
+                <div class="url" id="url-getapi"></div>
+                <div class="image-container">
+                    <img id="img-getapi" alt="Teste getApiUrl" onload="updateStatus('getapi', 'success')" onerror="updateStatus('getapi', 'error', this)">
+                </div>
+            </div>
+        </div>
+        
+        <div class="summary" id="summary">
+            <h2>📊 Resumo</h2>
+            <div id="summary-content"></div>
+        </div>
+    </div>
+    
+    <script>
+        // URL de teste do Instagram
+        const INSTAGRAM_URL = 'https://scontent-lga3-2.cdninstagram.com/v/t51.2885-19/469280503_618774417244536_6789387411220436489_n.jpg?stp=dst-jpg_e0_s150x150_tt6&efg=eyJ2ZW5jb2RlX3RhZyI6InByb2ZpbGVfcGljLmRqYW5nby4xMDgwLmMyIn0&_nc_ht=scontent-lga3-2.cdninstagram.com&_nc_cat=100&_nc_oc=Q6cZ2QHYxhLxq_NmWYgEHgt0OBvkslJ4XIN1WsbpbSSKT3pq8HsIaDdv3qIireMn7I7Zbaw&_nc_ohc=m6SeHjrgpigQ7kNvwFlWz-2&_nc_gid=TuumDka_g-VGdCd1m-0TWA&edm=AO4kU9EBAAAA&ccb=7-5&ig_cache_key=GPem_Bt4AValxTICAAmWTfjgvzhebkULAAAB1501500j-ccb7-5&oh=00_AfkxBb_k83mPIrAUUZikSkx3xhJ0uOiQAw4gT_NUl_-9sw&oe=693586F4&_nc_sid=164c1d';
+        
+        const encodedUrl = encodeURIComponent(INSTAGRAM_URL);
+        const results = {};
+        
+        // Função getApiUrl (copiada do código)
+        function getApiUrl(endpoint) {
+            const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+            
+            if (isLocalhost) {
+                const port = window.location.port || '8001';
+                const apiPort = port === '8001' ? '8002' : port;
+                return `http://localhost:${apiPort}${endpoint}`;
+            } else {
+                const protocol = window.location.protocol;
+                const hostname = window.location.hostname;
+                
+                let cleanEndpoint = endpoint;
+                if (cleanEndpoint.startsWith('/API/api/')) {
+                    cleanEndpoint = cleanEndpoint.replace('/API/api/', '/api/');
+                } else if (cleanEndpoint.startsWith('/API/')) {
+                    cleanEndpoint = cleanEndpoint.replace('/API/', '/api/');
+                } else if (!cleanEndpoint.startsWith('/api/') && !cleanEndpoint.startsWith('/proxy-image')) {
+                    cleanEndpoint = '/api' + (cleanEndpoint.startsWith('/') ? '' : '/') + cleanEndpoint;
+                }
+                
+                return `${protocol}//${hostname}${cleanEndpoint}`;
+            }
+        }
+        
+        // Atualizar status
+        function updateStatus(testId, status, imgElement) {
+            const statusEl = document.getElementById(`status-${testId}`);
+            statusEl.className = `status ${status}`;
+            statusEl.textContent = status === 'success' ? '✅ Sucesso' : '❌ Erro';
+            
+            results[testId] = {
+                status: status,
+                timestamp: new Date().toLocaleTimeString()
+            };
+            
+            if (status === 'error' && imgElement) {
+                const errorMsg = document.createElement('div');
+                errorMsg.className = 'error-message';
+                errorMsg.textContent = `Erro ao carregar: ${imgElement.src.substring(0, 100)}...`;
+                document.getElementById(`test-${testId}`).appendChild(errorMsg);
+            }
+            
+            updateSummary();
+        }
+        
+        // Atualizar resumo
+        function updateSummary() {
+            const summaryContent = document.getElementById('summary-content');
+            summaryContent.innerHTML = '';
+            
+            const tests = [
+                { id: 'direct', name: 'URL Direta' },
+                { id: 'proxy', name: 'Proxy Atual' },
+                { id: 'next', name: 'Next.js Style' },
+                { id: 'api-proxy', name: 'API Proxy' },
+                { id: 'srcset', name: 'Srcset' },
+                { id: 'quality', name: 'Quality' },
+                { id: 'getapi', name: 'getApiUrl()' }
+            ];
+            
+            tests.forEach(test => {
+                const result = results[test.id];
+                if (result) {
+                    const div = document.createElement('div');
+                    div.className = 'summary-item';
+                    div.innerHTML = `
+                        <span>${test.name}</span>
+                        <span style="color: ${result.status === 'success' ? '#00ff00' : '#ff0000'}">
+                            ${result.status === 'success' ? '✅' : '❌'} ${result.status.toUpperCase()}
+                        </span>
+                    `;
+                    summaryContent.appendChild(div);
+                }
+            });
+        }
+        
+        // Inicializar testes
+        window.addEventListener('DOMContentLoaded', function() {
+            // 1. URL Direta
+            const imgDirect = document.getElementById('img-direct');
+            const urlDirect = INSTAGRAM_URL;
+            document.getElementById('url-direct').textContent = urlDirect;
+            imgDirect.src = urlDirect;
+            
+            // 2. Proxy Atual
+            const imgProxy = document.getElementById('img-proxy');
+            const urlProxy = `/proxy-image?url=${encodedUrl}`;
+            document.getElementById('url-proxy').textContent = urlProxy;
+            imgProxy.src = urlProxy;
+            
+            // 3. Next.js Style
+            const imgNext = document.getElementById('img-next');
+            const urlNext = `/_next/image?url=${encodedUrl}&w=256&q=75`;
+            document.getElementById('url-next').textContent = urlNext;
+            imgNext.src = urlNext;
+            
+            // 4. API Proxy
+            const imgApiProxy = document.getElementById('img-api-proxy');
+            const urlApiProxy = `/api/proxy-image?url=${encodedUrl}`;
+            document.getElementById('url-api-proxy').textContent = urlApiProxy;
+            imgApiProxy.src = urlApiProxy;
+            
+            // 5. Srcset
+            const imgSrcset = document.getElementById('img-srcset');
+            const urlSrcset1 = `/proxy-image?url=${encodedUrl}&w=96&q=75`;
+            const urlSrcset2 = `/proxy-image?url=${encodedUrl}&w=256&q=75`;
+            document.getElementById('url-srcset').textContent = `1x: ${urlSrcset1}\n2x: ${urlSrcset2}`;
+            imgSrcset.srcset = `${urlSrcset1} 1x, ${urlSrcset2} 2x`;
+            imgSrcset.src = urlSrcset2;
+            
+            // 6. Quality
+            const imgQuality = document.getElementById('img-quality');
+            const urlQuality = `/proxy-image?url=${encodedUrl}&w=256&q=75`;
+            document.getElementById('url-quality').textContent = urlQuality;
+            imgQuality.src = urlQuality;
+            
+            // 7. getApiUrl()
+            const imgGetApi = document.getElementById('img-getapi');
+            const urlGetApi = getApiUrl('/proxy-image') + '?url=' + encodedUrl;
+            document.getElementById('url-getapi').textContent = urlGetApi;
+            imgGetApi.src = urlGetApi;
+        });
+    </script>
+</body>
+</html>

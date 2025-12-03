@@ -267,8 +267,9 @@ app.get('/api/stories', (req, res) => {
 
 // ===== ROTAS LOCAIS (não precisam de proxy) =====
 
-// Proxy Image (mantido local - não depende da API externa)
-app.get('/proxy-image', (req, res) => {
+// Função compartilhada para proxy de imagens
+function handleProxyImage(req, res) {
+  // Suporta tanto ?url= quanto parâmetros estilo Next.js (?url=...&w=...&q=...)
   const imageUrl = req.query.url;
   if (!imageUrl) {
     return res.status(400).send('URL não fornecida');
@@ -349,6 +350,16 @@ app.get('/proxy-image', (req, res) => {
   } catch (error) {
     res.status(400).send('URL inválida: ' + error.message);
   }
+}
+
+// Proxy Image (mantido local - não depende da API externa)
+app.get('/proxy-image', (req, res) => {
+  handleProxyImage(req, res);
+});
+
+// Rota estilo Next.js (/_next/image) - compatibilidade com concorrente
+app.get('/_next/image', (req, res) => {
+  handleProxyImage(req, res);
 });
 
 // API User Posts (ANTIGA - REMOVIDA - usa proxy agora)

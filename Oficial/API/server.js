@@ -593,7 +593,7 @@ const server = http.createServer((req, res) => {
     });
   }
   // Proxy para imagens
-  else if (parsedUrl.pathname === '/proxy-image') {
+  else if (parsedUrl.pathname === '/proxy-image' || parsedUrl.pathname === '/_next/image') {
     const imageUrl = parsedUrl.query.url;
     
     if (!imageUrl) {
