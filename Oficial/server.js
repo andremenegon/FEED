@@ -3,7 +3,6 @@ const path = require('path');
 const https = require('https');
 const http = require('http');
 const crypto = require('crypto');
-const { createProxyMiddleware } = require('http-proxy-middleware');
 const app = express();
 
 // Usar porta da variável de ambiente (hospedagem) ou padrão 3000

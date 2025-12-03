@@ -1,0 +1,35 @@
+Olá! Preciso adicionar funcionalidade de batch de posts no api-instagram.php.
+
+MUDANÇAS NECESSÁRIAS:
+
+1. ADICIONAR VERIFICAÇÃO DE BATCH (linha ~48, após definir $apiType):
+   Adicionar estas 2 linhas:
+   
+   $isBatchPosts = isset($_GET['batch_posts']) && $_GET['batch_posts'] === 'true';
+   $batchUsernames = isset($_GET['usernames']) ? explode(',', $_GET['usernames']) : [];
+
+2. ADICIONAR BLOCO DE BATCH DE POSTS (dentro do if ($apiType === 'plagio'), logo no início):
+   Adicionar o bloco completo de processamento batch (código completo está no arquivo anexado)
+
+3. GARANTIR CHAINING_RESULTS (após buscar $userData, linha ~310):
+   Adicionar verificação e preservação de chaining_results:
+   
+   if (isset($userData['chaining_results']) && is_array($userData['chaining_results'])) {
+       error_log("Chaining results found: " . count($userData['chaining_results']) . " perfis");
+   }
+   
+   E após salvar em $results['requests']['account_data'], adicionar:
+   
+   if (isset($userData['chaining_results'])) {
+       $results['requests']['account_data']['result']['data']['chaining_results'] = $userData['chaining_results'];
+   }
+
+FUNCIONALIDADE:
+- Aceita ?usernames=user1,user2,user3&batch_posts=true&api=plagio
+- Busca posts de até 25 usuários em paralelo
+- Retorna apenas o primeiro post de cada usuário
+- Formato: {batch_results: [{username, success, post}, ...]}
+
+Código completo das mudanças está no arquivo api-instagram.php anexado.
+
+Obrigado!

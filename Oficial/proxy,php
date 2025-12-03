@@ -1,0 +1,89 @@
+<?php
+// Proxy para servir imagens do Instagram (resolve problemas de CORS)
+
+$imageUrl = $_GET['url'] ?? '';
+
+if (empty($imageUrl)) {
+    http_response_code(400);
+    die('URL da imagem não fornecida');
+}
+
+// Decodificar URL múltiplas vezes se necessário (pode vir codificada)
+$decodedUrl = $imageUrl;
+for ($i = 0; $i < 3; $i++) {
+    $decodedUrl = urldecode($decodedUrl);
+    if ($decodedUrl === $imageUrl) {
+        break; // Não mudou mais, parar
+    }
+    $imageUrl = $decodedUrl;
+}
+
+// Validar que é uma URL do Instagram/CDN/Facebook
+$validDomains = ['instagram.com', 'cdninstagram.com', 'fbcdn.net', 'facebook.com', 'scontent'];
+$isValid = false;
+foreach ($validDomains as $domain) {
+    if (strpos($imageUrl, $domain) !== false) {
+        $isValid = true;
+        break;
+    }
+}
+
+if (!$isValid) {
+    http_response_code(403);
+    die('URL inválida: ' . substr($imageUrl, 0, 100));
+}
+
+// Buscar a imagem com timeout balanceado
+$ch = curl_init();
+curl_setopt_array($ch, [
+    CURLOPT_URL => $imageUrl,
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_FOLLOWLOCATION => true,
+    CURLOPT_MAXREDIRS => 3,
+    CURLOPT_TIMEOUT => 15, // Aumentado para 15 segundos (balanceado)
+    CURLOPT_CONNECTTIMEOUT => 8, // Timeout de conexão: 8 segundos
+    CURLOPT_SSL_VERIFYPEER => true,
+    CURLOPT_USERAGENT => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+    CURLOPT_ENCODING => 'gzip,deflate', // Aceitar compressão
+    CURLOPT_FRESH_CONNECT => true // Não reutilizar conexões antigas
+]);
+
+$imageData = curl_exec($ch);
+$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+$contentType = curl_getinfo($ch, CURLINFO_CONTENT_TYPE);
+$error = curl_error($ch);
+curl_close($ch);
+
+if ($error || $httpCode !== 200) {
+    http_response_code(500);
+    die('Erro ao buscar imagem');
+}
+
+// Determinar tipo de conteúdo
+if ($contentType) {
+    header('Content-Type: ' . $contentType);
+} else {
+    // Tentar detectar pelo conteúdo
+    if (function_exists('finfo_open')) {
+        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        $mimeType = finfo_buffer($finfo, $imageData);
+        finfo_close($finfo);
+        header('Content-Type: ' . $mimeType);
+    } else {
+        // Fallback: detectar pelo início do conteúdo ou extensão da URL
+        if (strpos($imageUrl, '.mp4') !== false || strpos($imageUrl, 'video') !== false) {
+            header('Content-Type: video/mp4');
+        } else {
+            header('Content-Type: image/jpeg');
+        }
+    }
+}
+
+header('Cache-Control: public, max-age=86400'); // Cache de 24 horas (antes era 1 hora)
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: GET');
+header('Access-Control-Allow-Headers: Content-Type');
+
+echo $imageData;
+?>
+

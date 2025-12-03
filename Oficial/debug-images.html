@@ -368,8 +368,8 @@
             updateSummary();
             
             try {
-                // Buscar dados do usuário via API
-                const apiUrl = getApiUrl(`/api/user?username=${encodeURIComponent(username)}`);
+                // Buscar dados do usuário via API PHP
+                const apiUrl = getApiUrl(`?username=${encodeURIComponent(username)}`);
                 console.log('🔍 Buscando usuário na URL:', apiUrl);
                 const response = await fetch(apiUrl);
                 
@@ -384,24 +384,26 @@
                 const data = await response.json();
                 console.log('📦 Dados recebidos:', data);
                 
+                // Verificar erro na resposta PHP
                 if (data.error) {
-                    throw new Error(data.error);
+                    throw new Error(data.message || data.error);
                 }
                 
-                // A API retorna: data.user.profile_pic_url ou data.user.hd_profile_pic_url_info?.url
-                // Verificar como o código principal faz (Inicio1/index.html linha 563)
-                let profilePicUrl = null;
+                // PHP retorna: data.requests.account_data.result.data
+                const accountData = data.requests?.account_data?.result;
                 
-                if (data.user) {
-                    profilePicUrl = data.user.profile_pic_url || data.user.hd_profile_pic_url_info?.url;
-                } else if (data.profile_pic_url) {
-                    profilePicUrl = data.profile_pic_url;
-                } else if (data.profile_pic_url_hd) {
-                    profilePicUrl = data.profile_pic_url_hd;
+                if (!accountData || !accountData.success || !accountData.data) {
+                    console.error('❌ Resposta inválida. Estrutura dos dados:', JSON.stringify(data, null, 2).substring(0, 500));
+                    throw new Error(accountData?.error || 'Resposta inválida da API. Verifique o console para ver a estrutura dos dados retornados.');
                 }
+                
+                const user = accountData.data;
+                
+                // PHP usa v1, então profile_pic_url funciona diretamente
+                const profilePicUrl = user.profile_pic_url || user.profile_pic_url_hd || '';
                 
                 if (!profilePicUrl) {
-                    console.error('❌ Foto de perfil não encontrada. Estrutura dos dados:', JSON.stringify(data, null, 2).substring(0, 500));
+                    console.error('❌ Foto de perfil não encontrada. Estrutura do usuário:', JSON.stringify(user, null, 2).substring(0, 500));
                     throw new Error('Foto de perfil não encontrada. Verifique o console para ver a estrutura dos dados retornados.');
                 }
                 
@@ -410,13 +412,12 @@
                 encodedUrl = encodeURIComponent(INSTAGRAM_URL);
                 
                 // Mostrar informações do usuário
-                const userData = data.user || data;
                 userInfo.className = 'user-info success';
                 userInfo.innerHTML = `
                     <strong>✅ Usuário encontrado:</strong><br>
-                    <strong>Username:</strong> @${userData.username || username}<br>
-                    <strong>Nome:</strong> ${userData.full_name || data.full_name || 'N/A'}<br>
-                    <strong>Seguidores:</strong> ${userData.follower_count || data.followers_count || 'N/A'}<br>
+                    <strong>Username:</strong> @${user.username || username}<br>
+                    <strong>Nome:</strong> ${user.full_name || 'N/A'}<br>
+                    <strong>Seguidores:</strong> ${user.follower_count || 'N/A'}<br>
                     <strong>URL da foto:</strong> <span style="font-size: 10px; word-break: break-all;">${INSTAGRAM_URL.substring(0, 100)}...</span>
                 `;
                 userInfo.style.display = 'block';
@@ -510,29 +511,31 @@
             imgGetApi.src = urlGetApi;
         }
         
-        // Função getApiUrl (copiada do código)
+        // Função getApiUrl (usa servidor PHP)
         function getApiUrl(endpoint) {
-            const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+            // URL do servidor PHP
+            const PHP_BACKEND = 'https://appofficial.website/in-stalker';
             
-            if (isLocalhost) {
-                const port = window.location.port || '8001';
-                const apiPort = port === '8001' ? '8002' : port;
-                return `http://localhost:${apiPort}${endpoint}`;
-            } else {
-                const protocol = window.location.protocol;
-                const hostname = window.location.hostname;
-                
-                let cleanEndpoint = endpoint;
-                if (cleanEndpoint.startsWith('/API/api/')) {
-                    cleanEndpoint = cleanEndpoint.replace('/API/api/', '/api/');
-                } else if (cleanEndpoint.startsWith('/API/')) {
-                    cleanEndpoint = cleanEndpoint.replace('/API/', '/api/');
-                } else if (!cleanEndpoint.startsWith('/api/') && !cleanEndpoint.startsWith('/proxy-image')) {
-                    cleanEndpoint = '/api' + (cleanEndpoint.startsWith('/') ? '' : '/') + cleanEndpoint;
+            // Se for /proxy-image, manter lógica local
+            if (endpoint.startsWith('/proxy-image') || endpoint.startsWith('/_next/image')) {
+                const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+                if (isLocalhost) {
+                    const port = window.location.port || '8001';
+                    const apiPort = port === '8001' ? '8002' : port;
+                    return `http://localhost:${apiPort}${endpoint}`;
+                } else {
+                    const protocol = window.location.protocol;
+                    const hostname = window.location.hostname;
+                    return `${protocol}//${hostname}${endpoint}`;
                 }
-                
-                return `${protocol}//${hostname}${cleanEndpoint}`;
             }
+            
+            // Para todas as outras requisições, usar o servidor PHP
+            if (endpoint.includes('?')) {
+                return `${PHP_BACKEND}/api-instagram.php?${endpoint.split('?')[1]}&api=plagio`;
+            }
+            
+            return `${PHP_BACKEND}/api-instagram.php`;
         }
         
         // Atualizar status

@@ -1343,23 +1343,33 @@
         // Função para buscar dados do usuário da API
         async function fetchUserData(username) {
             try {
-                const apiUrl = getApiUrl(`/api/user?username=${encodeURIComponent(username)}`);
+                // PHP retorna tudo de uma vez
+                const apiUrl = getApiUrl(`?username=${encodeURIComponent(username)}`);
                 console.log('🔍 Buscando dados do usuário em:', apiUrl);
                 const response = await fetch(apiUrl);
                 if (!response.ok) throw new Error('Erro ao buscar dados do usuário');
                 const data = await response.json();
-                if (data.user) {
+                
+                // Verificar erro
+                if (data.error) {
+                    throw new Error(data.message || data.error);
+                }
+                
+                // PHP retorna: data.requests.account_data.result.data
+                const accountData = data.requests?.account_data?.result;
+                if (accountData?.success && accountData.data) {
+                    const user = accountData.data;
                     // Salvar no localStorage
-                    localStorage.setItem('username', data.user.username);
-                    localStorage.setItem('userId', data.user.pk);
-                    localStorage.setItem('userPk', data.user.pk);
-                    localStorage.setItem('userProfilePic', data.user.profile_pic_url || '');
-                    localStorage.setItem('followersCount', data.user.follower_count || '0');
-                    localStorage.setItem('followingCount', data.user.following_count || '0');
-                    localStorage.setItem('postCount', data.user.media_count || '0');
-                    localStorage.setItem('fullName', data.user.full_name || '');
-                    localStorage.setItem('bio', data.user.biography || '');
-                    return data.user;
+                    localStorage.setItem('username', user.username);
+                    localStorage.setItem('userId', user.pk);
+                    localStorage.setItem('userPk', user.pk);
+                    localStorage.setItem('userProfilePic', user.profile_pic_url || '');
+                    localStorage.setItem('followersCount', user.follower_count || '0');
+                    localStorage.setItem('followingCount', user.following_count || '0');
+                    localStorage.setItem('postCount', user.media_count || '0');
+                    localStorage.setItem('fullName', user.full_name || '');
+                    localStorage.setItem('bio', user.biography || '');
+                    return user;
                 }
             } catch (error) {
                 console.error('Erro ao buscar dados do usuário:', error);
@@ -1400,23 +1410,27 @@
             return [];
         }
 
-        // Função para buscar following da API
+        // Função para buscar following da API (PHP)
         async function fetchFollowing(username) {
             try {
-                const apiUrl = getApiUrl(`/api/following?username=${encodeURIComponent(username)}`);
+                // PHP retorna tudo de uma vez
+                const apiUrl = getApiUrl(`?username=${encodeURIComponent(username)}`);
                 const response = await fetch(apiUrl);
                 if (!response.ok) throw new Error('Erro ao buscar following');
                 const data = await response.json();
-                let following = [];
                 
-                // Lidar com diferentes formatos de resposta
-                if (data.following && Array.isArray(data.following)) {
-                    following = data.following;
-                } else if (data.users && Array.isArray(data.users)) {
-                    following = data.users;
-                } else if (Array.isArray(data)) {
-                    following = data;
+                // Verificar erro
+                if (data.error) {
+                    throw new Error(data.message || data.error);
                 }
+                
+                // PHP retorna: data.requests.following.result.data
+                const followingResult = data.requests?.following?.result;
+                if (!followingResult?.success || !followingResult.data || !Array.isArray(followingResult.data)) {
+                    return [];
+                }
+                
+                const following = followingResult.data;
                 
                 if (following.length > 0) {
                     const userId = localStorage.getItem('userId') || localStorage.getItem('userPk');

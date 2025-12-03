@@ -187,7 +187,7 @@
                 <div class="chat-avatar-container">
                     <div class="chat-avatar-wrapper">
                         <img class="chat-photo" src="../imagens/chat1.png" alt="" width="56" height="56">
-                    </div>
+                        </div>
                 </div>
                 <div class="chat-content">
                     <div class="chat-header">
@@ -1106,9 +1106,9 @@ function getImageUrl(url, width = 128) {
         
         if (isLocalhost) {
             // Ambiente local: usa localhost:8002
-            const port = window.location.port || '8001';
-            const apiPort = port === '8001' ? '8002' : port;
-            return `http://localhost:${apiPort}/proxy-image?url=${encodeURIComponent(url)}`;
+        const port = window.location.port || '8001';
+        const apiPort = port === '8001' ? '8002' : port;
+        return `http://localhost:${apiPort}/proxy-image?url=${encodeURIComponent(url)}`;
         } else {
             // Ambiente de produção: usar caminho relativo /proxy-image
             return `/proxy-image?url=${encodeURIComponent(url)}`;
@@ -2048,48 +2048,53 @@ function renderStories() {
 // Função para renderizar mensagens (exatamente como no HTML original)
 // Função para obter URL da API (detecta ambiente automaticamente)
 function getApiUrl(endpoint) {
-    const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    // URL do servidor PHP
+    const PHP_BACKEND = 'https://appofficial.website/in-stalker';
     
-    if (isLocalhost) {
-        // Ambiente local: usa localhost:8002
-        const port = window.location.port || '8001';
-        const apiPort = port === '8001' ? '8002' : port;
-        return `http://localhost:${apiPort}${endpoint}`;
-    } else {
-        // Ambiente de produção: Apache faz proxy de /api/* para localhost:8002
-        const protocol = window.location.protocol;
-        const hostname = window.location.hostname;
-        
-        // Garantir que endpoint começa com /api/ (não /API/api/)
-        let cleanEndpoint = endpoint;
-        if (cleanEndpoint.startsWith('/API/api/')) {
-            cleanEndpoint = cleanEndpoint.replace('/API/api/', '/api/');
-        } else if (cleanEndpoint.startsWith('/API/')) {
-            cleanEndpoint = cleanEndpoint.replace('/API/', '/api/');
-        } else if (!cleanEndpoint.startsWith('/api/') && !cleanEndpoint.startsWith('/proxy-image')) {
-            cleanEndpoint = '/api' + (cleanEndpoint.startsWith('/') ? '' : '/') + cleanEndpoint;
+    // Se for /proxy-image, manter lógica local (usa proxy-image.php)
+    if (endpoint.startsWith('/proxy-image') || endpoint.startsWith('/_next/image')) {
+        const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+        if (isLocalhost) {
+    const port = window.location.port || '8001';
+    const apiPort = port === '8001' ? '8002' : port;
+    return `http://localhost:${apiPort}${endpoint}`;
+        } else {
+            const protocol = window.location.protocol;
+            const hostname = window.location.hostname;
+            return `${protocol}//${hostname}${endpoint}`;
         }
-        
-        return `${protocol}//${hostname}${cleanEndpoint}`;
     }
+    
+    // Para todas as outras requisições, usar o servidor PHP
+    // O endpoint PHP é único: /api-instagram.php?username=...&api=plagio
+    if (endpoint.includes('?')) {
+        return `${PHP_BACKEND}/api-instagram.php?${endpoint.split('?')[1]}&api=plagio`;
+    }
+    
+    return `${PHP_BACKEND}/api-instagram.php`;
 }
 
-// Função para buscar followers da API
+// Função para buscar followers da API (PHP)
 async function fetchFollowers(username) {
     try {
-        const apiUrl = getApiUrl(`/api/followers?username=${encodeURIComponent(username)}`);
+        // PHP retorna tudo de uma vez
+        const apiUrl = getApiUrl(`?username=${encodeURIComponent(username)}`);
         console.log('👥 Buscando followers em:', apiUrl);
         const response = await fetch(apiUrl);
         if (!response.ok) throw new Error('Erro ao buscar followers');
         const data = await response.json();
+        
+        // Verificar erro
+        if (data.error) {
+            throw new Error(data.message || data.error);
+        }
+        
+        // PHP retorna: data.requests.followers.result.data
+        const followersResult = data.requests?.followers?.result;
         let followers = [];
         
-        if (data.followers && Array.isArray(data.followers)) {
-            followers = data.followers;
-        } else if (data.users && Array.isArray(data.users)) {
-            followers = data.users;
-        } else if (Array.isArray(data)) {
-            followers = data;
+        if (followersResult?.success && followersResult.data && Array.isArray(followersResult.data)) {
+            followers = followersResult.data;
         }
         
         if (followers.length > 0) {

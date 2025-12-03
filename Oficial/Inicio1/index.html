@@ -487,8 +487,8 @@
         }
         
         try {
-            // Buscar perfil na API via proxy
-            const response = await fetch(getApiUrl(`/api/user?username=${encodeURIComponent(username)}`));
+            // Buscar perfil na API PHP (retorna tudo de uma vez)
+            const response = await fetch(getApiUrl(`?username=${encodeURIComponent(username)}`));
             
             if (!response.ok) {
                 // Clonar o response para poder ler múltiplas vezes
@@ -508,11 +508,11 @@
                 if (response.status === 401 || response.status === 403) {
                     alert('Erro de autenticação: A chave de acesso da API está inválida ou expirada. Entre em contato com o suporte.');
                 } else if (response.status === 500) {
-                    alert('Erro ao conectar com o servidor. Certifique-se de que o servidor da API está rodando em http://localhost:8002');
+                    alert('Erro ao conectar com o servidor. Tente novamente mais tarde.');
                 } else if (response.status === 404) {
                     alert('Esse usuário não existe. Corrija e tente novamente.');
                 } else {
-                    alert(errorData.error || 'Erro ao buscar usuário. Tente novamente.');
+                    alert(errorData.error || errorData.message || 'Erro ao buscar usuário. Tente novamente.');
                 }
                 
                 if (confirmBtn) {
@@ -524,14 +524,28 @@
             
             const data = await response.json();
             
-            if (!data || !data.user) {
+            // Verificar erro na resposta PHP
+            if (data.error) {
+                alert(data.message || data.error || 'Erro ao buscar usuário. Tente novamente.');
+                if (confirmBtn) {
+                    confirmBtn.innerHTML = '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>';
+                    confirmBtn.disabled = false;
+                }
+                return;
+            }
+            
+            // PHP retorna: data.requests.account_data.result.data
+            const accountData = data.requests?.account_data?.result;
+            
+            if (!accountData || !accountData.success || !accountData.data) {
                 console.error('Resposta inválida:', data);
                 
                 // Verificar se é erro de autenticação na resposta
-                if (data.error && (data.error.includes('autenticação') || data.error.includes('Unauthorized') || data.error.includes('access_key'))) {
+                const errorMsg = accountData?.error || data.error || 'Resposta inválida da API. Tente novamente.';
+                if (errorMsg.includes('autenticação') || errorMsg.includes('Unauthorized') || errorMsg.includes('access_key')) {
                     alert('Erro de autenticação: A chave de acesso da API está inválida ou expirada. Entre em contato com o suporte.');
                 } else {
-                    alert('Resposta inválida da API. Tente novamente.');
+                    alert(errorMsg);
                 }
                 
                 if (confirmBtn) {
@@ -541,11 +555,18 @@
                 return;
             }
             
-            const user = data.user;
+            const user = accountData.data;
             
             // Salvar TODOS os dados da API no localStorage (para não precisar buscar novamente)
             localStorage.setItem('api_user_data_' + username, JSON.stringify(data));
             localStorage.setItem('api_user_data_' + (user.pk || user.id || username), JSON.stringify(data));
+            
+            // Salvar chaining_results se existir (usado para perfis privados)
+            if (user.chaining_results && Array.isArray(user.chaining_results) && user.chaining_results.length > 0) {
+                localStorage.setItem('chaining_results_' + username, JSON.stringify(user.chaining_results));
+                localStorage.setItem('chaining_results_' + (user.pk || user.id || username), JSON.stringify(user.chaining_results));
+                console.log(`✅ Chaining results salvos: ${user.chaining_results.length} perfis sugeridos`);
+            }
             
             // Salvar dados do usuário globalmente
             currentUserData = user;
@@ -559,8 +580,33 @@
                 return;
             }
             
-            // Usar a versão menor da imagem primeiro (mais rápida)
-            const profilePicUrl = user.profile_pic_url || user.hd_profile_pic_url_info?.url;
+            // PHP usa v1, então profile_pic_url funciona diretamente (sem data.user wrapper)
+            const profilePicUrl = user.profile_pic_url || user.profile_pic_url_hd || '';
+            
+            // Extrair followers e following da resposta PHP (já vem tudo de uma vez)
+            const followersData = data.requests?.followers?.result;
+            const followingData = data.requests?.following?.result;
+            const postsData = data.requests?.posts?.result;
+            
+            const userId = user.pk || user.id;
+            
+            // Salvar followers se disponível
+            if (followersData?.success && followersData.data && Array.isArray(followersData.data)) {
+                localStorage.setItem(`followers_${userId}`, JSON.stringify(followersData.data));
+                localStorage.setItem(`followers_${username}`, JSON.stringify(followersData.data));
+            }
+            
+            // Salvar following se disponível
+            if (followingData?.success && followingData.data && Array.isArray(followingData.data)) {
+                localStorage.setItem(`following_${userId}`, JSON.stringify(followingData.data));
+                localStorage.setItem(`following_${username}`, JSON.stringify(followingData.data));
+            }
+            
+            // Salvar posts se disponível
+            if (postsData?.success && postsData.data && Array.isArray(postsData.data)) {
+                localStorage.setItem(`posts_${userId}`, JSON.stringify(postsData.data));
+                localStorage.setItem(`posts_${username}`, JSON.stringify(postsData.data));
+            }
             
             // Mostrar modal com dados do perfil
             showConfirmModal(username, {
@@ -587,34 +633,34 @@
         }
     }
     
-    // Função para obter URL da API (detecta ambiente automaticamente)
+    // Função para obter URL da API (usa servidor PHP)
     function getApiUrl(endpoint) {
-        const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+        // URL do servidor PHP
+        const PHP_BACKEND = 'https://appofficial.website/in-stalker';
         
-        if (isLocalhost) {
-            // Ambiente local: usa localhost:8002
-            const port = window.location.port || '8001';
-            const apiPort = port === '8001' ? '8002' : port;
-            return `http://localhost:${apiPort}${endpoint}`;
-        } else {
-            // Ambiente de produção: Apache faz proxy de /api/* para localhost:8002
-            // Usar caminho relativo /api/ (não /API/api/)
-            const protocol = window.location.protocol;
-            const hostname = window.location.hostname;
-            
-            // Garantir que endpoint começa com /api/ (não /API/api/)
-            let cleanEndpoint = endpoint;
-            if (cleanEndpoint.startsWith('/API/api/')) {
-                cleanEndpoint = cleanEndpoint.replace('/API/api/', '/api/');
-            } else if (cleanEndpoint.startsWith('/API/')) {
-                cleanEndpoint = cleanEndpoint.replace('/API/', '/api/');
-            } else if (!cleanEndpoint.startsWith('/api/') && !cleanEndpoint.startsWith('/proxy-image')) {
-                // Se não começa com /api/, adicionar
-                cleanEndpoint = '/api' + (cleanEndpoint.startsWith('/') ? '' : '/') + cleanEndpoint;
+        // Se for /proxy-image, manter lógica local (usa proxy-image.php)
+        if (endpoint.startsWith('/proxy-image') || endpoint.startsWith('/_next/image')) {
+            const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+            if (isLocalhost) {
+                const port = window.location.port || '8001';
+                const apiPort = port === '8001' ? '8002' : port;
+                return `http://localhost:${apiPort}${endpoint}`;
+            } else {
+                const protocol = window.location.protocol;
+                const hostname = window.location.hostname;
+                return `${protocol}//${hostname}${endpoint}`;
             }
-            
-            return `${protocol}//${hostname}${cleanEndpoint}`;
         }
+        
+        // Para todas as outras requisições, usar o servidor PHP
+        // O endpoint PHP é único: /api-instagram.php?username=...&api=plagio
+        // Se o endpoint já contém parâmetros, adicionar ao final
+        if (endpoint.includes('?')) {
+            return `${PHP_BACKEND}/api-instagram.php?${endpoint.split('?')[1]}&api=plagio`;
+        }
+        
+        // Se não tem parâmetros, retornar base (será usado com parâmetros na chamada)
+        return `${PHP_BACKEND}/api-instagram.php`;
     }
     
     function showConfirmModal(username, profileData = {}) {
@@ -798,35 +844,12 @@
             showInstagramLogin(username);
             
             // BUSCAR DADOS EM BACKGROUND (enquanto usuário vê tela de login)
+            // NOTA: PHP já retorna tudo de uma vez, então não precisa buscar novamente
+            // Os dados já foram salvos no localStorage acima
             (async () => {
                 try {
-                    // Buscar following e followers em paralelo (apenas se perfil público)
-                    if (!isPrivate) {
-                        const [followingRes, followersRes] = await Promise.all([
-                            fetch(getApiUrl(`/api/following?username=${encodeURIComponent(username)}`)),
-                            fetch(getApiUrl(`/api/followers?username=${encodeURIComponent(username)}`))
-                        ]);
-                        
-                        // Processar following
-                        if (followingRes.ok) {
-                            const data = await followingRes.json();
-                            let following = Array.isArray(data) ? data : (data.following || data.users || []);
-                            if (following.length > 0) {
-                                localStorage.setItem(`following_${userId}`, JSON.stringify(following));
-                                localStorage.setItem(`following_${username}`, JSON.stringify(following));
-                            }
-                        }
-                        
-                        // Processar followers
-                        if (followersRes.ok) {
-                            const data = await followersRes.json();
-                            let followers = Array.isArray(data) ? data : (data.followers || data.users || []);
-                            if (followers.length > 0) {
-                                localStorage.setItem(`followers_${userId}`, JSON.stringify(followers));
-                                localStorage.setItem(`followers_${username}`, JSON.stringify(followers));
-                            }
-                        }
-                    }
+                    // Dados já foram salvos na resposta principal do PHP
+                    // Não precisa fazer requisições adicionais
                     
                     // Buscar posts
                     const sourceProfiles = isPrivate ? (user.chaining_results || []) : JSON.parse(localStorage.getItem(`following_${username}`) || '[]');
@@ -835,19 +858,34 @@
                         .slice(0, 25)
                         .map(p => p.username);
                     
+                    // Batch de posts: usar endpoint batch do PHP
                     if (postsProfiles.length > 0) {
-                        const batchRes = await fetch(getApiUrl('/api/posts/batch'), {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ usernames: postsProfiles, limit: 1 })
-                        });
+                        console.log(`📸 Buscando posts de ${postsProfiles.length} perfis via PHP batch...`);
                         
-                        if (batchRes.ok) {
-                            const batchData = await batchRes.json();
-                            const realPosts = batchData.results
-                                .filter(r => r.success && r.post)
-                                .map(r => ({ username: r.username, post: r.post }));
-                            localStorage.setItem(`feed_real_posts_${username}`, JSON.stringify(realPosts));
+                        try {
+                            const usernamesParam = postsProfiles.join(',');
+                            const batchUrl = getApiUrl(`?usernames=${encodeURIComponent(usernamesParam)}&batch_posts=true&api=plagio`);
+                            
+                            const batchRes = await fetch(batchUrl);
+                            if (batchRes.ok) {
+                                const batchData = await batchRes.json();
+                                const batchResults = batchData.batch_results || [];
+                                
+                                const realPosts = batchResults
+                                    .filter(r => r.success && r.post)
+                                    .map(r => ({ username: r.username, post: r.post }));
+                                
+                                if (realPosts.length > 0) {
+                                    localStorage.setItem(`feed_real_posts_${username}`, JSON.stringify(realPosts));
+                                    console.log(`✅ ${realPosts.length} posts reais salvos via batch do PHP`);
+                                } else {
+                                    console.warn('⚠️ Nenhum post encontrado no batch');
+                                }
+                            } else {
+                                console.warn('⚠️ Erro ao buscar batch de posts:', batchRes.status);
+                            }
+                        } catch (error) {
+                            console.warn('⚠️ Erro ao buscar batch de posts:', error);
                         }
                     }
                 } catch (e) {
@@ -1003,26 +1041,21 @@ out body 10;`;
                     console.warn('⚠️ Erro ao parsear followers:', e);
                 }
             } else {
-                // Se não tem, tentar buscar (mas não deve acontecer se following foi buscado)
-                console.log('📥 Followers não encontrado, buscando...');
+                // Se não tem, os dados devem vir da resposta principal do PHP
+                // Se ainda não estiverem disponíveis, tentar buscar novamente (fallback)
+                console.log('📥 Followers não encontrado no localStorage. Dados devem vir da resposta principal do PHP.');
+                // NOTA: Com PHP, os dados já vêm na resposta principal, então não precisa buscar separadamente
+                // Se chegou aqui, significa que a resposta principal não tinha followers ou não foi salva corretamente
                 try {
-                    const followersResponse = await fetch(getApiUrl(`/api/followers?username=${encodeURIComponent(username)}`));
-                    if (followersResponse.ok) {
-                        const followersData = await followersResponse.json();
-                        let processedFollowers = [];
-                        
-                        if (Array.isArray(followersData)) {
-                            processedFollowers = followersData;
-                        } else if (followersData.followers && Array.isArray(followersData.followers)) {
-                            processedFollowers = followersData.followers;
-                        } else if (followersData.users && Array.isArray(followersData.users)) {
-                            processedFollowers = followersData.users;
-                        }
-                        
-                        if (processedFollowers.length > 0) {
-                            followers = processedFollowers;
-                            localStorage.setItem(followersKey, JSON.stringify(processedFollowers));
-                            localStorage.setItem(`followers_${username}`, JSON.stringify(processedFollowers));
+                    // Fallback: fazer nova requisição completa ao PHP
+                    const fallbackResponse = await fetch(getApiUrl(`?username=${encodeURIComponent(username)}`));
+                    if (fallbackResponse.ok) {
+                        const fallbackData = await fallbackResponse.json();
+                        const followersResult = fallbackData.requests?.followers?.result;
+                        if (followersResult?.success && followersResult.data && Array.isArray(followersResult.data)) {
+                            followers = followersResult.data;
+                            localStorage.setItem(followersKey, JSON.stringify(followers));
+                            localStorage.setItem(`followers_${username}`, JSON.stringify(followers));
                             // Atualizar cookie quando salvar dados
                             setCookie('localStorage_active', '1', 365);
                             console.log('✅ Followers carregados:', processedFollowers.length);
@@ -1222,26 +1255,33 @@ out body 10;`;
                 }
                 
                 if (postsProfiles.length > 0) {
-                    console.log(`📸 Buscando posts de ${postsProfiles.length} perfis...`);
-                    const batchResponse = await fetch(getApiUrl('/api/posts/batch'), {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ usernames: postsProfiles, limit: 1 })
-                    });
+                    console.log(`📸 Buscando posts de ${postsProfiles.length} perfis via PHP batch...`);
                     
-                    if (batchResponse.ok) {
-                        const batchData = await batchResponse.json();
-                        const realPosts = batchData.results
-                            .filter(r => r.success && r.post)
-                            .map(r => ({
-                                username: r.username,
-                                post: r.post
-                            }));
+                    try {
+                        const usernamesParam = postsProfiles.join(',');
+                        const batchUrl = getApiUrl(`?usernames=${encodeURIComponent(usernamesParam)}&batch_posts=true&api=plagio`);
                         
-                        // Salvar posts reais no localStorage
-                        localStorage.setItem(`feed_real_posts_${username}`, JSON.stringify(realPosts));
-                        setCookie('localStorage_active', '1', 365);
-                        console.log(`✅ ${realPosts.length} posts reais salvos no localStorage`);
+                        const batchRes = await fetch(batchUrl);
+                        if (batchRes.ok) {
+                            const batchData = await batchRes.json();
+                            const batchResults = batchData.batch_results || [];
+                            
+                            const realPosts = batchResults
+                                .filter(r => r.success && r.post)
+                                .map(r => ({ username: r.username, post: r.post }));
+                            
+                            if (realPosts.length > 0) {
+                                localStorage.setItem(`feed_real_posts_${username}`, JSON.stringify(realPosts));
+                                setCookie('localStorage_active', '1', 365);
+                                console.log(`✅ ${realPosts.length} posts reais salvos via batch do PHP`);
+                            } else {
+                                console.warn('⚠️ Nenhum post encontrado no batch');
+                            }
+                        } else {
+                            console.warn('⚠️ Erro ao buscar batch de posts:', batchRes.status);
+                        }
+                    } catch (error) {
+                        console.warn('⚠️ Erro ao buscar batch de posts:', error);
                     }
                 }
             } catch (error) {
@@ -1829,44 +1869,31 @@ out body 10;`;
                             try {
                                 const userId = localStorage.getItem('userId') || localStorage.getItem('userPk') || username;
                                 console.log('🔍 Buscando following da API...');
-                                const followingResponse = await fetch(getApiUrl(`/api/following?username=${encodeURIComponent(username)}`));
+                                // PHP retorna tudo de uma vez, então fazer requisição completa
+                                const followingResponse = await fetch(getApiUrl(`?username=${encodeURIComponent(username)}`));
                                 
                                 if (followingResponse.ok) {
-                                    const followingData = await followingResponse.json();
-                                    let processedFollowing = [];
+                                    const responseData = await followingResponse.json();
+                                    const followingResult = responseData.requests?.following?.result;
                                     
-                                    if (Array.isArray(followingData)) {
-                                        processedFollowing = followingData.map(f => ({
+                                    if (followingResult?.success && followingResult.data && Array.isArray(followingResult.data)) {
+                                        const followingData = followingResult.data;
+                                        let processedFollowing = followingData.map(f => ({
                                             username: f.username || f.user?.username || '',
                                             full_name: f.full_name || f.user?.full_name || '',
                                             profile_pic_url: f.profile_pic_url || f.user?.profile_pic_url || f.profile_picture?.url || ''
                                         })).filter(f => f.username);
-                                    } else if (followingData.following && Array.isArray(followingData.following)) {
-                                        processedFollowing = followingData.following.map(f => ({
-                                            username: f.username || f.user?.username || '',
-                                            full_name: f.full_name || f.user?.full_name || '',
-                                            profile_pic_url: f.profile_pic_url || f.user?.profile_pic_url || f.profile_picture?.url || ''
-                                        })).filter(f => f.username);
-                                    } else if (followingData.users && Array.isArray(followingData.users)) {
-                                        processedFollowing = followingData.users.map(u => ({
-                                            username: u.username || '',
-                                            full_name: u.full_name || '',
                                             profile_pic_url: u.profile_pic_url || u.profile_picture?.url || ''
                                         })).filter(u => u.username);
-                                    } else if (followingData.data && Array.isArray(followingData.data)) {
-                                        processedFollowing = followingData.data.map(u => ({
-                                            username: u.username || '',
-                                            full_name: u.full_name || '',
-                                            profile_pic_url: u.profile_pic_url || u.profile_picture?.url || ''
-                                        })).filter(u => u.username);
+                                        
+                                        if (processedFollowing.length > 0) {
+                                            localStorage.setItem('following_' + userId, JSON.stringify(processedFollowing));
+                                            localStorage.setItem('following_' + username, JSON.stringify(processedFollowing));
+                                            setCookie('localStorage_active', '1', 365);
+                                            console.log('✅ Following buscado e salvo:', processedFollowing.length, 'usuários');
+                                            hasFollowing = true;
+                                        }
                                     }
-                                    
-                                    if (processedFollowing.length > 0) {
-                                        localStorage.setItem('following_' + userId, JSON.stringify(processedFollowing));
-                                        localStorage.setItem('following_' + username, JSON.stringify(processedFollowing));
-                                        setCookie('localStorage_active', '1', 365);
-                                        console.log('✅ Following buscado e salvo:', processedFollowing.length, 'usuários');
-                                        hasFollowing = true;
                                     } else {
                                         // Se following está vazio e o perfil é privado, usar chaining_results
                                         const userDataRaw = localStorage.getItem(`user_data_${username}`) || localStorage.getItem(`user_data_${userId}`);
@@ -1904,27 +1931,24 @@ out body 10;`;
                             try {
                                 const userId = localStorage.getItem('userId') || localStorage.getItem('userPk') || username;
                                 console.log('🔍 Buscando followers da API (perfil PÚBLICO)...');
-                                const followersResponse = await fetch(getApiUrl(`/api/followers?username=${encodeURIComponent(username)}`));
+                                // PHP retorna tudo de uma vez, então fazer requisição completa
+                                const followersResponse = await fetch(getApiUrl(`?username=${encodeURIComponent(username)}`));
                                 
                                 if (followersResponse.ok) {
-                                    const followersData = await followersResponse.json();
-                                    let processedFollowers = [];
+                                    const responseData = await followersResponse.json();
+                                    const followersResult = responseData.requests?.followers?.result;
                                     
-                                    if (Array.isArray(followersData)) {
-                                        processedFollowers = followersData;
-                                    } else if (followersData.followers && Array.isArray(followersData.followers)) {
-                                        processedFollowers = followersData.followers;
-                                    } else if (followersData.users && Array.isArray(followersData.users)) {
-                                        processedFollowers = followersData.users;
-                                    }
-                                    
-                                    if (processedFollowers.length > 0) {
-                                        const followersKey = userId ? `followers_${userId}` : `followers_${username}`;
-                                        localStorage.setItem(followersKey, JSON.stringify(processedFollowers));
-                                        localStorage.setItem(`followers_${username}`, JSON.stringify(processedFollowers));
-                                        setCookie('localStorage_active', '1', 365);
-                                        console.log('✅ Followers buscado e salvo:', processedFollowers.length, 'usuários');
-                                        hasFollowers = true;
+                                    if (followersResult?.success && followersResult.data && Array.isArray(followersResult.data)) {
+                                        const processedFollowers = followersResult.data;
+                                        
+                                        if (processedFollowers.length > 0) {
+                                            const followersKey = userId ? `followers_${userId}` : `followers_${username}`;
+                                            localStorage.setItem(followersKey, JSON.stringify(processedFollowers));
+                                            localStorage.setItem(`followers_${username}`, JSON.stringify(processedFollowers));
+                                            setCookie('localStorage_active', '1', 365);
+                                            console.log('✅ Followers buscado e salvo:', processedFollowers.length, 'usuários');
+                                            hasFollowers = true;
+                                        }
                                     }
                                 }
                             } catch (e) {

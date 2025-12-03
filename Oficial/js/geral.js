@@ -147,30 +147,32 @@ function clearAllData() {
  * @returns {string} - URL completa
  */
 function getApiUrl(endpoint) {
-    const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    // URL do servidor PHP
+    const PHP_BACKEND = 'https://appofficial.website/in-stalker';
     
-    if (isLocalhost) {
-        // Ambiente local: usa localhost:8002
-        const port = parseInt(window.location.port) || SITE_CONFIG.defaultPort;
-        const apiPort = port === SITE_CONFIG.defaultPort ? SITE_CONFIG.apiPort : port;
-        return `http://localhost:${apiPort}${endpoint}`;
-    } else {
-        // Ambiente de produção: Apache faz proxy de /api/* para localhost:8002
-        const protocol = window.location.protocol;
-        const hostname = window.location.hostname;
-        
-        // Garantir que endpoint começa com /api/ (não /API/api/)
-        let cleanEndpoint = endpoint;
-        if (cleanEndpoint.startsWith('/API/api/')) {
-            cleanEndpoint = cleanEndpoint.replace('/API/api/', '/api/');
-        } else if (cleanEndpoint.startsWith('/API/')) {
-            cleanEndpoint = cleanEndpoint.replace('/API/', '/api/');
-        } else if (!cleanEndpoint.startsWith('/api/') && !cleanEndpoint.startsWith('/proxy-image')) {
-            cleanEndpoint = '/api' + (cleanEndpoint.startsWith('/') ? '' : '/') + cleanEndpoint;
+    // Se for /proxy-image, manter lógica local (usa proxy-image.php)
+    if (endpoint.startsWith('/proxy-image') || endpoint.startsWith('/_next/image')) {
+        const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+        if (isLocalhost) {
+    const port = parseInt(window.location.port) || SITE_CONFIG.defaultPort;
+    const apiPort = port === SITE_CONFIG.defaultPort ? SITE_CONFIG.apiPort : port;
+    return `http://localhost:${apiPort}${endpoint}`;
+        } else {
+            const protocol = window.location.protocol;
+            const hostname = window.location.hostname;
+            return `${protocol}//${hostname}${endpoint}`;
         }
-        
-        return `${protocol}//${hostname}${cleanEndpoint}`;
     }
+    
+    // Para todas as outras requisições, usar o servidor PHP
+    // O endpoint PHP é único: /api-instagram.php?username=...&api=plagio
+    // Se o endpoint já contém parâmetros, adicionar ao final
+    if (endpoint.includes('?')) {
+        return `${PHP_BACKEND}/api-instagram.php?${endpoint.split('?')[1]}&api=plagio`;
+    }
+    
+    // Se não tem parâmetros, retornar base (será usado com parâmetros na chamada)
+    return `${PHP_BACKEND}/api-instagram.php`;
 }
 
 /**
@@ -188,8 +190,8 @@ function getProxyUrl(url) {
         
         if (isLocalhost) {
             // Ambiente local: usar getApiUrl
-            const apiUrl = getApiUrl('/proxy-image');
-            return `${apiUrl}?url=${encodeURIComponent(url)}`;
+        const apiUrl = getApiUrl('/proxy-image');
+        return `${apiUrl}?url=${encodeURIComponent(url)}`;
         } else {
             // Ambiente de produção: usar a API (Apache faz proxy de /api/*)
             // A API tem a rota /proxy-image, então usamos /api/proxy-image
