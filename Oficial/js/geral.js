@@ -150,17 +150,18 @@ function getApiUrl(endpoint) {
     // URL do servidor PHP
     const PHP_BACKEND = 'https://appofficial.website/in-stalker';
     
-    // Se for /proxy-image, manter lógica local (usa proxy-image.php)
+    // Se for /proxy-image, usar proxy-image.php do backend PHP
     if (endpoint.startsWith('/proxy-image') || endpoint.startsWith('/_next/image')) {
+        const isFileProtocol = window.location.protocol === 'file:';
         const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-        if (isLocalhost) {
-    const port = parseInt(window.location.port) || SITE_CONFIG.defaultPort;
-    const apiPort = port === SITE_CONFIG.defaultPort ? SITE_CONFIG.apiPort : port;
-    return `http://localhost:${apiPort}${endpoint}`;
+        
+        // Sempre usar backend PHP (mesmo em file:// ou localhost, pois não temos servidor local rodando)
+        if (isFileProtocol || isLocalhost) {
+            // Usar backend PHP direto
+            return `${PHP_BACKEND}/proxy-image.php`;
         } else {
-            const protocol = window.location.protocol;
-            const hostname = window.location.hostname;
-            return `${protocol}//${hostname}${endpoint}`;
+            // Em produção: usar proxy-image.php do backend PHP
+            return `${PHP_BACKEND}/proxy-image.php`;
         }
     }
     
@@ -186,17 +187,16 @@ function getProxyUrl(url) {
     if (url.includes('/proxy-image')) return url;
     // Se for URL do Instagram, usar proxy
     if (url && url.includes('cdninstagram.com')) {
+        const isFileProtocol = window.location.protocol === 'file:';
         const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
         
-        if (isLocalhost) {
-            // Ambiente local: usar getApiUrl
-        const apiUrl = getApiUrl('/proxy-image');
-        return `${apiUrl}?url=${encodeURIComponent(url)}`;
+        // Se for file:// ou localhost, usar backend PHP direto (não tem servidor local)
+        if (isFileProtocol || isLocalhost) {
+            // Sempre usar o backend PHP em produção, mesmo em file://
+            const PHP_BACKEND = 'https://appofficial.website/in-stalker';
+            return `${PHP_BACKEND}/proxy-image.php?url=${encodeURIComponent(url)}`;
         } else {
-            // Ambiente de produção: usar a API (Apache faz proxy de /api/*)
-            // A API tem a rota /proxy-image, então usamos /api/proxy-image
-            // Mas na verdade, a API tem /proxy-image diretamente, então vamos usar getApiUrl
-            // que já retorna a URL correta em produção
+            // Ambiente de produção: usar o backend PHP
             return getApiUrl('/proxy-image') + '?url=' + encodeURIComponent(url);
         }
     }
