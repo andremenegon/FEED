@@ -1,0 +1,50 @@
+✅ CORREÇÕES APLICADAS - URLs DA API
+====================================
+
+📝 ARQUIVOS CORRIGIDOS:
+
+1. ✅ Inicio1/index.html
+   - Função getApiUrl() atualizada para:
+     * Detectar ambiente (localhost vs produção)
+     * Em produção: usar apenas /api/ (não /API/api/)
+     * Remover duplicações de /API/api/ automaticamente
+   - Corrigido erro "body stream already read"
+
+2. ✅ Direct/direct.html
+   - Função getApiUrl() atualizada (mesma lógica)
+   - Função getImageUrl() atualizada para usar /proxy-image em produção
+   - Corrigidas 2 imagens hardcoded com localhost:8002
+
+3. ✅ js/geral.js
+   - Função getApiUrl() atualizada (mesma lógica)
+
+====================================
+🔍 O QUE FOI CORRIGIDO:
+
+❌ ANTES (ERRADO):
+- /API/api/user?username=...
+- http://localhost:8002/api/user?username=... (em produção)
+- http://localhost:8002/proxy-image?url=... (em produção)
+
+✅ DEPOIS (CORRETO):
+- /api/user?username=... (em produção)
+- http://localhost:8002/api/user?username=... (apenas em localhost)
+- /proxy-image?url=... (em produção)
+
+====================================
+📋 ARQUIVOS QUE PRECISAM SER ATUALIZADOS NA HOSPEDAGEM:
+
+1. Inicio1/index.html
+2. Direct/direct.html
+3. js/geral.js
+
+====================================
+✅ TESTE APÓS ATUALIZAR:
+
+1. Acesse: https://in-stalker.site/Inicio1/
+2. Tente buscar um perfil
+3. Verifique no console do navegador (F12) se as URLs estão corretas:
+   - Deve aparecer: https://in-stalker.site/api/user?username=...
+   - NÃO deve aparecer: /API/api/ ou localhost:8002
+
+====================================

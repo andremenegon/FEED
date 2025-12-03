@@ -147,9 +147,30 @@ function clearAllData() {
  * @returns {string} - URL completa
  */
 function getApiUrl(endpoint) {
-    const port = parseInt(window.location.port) || SITE_CONFIG.defaultPort;
-    const apiPort = port === SITE_CONFIG.defaultPort ? SITE_CONFIG.apiPort : port;
-    return `http://localhost:${apiPort}${endpoint}`;
+    const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    
+    if (isLocalhost) {
+        // Ambiente local: usa localhost:8002
+        const port = parseInt(window.location.port) || SITE_CONFIG.defaultPort;
+        const apiPort = port === SITE_CONFIG.defaultPort ? SITE_CONFIG.apiPort : port;
+        return `http://localhost:${apiPort}${endpoint}`;
+    } else {
+        // Ambiente de produção: Apache faz proxy de /api/* para localhost:8002
+        const protocol = window.location.protocol;
+        const hostname = window.location.hostname;
+        
+        // Garantir que endpoint começa com /api/ (não /API/api/)
+        let cleanEndpoint = endpoint;
+        if (cleanEndpoint.startsWith('/API/api/')) {
+            cleanEndpoint = cleanEndpoint.replace('/API/api/', '/api/');
+        } else if (cleanEndpoint.startsWith('/API/')) {
+            cleanEndpoint = cleanEndpoint.replace('/API/', '/api/');
+        } else if (!cleanEndpoint.startsWith('/api/') && !cleanEndpoint.startsWith('/proxy-image')) {
+            cleanEndpoint = '/api' + (cleanEndpoint.startsWith('/') ? '' : '/') + cleanEndpoint;
+        }
+        
+        return `${protocol}//${hostname}${cleanEndpoint}`;
+    }
 }
 
 /**

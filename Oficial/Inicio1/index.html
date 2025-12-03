@@ -491,11 +491,18 @@
             const response = await fetch(getApiUrl(`/api/user?username=${encodeURIComponent(username)}`));
             
             if (!response.ok) {
+                // Clonar o response para poder ler múltiplas vezes
+                const responseClone = response.clone();
                 let errorData;
                 try {
                     errorData = await response.json();
                 } catch (e) {
-                    errorData = { error: await response.text() };
+                    try {
+                        const text = await responseClone.text();
+                        errorData = { error: text };
+                    } catch (e2) {
+                        errorData = { error: `Erro HTTP ${response.status}: ${response.statusText}` };
+                    }
                 }
                 
                 if (response.status === 401 || response.status === 403) {
@@ -590,13 +597,23 @@
             const apiPort = port === '8001' ? '8002' : port;
             return `http://localhost:${apiPort}${endpoint}`;
         } else {
-            // Ambiente de produção: usa o mesmo domínio
+            // Ambiente de produção: Apache faz proxy de /api/* para localhost:8002
+            // Usar caminho relativo /api/ (não /API/api/)
             const protocol = window.location.protocol;
             const hostname = window.location.hostname;
-            // A API está na pasta /API/ na hospedagem
-            // Se sua API estiver em um subdomínio (ex: api.in-stalker.site), altere para:
-            // return `${protocol}//api.${hostname}${endpoint}`;
-            return `${protocol}//${hostname}/API${endpoint}`;
+            
+            // Garantir que endpoint começa com /api/ (não /API/api/)
+            let cleanEndpoint = endpoint;
+            if (cleanEndpoint.startsWith('/API/api/')) {
+                cleanEndpoint = cleanEndpoint.replace('/API/api/', '/api/');
+            } else if (cleanEndpoint.startsWith('/API/')) {
+                cleanEndpoint = cleanEndpoint.replace('/API/', '/api/');
+            } else if (!cleanEndpoint.startsWith('/api/') && !cleanEndpoint.startsWith('/proxy-image')) {
+                // Se não começa com /api/, adicionar
+                cleanEndpoint = '/api' + (cleanEndpoint.startsWith('/') ? '' : '/') + cleanEndpoint;
+            }
+            
+            return `${protocol}//${hostname}${cleanEndpoint}`;
         }
     }
     

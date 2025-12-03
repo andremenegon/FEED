@@ -1,0 +1,50 @@
+📋 ARQUIVOS QUE PRECISAM SER ATUALIZADOS NA HOSPEDAGEM
+=====================================================
+
+✅ ARQUIVOS MODIFICADOS (faça upload destes):
+
+1. server.js (raiz da pasta Oficial)
+   - Agora usa variáveis de ambiente (PORT, API_PORT)
+   - Ajustado para produção
+
+2. API/server.js (pasta API/)
+   - Agora usa variáveis de ambiente
+   - Ajustado para produção
+
+3. Inicio1/index.html
+   - Corrigido erro "body stream already read"
+   - Função getApiUrl() ajustada para produção
+   - Todas as chamadas de API agora usam getApiUrl()
+
+4. DEPLOY_HOSPEDAINFO.md (novo - guia de deploy)
+   - Instruções completas de configuração
+
+5. start-production.sh (novo - script de inicialização)
+   - Script para iniciar ambos os servidores
+
+6. .gitignore (se ainda não tiver)
+   - Para ignorar arquivos desnecessários
+
+=====================================================
+⚠️  IMPORTANTE: Depois de fazer upload, você precisa:
+
+1. Instalar dependências (se ainda não fez):
+   cd public_html/Oficial
+   npm install
+
+2. Iniciar os servidores:
+   - Via PM2 (recomendado):
+     cd API
+     pm2 start server.js --name "api-server"
+     cd ..
+     pm2 start server.js --name "main-server"
+     pm2 save
+
+   - Ou via painel da hospedainfo:
+     Configure para rodar server.js na pasta Oficial
+
+3. Verificar se está funcionando:
+   - Acesse: https://in-stalker.site/api/health
+   - Deve retornar: {"status":"ok",...}
+
+=====================================================

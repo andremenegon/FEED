@@ -1,0 +1,65 @@
+🚀 COMANDOS PARA EXECUTAR NO SSH DA HOSPEDAINFO
+================================================
+
+1️⃣ NAVEGAR ATÉ A PASTA DO PROJETO
+----------------------------------
+cd public_html/Oficial
+# (ou o caminho onde você fez upload dos arquivos)
+
+2️⃣ INSTALAR DEPENDÊNCIAS (só precisa fazer uma vez)
+----------------------------------------------------
+npm install
+
+3️⃣ INSTALAR PM2 (gerenciador de processos - só precisa uma vez)
+-----------------------------------------------------------------
+npm install -g pm2
+
+4️⃣ INICIAR O SERVIDOR DA API
+------------------------------
+cd API
+pm2 start server.js --name "api-server"
+cd ..
+
+5️⃣ INICIAR O SERVIDOR PRINCIPAL
+--------------------------------
+pm2 start server.js --name "main-server"
+
+6️⃣ SALVAR CONFIGURAÇÃO (para iniciar automaticamente)
+------------------------------------------------------
+pm2 save
+
+7️⃣ CONFIGURAR PARA INICIAR AUTOMATICAMENTE AO REINICIAR O SERVIDOR
+-------------------------------------------------------------------
+pm2 startup
+# Siga as instruções que aparecerem na tela
+
+8️⃣ VERIFICAR SE ESTÁ RODANDO
+------------------------------
+pm2 list
+# Deve mostrar "api-server" e "main-server" com status "online"
+
+9️⃣ VER OS LOGS (se precisar debugar)
+-------------------------------------
+pm2 logs
+# Para ver logs de um específico:
+pm2 logs api-server
+pm2 logs main-server
+
+🔟 COMANDOS ÚTEIS
+-----------------
+# Parar servidores:
+pm2 stop all
+
+# Reiniciar servidores:
+pm2 restart all
+
+# Ver status:
+pm2 status
+
+# Parar e remover:
+pm2 delete all
+
+================================================
+✅ DEPOIS DISSO, TESTE:
+- Acesse: https://in-stalker.site/api/health
+- Deve retornar JSON com {"status":"ok"}

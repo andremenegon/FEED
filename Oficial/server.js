@@ -5,8 +5,13 @@ const http = require('http');
 const crypto = require('crypto');
 const { createProxyMiddleware } = require('http-proxy-middleware');
 const app = express();
-const PORT = 3000;
-const API_PORT = 8002;
+
+// Usar porta da variável de ambiente (hospedagem) ou padrão 3000
+const PORT = process.env.PORT || 3000;
+// Em produção, a API pode estar no mesmo processo ou em localhost
+// Se a hospedagem permitir múltiplas portas, use 8002, senão use a mesma porta
+const API_PORT = process.env.API_PORT || (process.env.PORT ? process.env.PORT : 8002);
+const IS_PRODUCTION = process.env.NODE_ENV === 'production' || !process.env.NODE_ENV;
 
 // Middleware para parsing JSON
 app.use(express.json());
@@ -27,8 +32,6 @@ app.use((req, res, next) => {
 const imageCache = new Map();
 const CACHE_TTL = 24 * 60 * 60 * 1000; // 24 horas
 
-const API_PORT = 8002;
-
 // ===== PROXY PARA API (porta 8002) =====
 // Rotas específicas de API são redirecionadas para o servidor de API na porta 8002
 const apiProxyRoutes = ['/api/user', '/api/followers', '/api/following', '/api/chaining-results', 
@@ -36,6 +39,9 @@ const apiProxyRoutes = ['/api/user', '/api/followers', '/api/following', '/api/c
 
 apiProxyRoutes.forEach(route => {
   app.all(route, (req, res) => {
+    // Em produção, se API_PORT for igual a PORT, significa que a API está no mesmo processo
+    // Nesse caso, precisamos importar e usar a API diretamente
+    // Por enquanto, mantemos o proxy para localhost
     const apiUrl = `http://localhost:${API_PORT}${req.originalUrl}`;
     console.log(`🔄 Proxy: ${req.method} ${req.originalUrl} -> ${apiUrl}`);
     
@@ -58,8 +64,9 @@ apiProxyRoutes.forEach(route => {
       console.error('❌ Erro no proxy da API:', err.message);
       if (!res.headersSent) {
         res.status(502).json({ 
-          error: 'Servidor de API não está disponível. Certifique-se de que o servidor na porta 8002 está rodando.',
-          details: err.message
+          error: 'Servidor de API não está disponível. Certifique-se de que o servidor da API está rodando.',
+          details: err.message,
+          hint: 'Em produção, você precisa iniciar também o servidor API/server.js'
         });
       }
     });
@@ -630,8 +637,9 @@ app.get('/', (req, res) => {
 
 // Iniciar servidor
 app.listen(PORT, () => {
-    console.log(`🚀 Servidor rodando em http://localhost:${PORT}`);
+    console.log(`🚀 Servidor rodando na porta ${PORT}`);
     console.log(`📁 Servindo apenas a pasta: ${__dirname}`);
+    console.log(`🌍 Ambiente: ${IS_PRODUCTION ? 'PRODUÇÃO' : 'DESENVOLVIMENTO'}`);
     console.log(`\n📄 Acesse:`);
     console.log(`   - http://localhost:${PORT}/Inicio1/index.html`);
     console.log(`   - http://localhost:${PORT}/Direct/direct.html`);
@@ -641,4 +649,6 @@ app.listen(PORT, () => {
     console.log(`   - http://localhost:${PORT}/api/followers?username=USERNAME`);
     console.log(`   - http://localhost:${PORT}/api/following?username=USERNAME`);
     console.log(`   - http://localhost:${PORT}/api/health`);
+    console.log(`\n⚠️  IMPORTANTE: Para a API funcionar, você precisa iniciar também:`);
+    console.log(`   - cd API && node server.js (na porta ${API_PORT})`);
 });
