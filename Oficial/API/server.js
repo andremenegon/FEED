@@ -1227,6 +1227,31 @@ const server = http.createServer((req, res) => {
       res.end(`<h1>500 - Erro ao carregar debug page</h1><p>Erro: ${error.message}</p>`);
     }
   }
+  // Servir página de debug de imagens (debug-images.html)
+  else if (parsedUrl.pathname === '/debug-images.html') {
+    // Tentar primeiro na pasta pai (Oficial)
+    const debugPath = path.join(__dirname, '..', 'debug-images.html');
+    console.log('🔍 Tentando servir debug-images.html do caminho:', debugPath);
+    try {
+      if (!fs.existsSync(debugPath)) {
+        console.error('❌ Arquivo debug-images.html não encontrado em:', debugPath);
+        res.writeHead(404, { 'Content-Type': 'text/html; charset=utf-8' });
+        res.end(`<h1>404 - Debug images page not found</h1><p>Caminho: ${debugPath}</p>`);
+        return;
+      }
+      const content = fs.readFileSync(debugPath, 'utf8');
+      console.log('✅ Debug-images.html carregado com sucesso, tamanho:', content.length, 'bytes');
+      res.writeHead(200, { 
+        'Content-Type': 'text/html; charset=utf-8',
+        'Access-Control-Allow-Origin': '*'
+      });
+      res.end(content);
+    } catch (error) {
+      console.error('❌ Erro ao ler debug-images.html:', error.message);
+      res.writeHead(500, { 'Content-Type': 'text/html; charset=utf-8' });
+      res.end(`<h1>500 - Erro ao carregar debug images page</h1><p>Erro: ${error.message}</p>`);
+    }
+  }
   // Servir arquivos estáticos (HTML, CSS, JS, imagens)
   else {
     // Remover query string do pathname

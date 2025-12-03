@@ -638,6 +638,11 @@ app.post('/api/clear-cache', (req, res) => {
 
 // ===== SERVIÇO DE ARQUIVOS ESTÁTICOS =====
 
+// Rota explícita para debug-images.html (antes do static para ter prioridade)
+app.get('/debug-images.html', (req, res) => {
+  res.sendFile(path.join(__dirname, 'debug-images.html'));
+});
+
 // Servir arquivos estáticos apenas da pasta Oficial
 app.use(express.static(__dirname));
 

@@ -141,11 +141,117 @@
         .summary-item:last-child {
             border-bottom: none;
         }
+        
+        .search-box {
+            background: #1a1a1a;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+            border: 1px solid #333;
+        }
+        
+        .search-box h2 {
+            color: #EB1C8F;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+        
+        .search-form {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .search-form input {
+            flex: 1;
+            padding: 12px 16px;
+            background: #0a0a0a;
+            border: 1px solid #333;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 14px;
+            outline: none;
+        }
+        
+        .search-form input:focus {
+            border-color: #EB1C8F;
+        }
+        
+        .search-form input::placeholder {
+            color: #666;
+        }
+        
+        .search-form button {
+            padding: 12px 24px;
+            background: #EB1C8F;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .search-form button:hover {
+            background: #d0167a;
+        }
+        
+        .search-form button:disabled {
+            background: #666;
+            cursor: not-allowed;
+        }
+        
+        .loading-spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid #fff;
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-left: 8px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .user-info {
+            margin-top: 15px;
+            padding: 12px;
+            background: #0a0a0a;
+            border-radius: 8px;
+            border: 1px solid #333;
+        }
+        
+        .user-info.success {
+            border-color: #00ff00;
+        }
+        
+        .user-info.error {
+            border-color: #ff0000;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>🔍 Debug - Teste de Carregamento de Imagens</h1>
+        
+        <div class="search-box">
+            <h2>📱 Buscar Usuário do Instagram</h2>
+            <form class="search-form" id="searchForm" onsubmit="searchUser(event)">
+                <input 
+                    type="text" 
+                    id="usernameInput" 
+                    placeholder="Digite o username do Instagram (ex: andre.menegon)" 
+                    required
+                    autocomplete="off"
+                >
+                <button type="submit" id="searchButton">Buscar</button>
+            </form>
+            <div id="userInfo" class="user-info" style="display: none;"></div>
+        </div>
         
         <div class="test-section">
             <h2>1. URL Direta do Instagram (sem proxy)</h2>
@@ -234,11 +340,150 @@
     </div>
     
     <script>
-        // URL de teste do Instagram
-        const INSTAGRAM_URL = 'https://scontent-lga3-2.cdninstagram.com/v/t51.2885-19/469280503_618774417244536_6789387411220436489_n.jpg?stp=dst-jpg_e0_s150x150_tt6&efg=eyJ2ZW5jb2RlX3RhZyI6InByb2ZpbGVfcGljLmRqYW5nby4xMDgwLmMyIn0&_nc_ht=scontent-lga3-2.cdninstagram.com&_nc_cat=100&_nc_oc=Q6cZ2QHYxhLxq_NmWYgEHgt0OBvkslJ4XIN1WsbpbSSKT3pq8HsIaDdv3qIireMn7I7Zbaw&_nc_ohc=m6SeHjrgpigQ7kNvwFlWz-2&_nc_gid=TuumDka_g-VGdCd1m-0TWA&edm=AO4kU9EBAAAA&ccb=7-5&ig_cache_key=GPem_Bt4AValxTICAAmWTfjgvzhebkULAAAB1501500j-ccb7-5&oh=00_AfkxBb_k83mPIrAUUZikSkx3xhJ0uOiQAw4gT_NUl_-9sw&oe=693586F4&_nc_sid=164c1d';
+        // URL de teste padrão do Instagram (será substituída quando buscar usuário)
+        let INSTAGRAM_URL = 'https://scontent-lga3-2.cdninstagram.com/v/t51.2885-19/469280503_618774417244536_6789387411220436489_n.jpg?stp=dst-jpg_e0_s150x150_tt6&efg=eyJ2ZW5jb2RlX3RhZyI6InByb2ZpbGVfcGljLmRqYW5nby4xMDgwLmMyIn0&_nc_ht=scontent-lga3-2.cdninstagram.com&_nc_cat=100&_nc_oc=Q6cZ2QHYxhLxq_NmWYgEHgt0OBvkslJ4XIN1WsbpbSSKT3pq8HsIaDdv3qIireMn7I7Zbaw&_nc_ohc=m6SeHjrgpigQ7kNvwFlWz-2&_nc_gid=TuumDka_g-VGdCd1m-0TWA&edm=AO4kU9EBAAAA&ccb=7-5&ig_cache_key=GPem_Bt4AValxTICAAmWTfjgvzhebkULAAAB1501500j-ccb7-5&oh=00_AfkxBb_k83mPIrAUUZikSkx3xhJ0uOiQAw4gT_NUl_-9sw&oe=693586F4&_nc_sid=164c1d';
         
-        const encodedUrl = encodeURIComponent(INSTAGRAM_URL);
+        let encodedUrl = encodeURIComponent(INSTAGRAM_URL);
         const results = {};
+        
+        // Função para buscar usuário do Instagram
+        async function searchUser(event) {
+            event.preventDefault();
+            
+            const usernameInput = document.getElementById('usernameInput');
+            const searchButton = document.getElementById('searchButton');
+            const userInfo = document.getElementById('userInfo');
+            const username = usernameInput.value.trim();
+            
+            if (!username) return;
+            
+            // Desabilitar botão e mostrar loading
+            searchButton.disabled = true;
+            searchButton.innerHTML = 'Buscando... <span class="loading-spinner"></span>';
+            userInfo.style.display = 'none';
+            
+            // Limpar resultados anteriores
+            Object.keys(results).forEach(key => delete results[key]);
+            updateSummary();
+            
+            try {
+                // Buscar dados do usuário via API
+                const apiUrl = getApiUrl(`/api/user?username=${encodeURIComponent(username)}`);
+                const response = await fetch(apiUrl);
+                
+                if (!response.ok) {
+                    throw new Error(`Erro ${response.status}: ${response.statusText}`);
+                }
+                
+                const data = await response.json();
+                
+                if (data.error || !data.profile_pic_url) {
+                    throw new Error(data.error || 'Foto de perfil não encontrada');
+                }
+                
+                // Atualizar URL da imagem
+                INSTAGRAM_URL = data.profile_pic_url;
+                encodedUrl = encodeURIComponent(INSTAGRAM_URL);
+                
+                // Mostrar informações do usuário
+                userInfo.className = 'user-info success';
+                userInfo.innerHTML = `
+                    <strong>✅ Usuário encontrado:</strong><br>
+                    <strong>Username:</strong> @${data.username || username}<br>
+                    <strong>Nome:</strong> ${data.full_name || 'N/A'}<br>
+                    <strong>Seguidores:</strong> ${data.followers_count || 'N/A'}<br>
+                    <strong>URL da foto:</strong> <span style="font-size: 10px; word-break: break-all;">${INSTAGRAM_URL.substring(0, 100)}...</span>
+                `;
+                userInfo.style.display = 'block';
+                
+                // Reiniciar todos os testes com a nova URL
+                resetAllTests();
+                
+            } catch (error) {
+                console.error('Erro ao buscar usuário:', error);
+                userInfo.className = 'user-info error';
+                userInfo.innerHTML = `<strong>❌ Erro:</strong> ${error.message}`;
+                userInfo.style.display = 'block';
+            } finally {
+                // Reabilitar botão
+                searchButton.disabled = false;
+                searchButton.textContent = 'Buscar';
+            }
+        }
+        
+        // Função para reiniciar todos os testes
+        function resetAllTests() {
+            // Resetar todos os status
+            const testIds = ['direct', 'proxy', 'next', 'api-proxy', 'srcset', 'quality', 'getapi'];
+            testIds.forEach(testId => {
+                const statusEl = document.getElementById(`status-${testId}`);
+                if (statusEl) {
+                    statusEl.className = 'status loading';
+                    statusEl.textContent = 'Carregando...';
+                }
+                
+                // Remover mensagens de erro anteriores
+                const testItem = document.getElementById(`test-${testId}`);
+                if (testItem) {
+                    const errorMsg = testItem.querySelector('.error-message');
+                    if (errorMsg) errorMsg.remove();
+                }
+            });
+            
+            // Limpar resultados
+            Object.keys(results).forEach(key => delete results[key]);
+            updateSummary();
+            
+            // Recarregar todas as imagens
+            loadAllImages();
+        }
+        
+        // Função para carregar todas as imagens
+        function loadAllImages() {
+            // 1. URL Direta
+            const imgDirect = document.getElementById('img-direct');
+            const urlDirect = INSTAGRAM_URL;
+            document.getElementById('url-direct').textContent = urlDirect;
+            imgDirect.src = urlDirect;
+            
+            // 2. Proxy Atual
+            const imgProxy = document.getElementById('img-proxy');
+            const urlProxy = `/proxy-image?url=${encodedUrl}`;
+            document.getElementById('url-proxy').textContent = urlProxy;
+            imgProxy.src = urlProxy;
+            
+            // 3. Next.js Style
+            const imgNext = document.getElementById('img-next');
+            const urlNext = `/_next/image?url=${encodedUrl}&w=256&q=75`;
+            document.getElementById('url-next').textContent = urlNext;
+            imgNext.src = urlNext;
+            
+            // 4. API Proxy
+            const imgApiProxy = document.getElementById('img-api-proxy');
+            const urlApiProxy = `/api/proxy-image?url=${encodedUrl}`;
+            document.getElementById('url-api-proxy').textContent = urlApiProxy;
+            imgApiProxy.src = urlApiProxy;
+            
+            // 5. Srcset
+            const imgSrcset = document.getElementById('img-srcset');
+            const urlSrcset1 = `/proxy-image?url=${encodedUrl}&w=96&q=75`;
+            const urlSrcset2 = `/proxy-image?url=${encodedUrl}&w=256&q=75`;
+            document.getElementById('url-srcset').textContent = `1x: ${urlSrcset1}\n2x: ${urlSrcset2}`;
+            imgSrcset.srcset = `${urlSrcset1} 1x, ${urlSrcset2} 2x`;
+            imgSrcset.src = urlSrcset2;
+            
+            // 6. Quality
+            const imgQuality = document.getElementById('img-quality');
+            const urlQuality = `/proxy-image?url=${encodedUrl}&w=256&q=75`;
+            document.getElementById('url-quality').textContent = urlQuality;
+            imgQuality.src = urlQuality;
+            
+            // 7. getApiUrl()
+            const imgGetApi = document.getElementById('img-getapi');
+            const urlGetApi = getApiUrl('/proxy-image') + '?url=' + encodedUrl;
+            document.getElementById('url-getapi').textContent = urlGetApi;
+            imgGetApi.src = urlGetApi;
+        }
         
         // Função getApiUrl (copiada do código)
         function getApiUrl(endpoint) {
@@ -319,50 +564,9 @@
         
         // Inicializar testes
         window.addEventListener('DOMContentLoaded', function() {
-            // 1. URL Direta
-            const imgDirect = document.getElementById('img-direct');
-            const urlDirect = INSTAGRAM_URL;
-            document.getElementById('url-direct').textContent = urlDirect;
-            imgDirect.src = urlDirect;
-            
-            // 2. Proxy Atual
-            const imgProxy = document.getElementById('img-proxy');
-            const urlProxy = `/proxy-image?url=${encodedUrl}`;
-            document.getElementById('url-proxy').textContent = urlProxy;
-            imgProxy.src = urlProxy;
-            
-            // 3. Next.js Style
-            const imgNext = document.getElementById('img-next');
-            const urlNext = `/_next/image?url=${encodedUrl}&w=256&q=75`;
-            document.getElementById('url-next').textContent = urlNext;
-            imgNext.src = urlNext;
-            
-            // 4. API Proxy
-            const imgApiProxy = document.getElementById('img-api-proxy');
-            const urlApiProxy = `/api/proxy-image?url=${encodedUrl}`;
-            document.getElementById('url-api-proxy').textContent = urlApiProxy;
-            imgApiProxy.src = urlApiProxy;
-            
-            // 5. Srcset
-            const imgSrcset = document.getElementById('img-srcset');
-            const urlSrcset1 = `/proxy-image?url=${encodedUrl}&w=96&q=75`;
-            const urlSrcset2 = `/proxy-image?url=${encodedUrl}&w=256&q=75`;
-            document.getElementById('url-srcset').textContent = `1x: ${urlSrcset1}\n2x: ${urlSrcset2}`;
-            imgSrcset.srcset = `${urlSrcset1} 1x, ${urlSrcset2} 2x`;
-            imgSrcset.src = urlSrcset2;
-            
-            // 6. Quality
-            const imgQuality = document.getElementById('img-quality');
-            const urlQuality = `/proxy-image?url=${encodedUrl}&w=256&q=75`;
-            document.getElementById('url-quality').textContent = urlQuality;
-            imgQuality.src = urlQuality;
-            
-            // 7. getApiUrl()
-            const imgGetApi = document.getElementById('img-getapi');
-            const urlGetApi = getApiUrl('/proxy-image') + '?url=' + encodedUrl;
-            document.getElementById('url-getapi').textContent = urlGetApi;
-            imgGetApi.src = urlGetApi;
+            loadAllImages();
         });
     </script>
 </body>
 </html>
+
