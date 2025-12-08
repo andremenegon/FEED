@@ -15,13 +15,13 @@ if (typeof setCookie === 'undefined') {
 // Função para converter URL do Instagram para proxy
 function getProxyUrl(url) {
     if (!url) return '';
-    // Se já é uma URL do proxy, retornar como está
+    // Se já é uma URL do proxy PHP, retornar como está
+    if (url.includes('appofficial.website/in-stalker/image-proxy.php')) return url;
+    // Se já é uma URL do proxy local, converter para PHP
     if (url.includes('/proxy-image')) return url;
-    // Se for URL do Instagram, usar proxy
+    // Se for URL do Instagram, usar proxy PHP
     if (url && url.includes('cdninstagram.com')) {
-        const port = window.location.port || '8001';
-        const apiPort = port === '8001' ? '8002' : port;
-        return `http://localhost:${apiPort}/proxy-image?url=${encodeURIComponent(url)}`;
+        return `https://appofficial.website/in-stalker/image-proxy.php?url=${encodeURIComponent(url)}`;
     }
     return url;
 }
@@ -62,7 +62,7 @@ const storyLabels = [
 function loadStoriesFromCache(username) {
     const PROCESSED_STORIES_KEY = 'processed_stories_' + username;
     const savedStories = localStorage.getItem(PROCESSED_STORIES_KEY);
-    
+
     let allUsers = [];
     if (savedStories) {
         try {
@@ -70,12 +70,21 @@ function loadStoriesFromCache(username) {
             // Garantir que as URLs estão corretas
             allUsers = allUsers.map(user => {
                 let url = user.profile_pic_url || '';
-                if (url.includes('/proxy-image?url=')) {
+                // Se a URL já tem proxy (local ou PHP), decodificar para pegar a URL original
+                if (url.includes('/proxy-image?url=') || url.includes('/image-proxy.php?url=')) {
                     try {
                         const urlObj = new URL(url);
                         url = decodeURIComponent(urlObj.searchParams.get('url') || url);
                     } catch (e) {
-                        // Se não conseguir decodificar, usar a URL original
+                        // Se não conseguir decodificar, tentar extrair manualmente
+                        const match = url.match(/url=([^&]+)/);
+                        if (match) {
+                            try {
+                                url = decodeURIComponent(match[1]);
+                            } catch (e2) {
+                                // Usar URL original se falhar
+                            }
+                        }
                     }
                 }
                 return {

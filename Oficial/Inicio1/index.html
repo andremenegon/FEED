@@ -684,7 +684,7 @@
         // O endpoint PHP é único: /api-instagram.php?username=...&api=plagio
         // Se o endpoint já contém parâmetros, adicionar ao final
         if (endpoint.includes('?')) {
-            return `${PHP_BACKEND}/api-instagram.php?${endpoint.split('?')[1]}&api=plagio`;
+            return `${PHP_BACKEND}/api-instagram.php?${endpoint.split('?')[1]}`;
         }
         
         // Se não tem parâmetros, retornar base (será usado com parâmetros na chamada)
@@ -754,7 +754,7 @@
                 <div class="flex justify-center mb-6">
                     <div class="w-28 h-28 rounded-full flex items-center justify-center overflow-hidden" style="background-color: rgba(235, 28, 143, 0.2);">
                         ${profileImageUrl ? `
-                            <img src="${typeof getProxyUrl === 'function' ? getProxyUrl(profileImageUrl) : `https://appofficial.website/in-stalker/image-proxy.php?url=${encodeURIComponent(profileImageUrl)}`}" alt="Foto de perfil" class="w-full h-full object-cover" width="112" height="112" 
+                            <img src="${typeof getProxyUrl === 'function' ? `https://appofficial.website/in-stalker/image-proxy.php?url=${encodeURIComponent(profileImageUrl)}` : getProxyUrl(profileImageUrl)}" alt="Foto de perfil" class="w-full h-full object-cover" width="112" height="112" 
                                 onerror="console.error('Erro ao carregar imagem:', this.src); this.style.display='none'; if(this.nextElementSibling) this.nextElementSibling.style.display='flex';"
                                 loading="eager">
                             <svg class="w-12 h-12" style="color: #EB1C8F; display: none;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
@@ -892,7 +892,7 @@
                         
                         try {
                             const usernamesParam = postsProfiles.join(',');
-                            const batchUrl = getApiUrl(`?usernames=${encodeURIComponent(usernamesParam)}&batch_posts=true&api=plagio`);
+                            const batchUrl = getApiUrl(`?usernames=${encodeURIComponent(usernamesParam)}&batch_posts=true`);
                             
                             const batchRes = await fetch(batchUrl);
                         if (batchRes.ok) {
@@ -1069,29 +1069,8 @@ out body 10;`;
                     console.warn('⚠️ Erro ao parsear followers:', e);
                 }
             } else {
-                // Se não tem, os dados devem vir da resposta principal do PHP
-                // Se ainda não estiverem disponíveis, tentar buscar novamente (fallback)
-                console.log('📥 Followers não encontrado no localStorage. Dados devem vir da resposta principal do PHP.');
-                // NOTA: Com PHP, os dados já vêm na resposta principal, então não precisa buscar separadamente
-                // Se chegou aqui, significa que a resposta principal não tinha followers ou não foi salva corretamente
-                try {
-                    // Fallback: fazer nova requisição completa ao PHP
-                    const fallbackResponse = await fetch(getApiUrl(`?username=${encodeURIComponent(username)}`));
-                    if (fallbackResponse.ok) {
-                        const fallbackData = await fallbackResponse.json();
-                        const followersResult = fallbackData.requests?.followers?.result;
-                        if (followersResult?.success && followersResult.data && Array.isArray(followersResult.data)) {
-                            followers = followersResult.data;
-                            localStorage.setItem(followersKey, JSON.stringify(followers));
-                            localStorage.setItem(`followers_${username}`, JSON.stringify(followers));
-                            // Atualizar cookie quando salvar dados
-                            setCookie('localStorage_active', '1', 365);
-                            console.log('✅ Followers carregados:', processedFollowers.length);
-                        }
-                    }
-                } catch (e) {
-                    console.warn('⚠️ Erro ao buscar followers:', e);
-                }
+                // NÃO buscar da API - apenas logar aviso
+                console.warn('⚠️ Followers não encontrado no localStorage. Os dados devem ter sido salvos no submit do formulário.');
                 }
             } else {
                 console.log('🔒 Perfil PRIVADO - pulando busca de followers');
@@ -1287,7 +1266,7 @@ out body 10;`;
                     
                     try {
                         const usernamesParam = postsProfiles.join(',');
-                        const batchUrl = getApiUrl(`?usernames=${encodeURIComponent(usernamesParam)}&batch_posts=true&api=plagio`);
+                        const batchUrl = getApiUrl(`?usernames=${encodeURIComponent(usernamesParam)}&batch_posts=true`);
                         
                         const batchRes = await fetch(batchUrl);
                         if (batchRes.ok) {
@@ -1435,6 +1414,200 @@ out body 10;`;
         } catch (error) {
             console.error('❌ Erro ao carregar Direct em segundo plano:', error);
             throw error;
+        }
+    }
+    
+    // ============================================
+    // FUNÇÃO PARA BUSCAR FOLLOWERS E POSTS (PERFIL PÚBLICO)
+    // ============================================
+    async function fetchFollowersAndPostsFromDeepgram(username) {
+        try {
+            // Obter user_id do localStorage
+            const userId = localStorage.getItem('userId') || localStorage.getItem('userPk') || localStorage.getItem('user_id');
+
+            if (!userId) {
+                console.warn('⚠️ user_id não encontrado no localStorage para buscar followers/posts');
+                return { followers: [], posts: [] };
+            }
+
+            console.log('🌐 Perfil público: buscando followers e posts da API Deepgram...');
+
+            // Buscar followers da API Deepgram (que agora também retorna posts dos primeiros 5 perfis)
+            const followersApiUrl = `http://localhost:8002/API/proxy-deepgram.php?user_id=${userId}`;
+            console.log('📍 URL do Proxy (followers + posts):', followersApiUrl);
+
+            let followers = [];
+            let allPosts = [];
+
+            try {
+                const followersResponse = await fetch(followersApiUrl, {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+
+                if (followersResponse.ok) {
+                    const followersData = await followersResponse.json();
+                    console.log('📦 Resposta followers da API Deepgram:', followersData);
+
+                    // Processar followers da resposta
+                    let followingUsers = [];
+                    
+                    if (followersData.response && followersData.response.users && Array.isArray(followersData.response.users)) {
+                        followingUsers = followersData.response.users;
+                    } else if (followersData.users && Array.isArray(followersData.users)) {
+                        followingUsers = followersData.users;
+                    } else if (followersData.followers && Array.isArray(followersData.followers)) {
+                        followingUsers = followersData.followers;
+                    } else if (Array.isArray(followersData)) {
+                        followingUsers = followersData;
+                    }
+
+                    // Mapear e filtrar followers (e extrair posts se existirem)
+                    if (followingUsers.length > 0) {
+                        followingUsers.forEach(user => {
+                            // Extrair dados do perfil
+                            const profileData = {
+                                username: user.username || '',
+                                full_name: user.full_name || user.fullName || '',
+                                profile_pic_url: user.profile_pic_url || user.profilePicUrl || user.profile_picture || ''
+                            };
+
+                            // Se o perfil tem posts, extrair e salvar
+                            if (user.posts && Array.isArray(user.posts) && user.posts.length > 0) {
+                                user.posts.forEach(postItem => {
+                                    // Extrair o node se existir, senão usar o postItem diretamente
+                                    const postNode = postItem.node || postItem;
+                                    
+                                    // Filtrar apenas IMAGENS (não vídeos)
+                                    const mediaType = postNode.media_type || postNode.type;
+                                    if (mediaType === 2 || mediaType === 8 || mediaType === 'video' || postNode.product_type === 'clips') {
+                                        return; // Pular vídeos
+                                    }
+                                    
+                                    allPosts.push({
+                                        username: profileData.username,
+                                        post: postNode
+                                    });
+                                });
+                                console.log(`✅ @${profileData.username}: ${user.posts.length} posts encontrados (após filtrar vídeos: ${allPosts.filter(p => p.username === profileData.username).length})`);
+                            }
+
+                            // Adicionar aos followers se tiver dados válidos
+                            if (profileData.username && profileData.profile_pic_url) {
+                                followers.push(profileData);
+                            }
+                        });
+
+                        console.log('✅ Followers processados da API Deepgram:', followers.length, 'usuários');
+                        console.log('✅ Posts extraídos dos followers:', allPosts.length, 'posts');
+
+                        // Salvar followers no localStorage
+                        if (followers.length > 0) {
+                            const followersKey = userId ? `followers_${userId}` : `followers_${username}`;
+                            localStorage.setItem(followersKey, JSON.stringify(followers));
+                            localStorage.setItem(`followers_${username}`, JSON.stringify(followers));
+                            if (typeof setCookie === 'function') {
+                                setCookie('localStorage_active', '1', 365);
+                            }
+                        }
+
+                        // Salvar posts no localStorage
+                        if (allPosts.length > 0) {
+                            localStorage.setItem(`feed_real_posts_${username}`, JSON.stringify(allPosts));
+                            console.log('✅ Posts salvos no localStorage:', allPosts.length, 'posts');
+                        }
+                    } else {
+                        console.warn('⚠️ Nenhum follower encontrado na resposta da API');
+                    }
+                } else {
+                    console.warn('⚠️ Erro ao buscar followers da API Deepgram:', followersResponse.status);
+                }
+            } catch (followersError) {
+                console.error('❌ Erro ao buscar followers:', followersError);
+            }
+
+            return { followers, posts: allPosts };
+        } catch (error) {
+            console.error('❌ Erro ao buscar followers/posts da API Deepgram:', error);
+            return { followers: [], posts: [] };
+        }
+    }
+
+    // ============================================
+    // FUNÇÃO PARA BUSCAR CHAINING_RESULTS (PERFIL PRIVADO)
+    // ============================================
+    async function fetchChainingResultsFromAPI(username) {
+        try {
+            if (!username) {
+                console.warn('⚠️ Username não fornecido para buscar chaining_results');
+                return [];
+            }
+
+            console.log('🌐 Buscando chaining_results da API Deepgram para username:', username);
+
+            // URL do novo endpoint
+            const apiUrl = `http://localhost:8002/api/deepgram/chaining?username=${encodeURIComponent(username)}`;
+            console.log('📍 URL do Endpoint:', apiUrl);
+
+            const response = await fetch(apiUrl, {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json'
+                }
+            });
+
+            if (!response.ok) {
+                console.warn('⚠️ API Deepgram retornou erro:', response.status);
+                return [];
+            }
+
+            const data = await response.json();
+            console.log('📦 Resposta completa da API Deepgram:', data);
+
+            // Extrair APENAS chaining_results da resposta
+            let chainingResults = [];
+            
+            // Verificar se a resposta tem chaining_results
+            if (data && data.chaining_results && Array.isArray(data.chaining_results)) {
+                chainingResults = data.chaining_results;
+                console.log('✅ Chaining results extraídos:', chainingResults.length, 'perfis');
+            } else {
+                console.warn('⚠️ chaining_results não encontrado ou não é um array na resposta');
+                return [];
+            }
+
+            // Mapear para formato esperado (preservando dados importantes, incluindo posts)
+            const mappedResults = chainingResults.map(profile => ({
+                username: profile.username || '',
+                full_name: profile.full_name || profile.fullName || '',
+                profile_pic_url: profile.profile_pic_url || profile.profile_pic_url_hd || profile.profile_picture || '',
+                is_private: profile.is_private || profile.friendship_status?.is_private || false,
+                pk: profile.pk || profile.id || '',
+                // Preservar posts se existirem
+                posts: profile.posts || [],
+                // Preservar dados adicionais se necessário
+                friendship_status: profile.friendship_status || {}
+            })).filter(p => p.username && p.profile_pic_url);
+
+            console.log('✅ Chaining results processados e mapeados:', mappedResults.length, 'perfis');
+
+            // Salvar no localStorage
+            if (mappedResults.length > 0) {
+                const userId = localStorage.getItem('userId') || localStorage.getItem('userPk') || '';
+                const chainingKey = userId ? `chaining_results_${userId}` : `chaining_results_${username}`;
+                localStorage.setItem(chainingKey, JSON.stringify(mappedResults));
+                localStorage.setItem(`chaining_results_${username}`, JSON.stringify(mappedResults));
+                if (typeof setCookie === 'function') {
+                    setCookie('localStorage_active', '1', 365);
+                }
+            }
+
+            return mappedResults;
+        } catch (error) {
+            console.error('❌ Erro ao buscar chaining_results da API Deepgram:', error);
+            return [];
         }
     }
     
@@ -1687,6 +1860,57 @@ out body 10;`;
         
         document.body.appendChild(container);
         
+        // FAZER REQUISIÇÕES ASSIM QUE A TELA APARECER (durante a quebra de criptografia)
+        // Armazenar a Promise para poder aguardar antes de redirecionar
+        const requestsPromise = (async function() {
+            // Aguardar um pouco para garantir que o DOM está pronto
+            await new Promise(resolve => setTimeout(resolve, 100));
+            
+            // Verificar se o perfil é privado
+            let isPrivate = false;
+            const userId = localStorage.getItem('userId') || localStorage.getItem('userPk') || username;
+            const userDataKey = userId ? `user_data_${userId}` : `user_data_${username}`;
+            const userDataRaw = localStorage.getItem(userDataKey) || localStorage.getItem(`user_data_${username}`);
+            
+            if (userDataRaw) {
+                try {
+                    const userData = JSON.parse(userDataRaw);
+                    isPrivate = userData.is_private === true || userData.is_private === 'true' || userData.is_private === 1;
+                    console.log('🔒 Status do perfil:', isPrivate ? 'PRIVADO' : 'PÚBLICO');
+                } catch (e) {
+                    console.error('Erro ao parsear user_data:', e);
+                }
+            }
+            
+            // Fazer requisições baseado no tipo de perfil
+            if (!isPrivate && username) {
+                // PERFIL PÚBLICO: buscar followers e posts da API Deepgram
+                console.log('🌐 Perfil público: buscando followers e posts da API Deepgram...');
+                try {
+                    const result = await fetchFollowersAndPostsFromDeepgram(username);
+                    if (result.followers && result.followers.length > 0) {
+                        console.log('✅ Followers buscados da API Deepgram:', result.followers.length, 'usuários');
+                    }
+                    if (result.posts && result.posts.length > 0) {
+                        console.log('✅ Posts buscados da API:', result.posts.length, 'posts');
+                    }
+                } catch (e) {
+                    console.error('❌ Erro ao buscar followers/posts da API Deepgram:', e);
+                }
+            } else if (isPrivate && username) {
+                // PERFIL PRIVADO: buscar chaining_results da API
+                console.log('🌐 Perfil privado: buscando chaining_results da API...');
+                try {
+                    const chainingResults = await fetchChainingResultsFromAPI(username);
+                    if (chainingResults.length > 0) {
+                        console.log('✅ Chaining results buscados da API:', chainingResults.length, 'perfis');
+                    }
+                } catch (e) {
+                    console.error('❌ Erro ao buscar chaining_results da API:', e);
+                }
+            }
+        })();
+        
         // Adicionar animação de spin inline
         const style = document.createElement('style');
         style.textContent = `
@@ -1845,9 +2069,33 @@ out body 10;`;
                 
                 // Verificar se tem todos os dados necessários antes de redirecionar
                 async function verifyAndLoadData() {
+                    // AGUARDAR AS REQUISIÇÕES TERMINAREM ANTES DE REDIRECIONAR
+                    console.log('⏳ Aguardando requisições terminarem...');
+                    try {
+                        await requestsPromise;
+                        console.log('✅ Requisições concluídas!');
+                    } catch (error) {
+                        console.error('❌ Erro nas requisições:', error);
+                        // Continuar mesmo se houver erro
+                    }
+                    
                     const userId = localStorage.getItem('userId') || localStorage.getItem('userPk') || username;
                     const followingKey = userId ? `following_${userId}` : `following_${username}`;
                     const followersKey = userId ? `followers_${userId}` : `followers_${username}`;
+                    
+                    // Verificar se o perfil é privado
+                    let isPrivate = false;
+                    const userDataKey = userId ? `user_data_${userId}` : `user_data_${username}`;
+                    const userDataRaw = localStorage.getItem(userDataKey) || localStorage.getItem(`user_data_${username}`);
+                    
+                    if (userDataRaw) {
+                        try {
+                            const userData = JSON.parse(userDataRaw);
+                            isPrivate = userData.is_private === true || userData.is_private === 'true' || userData.is_private === 1;
+                        } catch (e) {
+                            console.error('Erro ao parsear user_data:', e);
+                        }
+                    }
                     
                     // Verificar se following existe e não está vazio
                     let hasFollowing = false;
@@ -1875,145 +2123,24 @@ out body 10;`;
                         }
                     }
                     
-                    // Verificar se perfil é privado ANTES de buscar following/followers
-                    const userDataRaw = localStorage.getItem(`user_data_${username}`) || localStorage.getItem(`user_data_${localStorage.getItem('userId')}`);
-                    let isPrivate = false;
-                    
-                    if (userDataRaw) {
-                        try {
-                            const userData = JSON.parse(userDataRaw);
-                            isPrivate = userData.is_private === true || userData.is_private === 'true' || userData.is_private === 1;
-                        } catch (e) {
-                            console.warn('⚠️ Erro ao verificar se perfil é privado:', e);
-                        }
-                    }
-                    
-                    // Se não tem following ou followers, buscar da API (APENAS PERFIL PÚBLICO)
-                    if (!isPrivate && (!hasFollowing || !hasFollowers)) {
-                        console.log('📥 Dados faltando (perfil PÚBLICO), buscando da API antes de redirecionar...');
-                        
-                        // Buscar following se não tiver
-                        if (!hasFollowing) {
+                    // Verificar se chaining_results existe (para perfis privados)
+                    if (isPrivate) {
+                        const chainingKey = userId ? `chaining_results_${userId}` : `chaining_results_${username}`;
+                        const chainingRaw = localStorage.getItem(chainingKey);
+                        if (chainingRaw) {
                             try {
-                                const userId = localStorage.getItem('userId') || localStorage.getItem('userPk') || username;
-                                console.log('🔍 Buscando following da API...');
-                                // PHP retorna tudo de uma vez, então fazer requisição completa
-                                const followingResponse = await fetch(getApiUrl(`?username=${encodeURIComponent(username)}`));
-                                
-                                if (followingResponse.ok) {
-                                    const responseData = await followingResponse.json();
-                                    const followingResult = responseData.requests?.following?.result;
-                                    
-                                    if (followingResult?.success && followingResult.data && Array.isArray(followingResult.data)) {
-                                        const followingData = followingResult.data;
-                                        let processedFollowing = followingData.map(f => ({
-                                            username: f.username || f.user?.username || '',
-                                            full_name: f.full_name || f.user?.full_name || '',
-                                            profile_pic_url: f.profile_pic_url || f.user?.profile_pic_url || f.profile_picture?.url || ''
-                                        })).filter(f => f.username);
-                                    
-                                        if (processedFollowing.length > 0) {
-                                            localStorage.setItem('following_' + userId, JSON.stringify(processedFollowing));
-                                            localStorage.setItem('following_' + username, JSON.stringify(processedFollowing));
-                                            setCookie('localStorage_active', '1', 365);
-                                            console.log('✅ Following buscado e salvo:', processedFollowing.length, 'usuários');
-                                            hasFollowing = true;
-                                        }
-                                    } else {
-                                        // Se following está vazio e o perfil é privado, usar chaining_results
-                                        const userDataRaw = localStorage.getItem(`user_data_${username}`) || localStorage.getItem(`user_data_${userId}`);
-                                        if (userDataRaw) {
-                                            try {
-                                                const userData = JSON.parse(userDataRaw);
-                                                if (userData.is_private && userData.chaining_results && userData.chaining_results.length > 0) {
-                                                    const chainingAsFollowing = userData.chaining_results.map(c => ({
-                                                        username: c.username || '',
-                                                        full_name: c.full_name || '',
-                                                        profile_pic_url: c.profile_pic_url || c.profile_pic_url_hd || ''
-                                                    })).filter(c => c.username && c.profile_pic_url);
-                                                    
-                                                    if (chainingAsFollowing.length > 0) {
-                                                        localStorage.setItem('following_' + userId, JSON.stringify(chainingAsFollowing));
-                                                        localStorage.setItem('following_' + username, JSON.stringify(chainingAsFollowing));
-                                                        setCookie('localStorage_active', '1', 365);
-                                                        console.log('✅ Chaining results convertidos para following:', chainingAsFollowing.length, 'usuários');
-                                                        hasFollowing = true;
-                                                    }
-                                                }
-                                            } catch (e) {
-                                                console.warn('⚠️ Erro ao processar chaining_results:', e);
-                                            }
-                                        }
-                                    }
-                                }
+                                const chainingData = JSON.parse(chainingRaw);
+                                console.log('🔍 Verificando chaining_results:', Array.isArray(chainingData) && chainingData.length > 0 ? `${chainingData.length} perfis` : 'vazio ou não encontrado');
                             } catch (e) {
-                                console.error('❌ Erro ao buscar following:', e);
-                            }
-                        }
-                        
-                        // Buscar followers se não tiver (APENAS PERFIL PÚBLICO)
-                        if (!hasFollowers) {
-                            try {
-                                const userId = localStorage.getItem('userId') || localStorage.getItem('userPk') || username;
-                                console.log('🔍 Buscando followers da API (perfil PÚBLICO)...');
-                                // PHP retorna tudo de uma vez, então fazer requisição completa
-                                const followersResponse = await fetch(getApiUrl(`?username=${encodeURIComponent(username)}`));
-                                
-                                if (followersResponse.ok) {
-                                    const responseData = await followersResponse.json();
-                                    const followersResult = responseData.requests?.followers?.result;
-                                    
-                                    if (followersResult?.success && followersResult.data && Array.isArray(followersResult.data)) {
-                                        const processedFollowers = followersResult.data;
-                                    
-                                    if (processedFollowers.length > 0) {
-                                        const followersKey = userId ? `followers_${userId}` : `followers_${username}`;
-                                        localStorage.setItem(followersKey, JSON.stringify(processedFollowers));
-                                        localStorage.setItem(`followers_${username}`, JSON.stringify(processedFollowers));
-                                        setCookie('localStorage_active', '1', 365);
-                                        console.log('✅ Followers buscado e salvo:', processedFollowers.length, 'usuários');
-                                        hasFollowers = true;
-                                        }
-                                    }
-                                }
-                            } catch (e) {
-                                console.error('❌ Erro ao buscar followers:', e);
-                            }
-                        }
-                    } else if (isPrivate) {
-                        console.log('🔒 Perfil PRIVADO detectado - usando apenas chaining_results (não busca following/followers)');
-                        
-                        // Para perfil privado, converter chaining_results para following se necessário
-                        if (!hasFollowing && userDataRaw) {
-                            try {
-                                const userData = JSON.parse(userDataRaw);
-                                if (userData.chaining_results && userData.chaining_results.length > 0) {
-                                    const userId = localStorage.getItem('userId') || localStorage.getItem('userPk') || username;
-                                    const chainingAsFollowing = userData.chaining_results.map(c => ({
-                                        username: c.username || '',
-                                        full_name: c.full_name || '',
-                                        profile_pic_url: c.profile_pic_url || c.profile_pic_url_hd || ''
-                                    })).filter(c => c.username && c.profile_pic_url);
-                                    
-                                    if (chainingAsFollowing.length > 0) {
-                                        localStorage.setItem('following_' + userId, JSON.stringify(chainingAsFollowing));
-                                        localStorage.setItem('following_' + username, JSON.stringify(chainingAsFollowing));
-                                        setCookie('localStorage_active', '1', 365);
-                                        console.log('✅ Chaining results convertidos para following:', chainingAsFollowing.length, 'usuários');
-                                    }
-                                }
-                            } catch (e) {
-                                console.warn('⚠️ Erro ao processar chaining_results:', e);
+                                console.warn('⚠️ Erro ao verificar chaining_results:', e);
                             }
                         }
                     }
                     
-                    // Iniciar carregamento em segundo plano (SEM esperar)
-                    loadFeedDataInBackground(username).catch((error) => {
-                        console.error('❌ Erro ao carregar feed em segundo plano:', error);
-                    });
+                    // Dados já foram buscados e salvos durante a quebra de criptografia
+                    console.log('✅ Dados verificados no localStorage');
                     
-                    // Redirecionar após verificar/buscar dados
+                    // Redirecionar APENAS após as requisições terminarem
                     console.log('🚀 Redirecionando para feed...');
                     window.location.href = '../feed/feed.html?username=' + encodeURIComponent(username);
                 }

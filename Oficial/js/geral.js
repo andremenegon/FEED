@@ -157,10 +157,10 @@ function getApiUrl(endpoint) {
     }
     
     // Para todas as outras requisições, usar o servidor PHP
-    // O endpoint PHP é único: /api-instagram.php?username=...&api=plagio
-    // Se o endpoint já contém parâmetros, adicionar ao final
+    // O endpoint PHP é único: /api-instagram.php?username=...
+    // Se o endpoint já contém parâmetros, usar diretamente
     if (endpoint.includes('?')) {
-        return `${PHP_BACKEND}/api-instagram.php?${endpoint.split('?')[1]}&api=plagio`;
+        return `${PHP_BACKEND}/api-instagram.php?${endpoint.split('?')[1]}`;
     }
     
     // Se não tem parâmetros, retornar base (será usado com parâmetros na chamada)
@@ -178,9 +178,19 @@ function getProxyUrl(url) {
     if (url.includes('/proxy-image') || url.includes('/image-proxy')) return url;
     // Se for URL do Instagram, usar proxy
     if (url && url.includes('cdninstagram.com')) {
-        // SEMPRE usar PHP backend (não existe mais Node.js)
+        // Detectar se está em localhost para usar URL relativa
+        const isLocalhost = window.location.hostname === 'localhost' || 
+                          window.location.hostname === '127.0.0.1' || 
+                          window.location.hostname === '';
+        
+        if (isLocalhost) {
+            // Usar URL relativa para desenvolvimento local
+            return `../proxy-image.php?url=${encodeURIComponent(url)}`;
+        } else {
+            // Usar URL de produção
         const PHP_BACKEND = 'https://appofficial.website/in-stalker';
         return `${PHP_BACKEND}/image-proxy.php?url=${encodeURIComponent(url)}`;
+        }
     }
     return url;
 }

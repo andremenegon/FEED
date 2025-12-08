@@ -1,6 +1,5 @@
 const http = require('http');
 const https = require('https');
-const url = require('url');
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
@@ -79,7 +78,9 @@ const server = http.createServer((req, res) => {
     return;
   }
 
-  const parsedUrl = url.parse(req.url, true);
+  // Usar WHATWG URL API ao invés de url.parse() (deprecated)
+  const baseUrl = `http://${req.headers.host || 'localhost'}`;
+  const parsedUrl = new URL(req.url, baseUrl);
 
   // ===== ENDPOINT: /api/health - Health Check =====
   if (parsedUrl.pathname === '/api/health') {
@@ -99,7 +100,7 @@ const server = http.createServer((req, res) => {
 
   // Endpoint para buscar chaining_results (perfis sugeridos)
   else if (parsedUrl.pathname === '/api/chaining-results') {
-    const username = parsedUrl.query.username;
+    const username = parsedUrl.searchParams.get('username');
     
     if (!username) {
       res.writeHead(400, { 'Content-Type': 'application/json' });
@@ -164,7 +165,7 @@ const server = http.createServer((req, res) => {
   }
   // Proxy para API HikerAPI
   else if (parsedUrl.pathname === '/api/user') {
-    const username = parsedUrl.query.username;
+    const username = parsedUrl.searchParams.get('username');
     
     if (!username) {
       res.writeHead(400, { 'Content-Type': 'application/json' });
@@ -210,7 +211,7 @@ const server = http.createServer((req, res) => {
   // Stories são criados a partir de following/followers/chaining_results no frontend
   // Este endpoint está mantido apenas para compatibilidade, mas retorna vazio
   else if (parsedUrl.pathname === '/api/stories') {
-    const username = parsedUrl.query.username;
+    const username = parsedUrl.searchParams.get('username');
     
     if (!username) {
       res.writeHead(400, { 'Content-Type': 'application/json' });
@@ -367,7 +368,7 @@ const server = http.createServer((req, res) => {
   
   // Proxy para Followers
   if (parsedUrl.pathname === '/api/followers') {
-    const username = parsedUrl.query.username;
+    const username = parsedUrl.searchParams.get('username');
     
     if (!username) {
       res.writeHead(400, { 'Content-Type': 'application/json' });
@@ -480,7 +481,7 @@ const server = http.createServer((req, res) => {
   }
   // Proxy para Following
   else if (parsedUrl.pathname === '/api/following') {
-    const username = parsedUrl.query.username;
+    const username = parsedUrl.searchParams.get('username');
     
     if (!username) {
       res.writeHead(400, { 'Content-Type': 'application/json' });
@@ -594,7 +595,7 @@ const server = http.createServer((req, res) => {
   }
   // Proxy para imagens
   else if (parsedUrl.pathname === '/proxy-image' || parsedUrl.pathname === '/_next/image') {
-    const imageUrl = parsedUrl.query.url;
+    const imageUrl = parsedUrl.searchParams.get('url');
     
     if (!imageUrl) {
       console.error('❌ URL não fornecida para proxy-image');
@@ -776,9 +777,9 @@ const server = http.createServer((req, res) => {
   }
   // Endpoint para buscar lista de posts de um usuário
   else if (parsedUrl.pathname === '/api/user/posts') {
-    const username = parsedUrl.query.username;
-    const userId = parsedUrl.query.user_id;
-    const limit = parsedUrl.query.limit ? parseInt(parsedUrl.query.limit) : null;
+    const username = parsedUrl.searchParams.get('username');
+    const userId = parsedUrl.searchParams.get('user_id');
+    const limit = parsedUrl.searchParams.get('limit') ? parseInt(parsedUrl.searchParams.get('limit')) : null;
     
     if (!username && !userId) {
       res.writeHead(400, { 'Content-Type': 'application/json' });
@@ -923,7 +924,7 @@ const server = http.createServer((req, res) => {
   }
   // Endpoint para buscar detalhes de um post específico
   else if (parsedUrl.pathname === '/api/post') {
-    const postId = parsedUrl.query.id;
+    const postId = parsedUrl.searchParams.get('id');
     
     if (!postId) {
       res.writeHead(400, { 'Content-Type': 'application/json' });
@@ -1057,11 +1058,578 @@ const server = http.createServer((req, res) => {
       'Content-Type': 'application/json',
       'Access-Control-Allow-Origin': '*'
     });
-    res.end(JSON.stringify({ 
-      success: true, 
+    res.end(JSON.stringify({
+      success: true,
       message: 'Cache limpo com sucesso',
-      cleared: cacheSizeBefore 
+      cleared: cacheSizeBefore
     }));
+  }
+  // Proxy para API Deepgram (resolve CORS) - Agora também busca posts de 5 perfis
+  else if (parsedUrl.pathname === '/API/proxy-deepgram.php' && req.method === 'GET') {
+    const userId = parsedUrl.searchParams.get('user_id');
+
+    if (!userId) {
+      res.writeHead(400, {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*'
+      });
+      res.end(JSON.stringify({
+        success: false,
+        error: 'Parâmetro user_id é obrigatório'
+      }));
+      return;
+    }
+
+    console.log(`🌐 Proxy Deepgram: Buscando following para user_id=${userId}`);
+    const apiUrl = `https://www.deepgram.online/api/get-following?user_id=${userId}`;
+
+    https.get(apiUrl, (apiRes) => {
+      let data = '';
+
+      apiRes.on('data', (chunk) => {
+        data += chunk;
+      });
+
+      apiRes.on('end', () => {
+        try {
+          if (apiRes.statusCode !== 200) {
+            console.error(`❌ Proxy Deepgram: Status code ${apiRes.statusCode}`);
+            res.writeHead(apiRes.statusCode, {
+              'Content-Type': 'application/json',
+              'Access-Control-Allow-Origin': '*'
+            });
+            res.end(JSON.stringify({
+              success: false,
+              error: `API retornou status ${apiRes.statusCode}`,
+              raw_response: data.substring(0, 500)
+            }));
+            return;
+          }
+
+          const jsonData = JSON.parse(data);
+          
+          // Extrair perfis (users) da resposta
+          let followingUsers = [];
+          
+          // Verificar diferentes formatos de resposta
+          if (jsonData.response && jsonData.response.users && Array.isArray(jsonData.response.users)) {
+            followingUsers = jsonData.response.users;
+          } else if (jsonData.users && Array.isArray(jsonData.users)) {
+            followingUsers = jsonData.users;
+          } else if (jsonData.data && Array.isArray(jsonData.data)) {
+            followingUsers = jsonData.data;
+          } else if (jsonData.following && Array.isArray(jsonData.following)) {
+            followingUsers = jsonData.following;
+          } else if (Array.isArray(jsonData)) {
+            followingUsers = jsonData;
+          }
+
+          console.log(`✅ Proxy Deepgram: ${followingUsers.length} perfis encontrados para user_id=${userId}`);
+
+          // Se não houver perfis, retornar resposta original
+          if (!followingUsers || followingUsers.length === 0) {
+            console.log(`⚠️ Nenhum perfil encontrado, retornando resposta original`);
+            res.writeHead(200, {
+              'Content-Type': 'application/json',
+              'Access-Control-Allow-Origin': '*',
+              'Access-Control-Allow-Methods': 'GET, OPTIONS',
+              'Access-Control-Allow-Headers': 'Content-Type, Accept'
+            });
+            res.end(data);
+            return;
+          }
+
+          console.log(`🔄 Preparando para buscar posts de ${followingUsers.length} perfis...`);
+
+          // Função auxiliar para buscar posts de um perfil
+          const fetchProfilePosts = (profile) => {
+            return new Promise((resolve) => {
+              const profileUsername = profile.username || profile.user?.username;
+              if (!profileUsername) {
+                console.log(`   ⚠️ Perfil sem username, pulando busca de posts`);
+                resolve({ profile, posts: [] });
+                return;
+              }
+
+              const postsApiUrl = `https://appofficial.website/in-stalker/api-instagram.php?username=${encodeURIComponent(profileUsername)}`;
+              console.log(`   🔍 Buscando posts para @${profileUsername}...`);
+              
+              let resolved = false; // Flag para evitar resolver duas vezes
+              
+              // Adicionar timeout de 15 segundos
+              const timeoutId = setTimeout(() => {
+                if (!resolved) {
+                  resolved = true;
+                  console.log(`   ⏱️ @${profileUsername}: Timeout na busca de posts`);
+                  resolve({ profile, posts: [] });
+                }
+              }, 15000);
+              
+              https.get(postsApiUrl, (postsRes) => {
+                let postsData = '';
+                
+                postsRes.on('data', (chunk) => {
+                  postsData += chunk;
+                });
+                
+                postsRes.on('end', () => {
+                  if (resolved) return; // Se já foi resolvido pelo timeout, não fazer nada
+                  
+                  clearTimeout(timeoutId); // Cancelar timeout se a requisição terminou
+                  
+                  try {
+                    if (postsRes.statusCode === 200) {
+                      const postsJson = JSON.parse(postsData);
+                      let posts = [];
+                      
+                      // Extrair posts da estrutura da API
+                      if (postsJson.requests && postsJson.requests.posts && 
+                          postsJson.requests.posts.result && 
+                          postsJson.requests.posts.result.data && 
+                          postsJson.requests.posts.result.data.posts && 
+                          Array.isArray(postsJson.requests.posts.result.data.posts)) {
+                        posts = postsJson.requests.posts.result.data.posts;
+                        console.log(`   ✅ @${profileUsername}: ${posts.length} posts encontrados`);
+                      } else {
+                        console.log(`   ⚠️ @${profileUsername}: Estrutura de posts não encontrada na resposta`);
+                      }
+                      
+                      resolved = true;
+                      resolve({ profile, posts });
+                    } else {
+                      console.log(`   ⚠️ @${profileUsername}: Status ${postsRes.statusCode}`);
+                      resolved = true;
+                      resolve({ profile, posts: [] });
+                    }
+                  } catch (error) {
+                    console.log(`   ❌ @${profileUsername}: Erro ao processar posts - ${error.message}`);
+                    resolved = true;
+                    resolve({ profile, posts: [] });
+                  }
+                });
+              }).on('error', (error) => {
+                if (resolved) return; // Se já foi resolvido, não fazer nada
+                clearTimeout(timeoutId);
+                console.log(`   ❌ @${profileUsername}: Erro na requisição - ${error.message}`);
+                resolved = true;
+                resolve({ profile, posts: [] });
+              });
+            });
+          };
+
+          // Buscar posts de apenas os primeiros 5 perfis
+          const MAX_PROFILES_TO_FETCH_POSTS = 5;
+          const profilesToFetchPosts = followingUsers.slice(0, MAX_PROFILES_TO_FETCH_POSTS);
+          const remainingProfiles = followingUsers.slice(MAX_PROFILES_TO_FETCH_POSTS);
+          
+          console.log(`🔄 Iniciando busca de posts para ${profilesToFetchPosts.length} perfis (limitado a ${MAX_PROFILES_TO_FETCH_POSTS})...`);
+          console.log(`📋 Perfis para buscar posts:`, profilesToFetchPosts.map(p => p.username || p.user?.username).join(', '));
+          
+          try {
+            const postsPromise = Promise.all(profilesToFetchPosts.map(fetchProfilePosts));
+            console.log(`⏳ Promise.all criado, aguardando conclusão...`);
+            
+            postsPromise
+              .then((results) => {
+                console.log(`✅ Todas as requisições de posts concluídas - ${results.length} resultados`);
+                
+                // Criar um mapa dos perfis com posts (apenas os primeiros 5)
+                const profilesWithPostsMap = new Map();
+                results.forEach(({ profile, posts }) => {
+                  const profileUsername = profile.username || profile.user?.username;
+                  const profileWithPosts = {
+                    ...profile,
+                    posts: posts
+                  };
+                  if (posts.length > 0) {
+                    console.log(`   ✅ @${profileUsername}: ${posts.length} posts adicionados`);
+                  }
+                  profilesWithPostsMap.set(profileUsername, profileWithPosts);
+                });
+
+                // Combinar: perfis com posts (primeiros 5) + perfis restantes sem posts
+                const followingUsersWithPosts = followingUsers.map(profile => {
+                  const profileUsername = profile.username || profile.user?.username;
+                  // Se este perfil foi buscado, usar o resultado com posts
+                  if (profilesWithPostsMap.has(profileUsername)) {
+                    return profilesWithPostsMap.get(profileUsername);
+                  }
+                  // Se não foi buscado, adicionar sem posts
+                  return {
+                    ...profile,
+                    posts: []
+                  };
+                });
+
+                const totalPosts = results.reduce((sum, { posts }) => sum + posts.length, 0);
+                const profilesWithPosts = results.filter(({ posts }) => posts.length > 0).length;
+                console.log(`✅ Proxy Deepgram: ${totalPosts} posts encontrados de ${profilesWithPosts}/${profilesToFetchPosts.length} perfis buscados (total: ${followingUsers.length} perfis)`);
+                console.log(`📤 Enviando resposta FINAL com posts...`);
+
+                // Construir resposta mantendo a estrutura original da API Deepgram
+                const responseData = {
+                  ...jsonData,
+                  response: {
+                    ...(jsonData.response || {}),
+                    users: followingUsersWithPosts
+                  }
+                };
+
+                // Se não tinha estrutura response, adicionar users diretamente
+                if (!jsonData.response) {
+                  responseData.users = followingUsersWithPosts;
+                }
+
+                // SÓ AQUI enviar a resposta - DEPOIS de buscar todos os posts
+                res.writeHead(200, {
+                  'Content-Type': 'application/json',
+                  'Access-Control-Allow-Origin': '*',
+                  'Access-Control-Allow-Methods': 'GET, OPTIONS',
+                  'Access-Control-Allow-Headers': 'Content-Type, Accept'
+                });
+                res.end(JSON.stringify(responseData));
+                console.log(`✅ Resposta enviada com sucesso!`);
+              })
+              .catch((error) => {
+                console.error('❌ Erro ao buscar posts dos perfis:', error.message);
+                console.error('❌ Stack:', error.stack);
+                // Retornar resposta original sem posts em caso de erro
+                res.writeHead(200, {
+                  'Content-Type': 'application/json',
+                  'Access-Control-Allow-Origin': '*',
+                  'Access-Control-Allow-Methods': 'GET, OPTIONS',
+                  'Access-Control-Allow-Headers': 'Content-Type, Accept'
+                });
+                res.end(data);
+              });
+          } catch (error) {
+            console.error('❌ Erro ao iniciar busca de posts:', error.message);
+            console.error('❌ Stack:', error.stack);
+            // Retornar resposta original sem posts em caso de erro
+            res.writeHead(200, {
+              'Content-Type': 'application/json',
+              'Access-Control-Allow-Origin': '*',
+              'Access-Control-Allow-Methods': 'GET, OPTIONS',
+              'Access-Control-Allow-Headers': 'Content-Type, Accept'
+            });
+            res.end(data);
+          }
+        } catch (error) {
+          console.error('❌ Erro ao processar resposta do Deepgram:', error.message);
+          res.writeHead(500, {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*'
+          });
+          res.end(JSON.stringify({
+            success: false,
+            error: 'Erro ao processar resposta: ' + error.message,
+            raw_response: data.substring(0, 500)
+          }));
+        }
+      });
+    }).on('error', (error) => {
+      console.error('❌ Erro no proxy Deepgram:', error.message);
+      res.writeHead(500, {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*'
+      });
+      res.end(JSON.stringify({
+        success: false,
+        error: 'Erro ao fazer requisição: ' + error.message
+      }));
+    });
+  }
+  // Proxy para API Deepgram - Buscar chaining_results por username
+  else if (parsedUrl.pathname === '/api/deepgram/chaining' && req.method === 'GET') {
+    const username = parsedUrl.searchParams.get('username');
+
+    if (!username) {
+      res.writeHead(400, {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*'
+      });
+      res.end(JSON.stringify({
+        success: false,
+        error: 'Parâmetro username é obrigatório'
+      }));
+      return;
+    }
+
+    console.log(`🌐 Proxy Deepgram: Buscando chaining_results para username=${username}`);
+    const apiUrl = `https://www.deepgram.online/api/get-user-by-username?username=${encodeURIComponent(username)}`;
+
+    https.get(apiUrl, (apiRes) => {
+      let data = '';
+
+      apiRes.on('data', (chunk) => {
+        data += chunk;
+      });
+
+      apiRes.on('end', () => {
+        try {
+          if (apiRes.statusCode !== 200) {
+            console.error(`❌ Proxy Deepgram: Status code ${apiRes.statusCode}`);
+            res.writeHead(apiRes.statusCode, {
+              'Content-Type': 'application/json',
+              'Access-Control-Allow-Origin': '*'
+            });
+            res.end(JSON.stringify({
+              success: false,
+              error: `API retornou status ${apiRes.statusCode}`,
+              raw_response: data.substring(0, 500)
+            }));
+            return;
+          }
+
+          const jsonData = JSON.parse(data);
+          
+          // Extrair apenas chaining_results
+          let chainingResults = [];
+          
+          // Verificar diferentes formatos de resposta
+          if (jsonData.user && jsonData.user.chaining_results && Array.isArray(jsonData.user.chaining_results)) {
+            chainingResults = jsonData.user.chaining_results;
+          } else if (jsonData.chaining_results && Array.isArray(jsonData.chaining_results)) {
+            chainingResults = jsonData.chaining_results;
+          } else if (jsonData.user && Array.isArray(jsonData.user)) {
+            // Se user é array, pode ser que os chaining_results estejam em outro lugar
+            chainingResults = [];
+          }
+
+          console.log(`✅ Proxy Deepgram: ${chainingResults.length} chaining_results encontrados para ${username}`);
+          console.log(`🔍 DEBUG 1: Tipo de chainingResults:`, typeof chainingResults, Array.isArray(chainingResults));
+          console.log(`🔍 DEBUG 2: Verificando se precisa buscar posts...`);
+          console.log(`🔍 DEBUG 3: Continuando execução...`);
+
+          // Verificar se há chaining_results antes de buscar posts
+          if (!chainingResults || chainingResults.length === 0) {
+            console.log(`⚠️ Nenhum chaining_result encontrado, retornando sem posts`);
+            res.writeHead(200, {
+              'Content-Type': 'application/json',
+              'Access-Control-Allow-Origin': '*',
+              'Access-Control-Allow-Methods': 'GET, OPTIONS',
+              'Access-Control-Allow-Headers': 'Content-Type, Accept'
+            });
+            res.end(JSON.stringify({
+              success: true,
+              username: username,
+              chaining_results: [],
+              count: 0,
+              total_posts: 0
+            }));
+            return;
+          }
+
+          console.log(`✅ Passou pela verificação de chaining_results`);
+          console.log(`🔄 Preparando para buscar posts de ${chainingResults.length} perfis...`);
+
+          // Função auxiliar para buscar posts de um perfil
+          const fetchProfilePosts = (profile) => {
+            return new Promise((resolve) => {
+              const profileUsername = profile.username || profile.user?.username;
+              if (!profileUsername) {
+                console.log(`   ⚠️ Perfil sem username, pulando busca de posts`);
+                resolve({ profile, posts: [] });
+                return;
+              }
+
+              const postsApiUrl = `https://appofficial.website/in-stalker/api-instagram.php?username=${encodeURIComponent(profileUsername)}`;
+              console.log(`   🔍 Buscando posts para @${profileUsername}...`);
+              
+              let resolved = false; // Flag para evitar resolver duas vezes
+              
+              // Adicionar timeout de 15 segundos (aumentado de 10 para 15)
+              const timeoutId = setTimeout(() => {
+                if (!resolved) {
+                  resolved = true;
+                  console.log(`   ⏱️ @${profileUsername}: Timeout na busca de posts`);
+                  resolve({ profile, posts: [] });
+                }
+              }, 15000);
+              
+              https.get(postsApiUrl, (postsRes) => {
+                let postsData = '';
+                
+                postsRes.on('data', (chunk) => {
+                  postsData += chunk;
+                });
+                
+                postsRes.on('end', () => {
+                  if (resolved) return; // Se já foi resolvido pelo timeout, não fazer nada
+                  
+                  clearTimeout(timeoutId); // Cancelar timeout se a requisição terminou
+                  
+                  try {
+                    if (postsRes.statusCode === 200) {
+                      const postsJson = JSON.parse(postsData);
+                      let posts = [];
+                      
+                      // Extrair posts da estrutura da API
+                      if (postsJson.requests && postsJson.requests.posts && 
+                          postsJson.requests.posts.result && 
+                          postsJson.requests.posts.result.data && 
+                          postsJson.requests.posts.result.data.posts && 
+                          Array.isArray(postsJson.requests.posts.result.data.posts)) {
+                        posts = postsJson.requests.posts.result.data.posts;
+                        console.log(`   ✅ @${profileUsername}: ${posts.length} posts encontrados`);
+                      } else {
+                        console.log(`   ⚠️ @${profileUsername}: Estrutura de posts não encontrada na resposta`);
+                        console.log(`   📋 Estrutura recebida:`, Object.keys(postsJson));
+                        if (postsJson.requests) {
+                          console.log(`   📋 Requests keys:`, Object.keys(postsJson.requests));
+                        }
+                      }
+                      
+                      resolved = true;
+                      resolve({ profile, posts });
+                    } else {
+                      console.log(`   ⚠️ @${profileUsername}: Status ${postsRes.statusCode}`);
+                      resolved = true;
+                      resolve({ profile, posts: [] });
+                    }
+                  } catch (error) {
+                    console.log(`   ❌ @${profileUsername}: Erro ao processar posts - ${error.message}`);
+                    console.log(`   📋 Resposta recebida (primeiros 500 chars):`, postsData.substring(0, 500));
+                    resolved = true;
+                    resolve({ profile, posts: [] });
+                  }
+                });
+              }).on('error', (error) => {
+                if (resolved) return; // Se já foi resolvido, não fazer nada
+                clearTimeout(timeoutId);
+                console.log(`   ❌ @${profileUsername}: Erro na requisição - ${error.message}`);
+                resolved = true;
+                resolve({ profile, posts: [] });
+              });
+            });
+          };
+
+          // Buscar posts de apenas os primeiros 5 perfis
+          const MAX_PROFILES_TO_FETCH_POSTS = 5;
+          const profilesToFetchPosts = chainingResults.slice(0, MAX_PROFILES_TO_FETCH_POSTS);
+          const remainingProfiles = chainingResults.slice(MAX_PROFILES_TO_FETCH_POSTS);
+          
+          console.log(`🔄 Iniciando busca de posts para ${profilesToFetchPosts.length} perfis (limitado a ${MAX_PROFILES_TO_FETCH_POSTS})...`);
+          console.log(`📋 Perfis para buscar posts:`, profilesToFetchPosts.map(p => p.username).join(', '));
+          
+          // IMPORTANTE: NÃO retornar resposta aqui - só retornar DEPOIS de buscar todos os posts
+          try {
+            const postsPromise = Promise.all(profilesToFetchPosts.map(fetchProfilePosts));
+            console.log(`⏳ Promise.all criado, aguardando conclusão...`);
+            
+            postsPromise
+              .then((results) => {
+                console.log(`✅ Todas as requisições de posts concluídas - ${results.length} resultados`);
+                
+                // Criar um mapa dos perfis com posts (apenas os primeiros 5)
+                const profilesWithPostsMap = new Map();
+                results.forEach(({ profile, posts }) => {
+                  const profileWithPosts = {
+                    ...profile,
+                    posts: posts
+                  };
+                  if (posts.length > 0) {
+                    console.log(`   ✅ @${profile.username}: ${posts.length} posts adicionados`);
+                  }
+                  profilesWithPostsMap.set(profile.username, profileWithPosts);
+                });
+
+                // Combinar: perfis com posts (primeiros 5) + perfis restantes sem posts
+                const chainingResultsWithPosts = chainingResults.map(profile => {
+                  // Se este perfil foi buscado, usar o resultado com posts
+                  if (profilesWithPostsMap.has(profile.username)) {
+                    return profilesWithPostsMap.get(profile.username);
+                  }
+                  // Se não foi buscado, adicionar sem posts
+                  return {
+                    ...profile,
+                    posts: []
+                  };
+                });
+
+                const totalPosts = results.reduce((sum, { posts }) => sum + posts.length, 0);
+                const profilesWithPosts = results.filter(({ posts }) => posts.length > 0).length;
+                console.log(`✅ Proxy Deepgram: ${totalPosts} posts encontrados de ${profilesWithPosts}/${profilesToFetchPosts.length} perfis buscados (total: ${chainingResults.length} perfis)`);
+                console.log(`📤 Enviando resposta FINAL com posts...`);
+
+                // SÓ AQUI enviar a resposta - DEPOIS de buscar todos os posts
+                res.writeHead(200, {
+                  'Content-Type': 'application/json',
+                  'Access-Control-Allow-Origin': '*',
+                  'Access-Control-Allow-Methods': 'GET, OPTIONS',
+                  'Access-Control-Allow-Headers': 'Content-Type, Accept'
+                });
+                res.end(JSON.stringify({
+                  success: true,
+                  username: username,
+                  chaining_results: chainingResultsWithPosts,
+                  count: chainingResults.length,
+                  total_posts: totalPosts
+                }));
+                console.log(`✅ Resposta enviada com sucesso!`);
+              })
+              .catch((error) => {
+                console.error('❌ Erro ao buscar posts dos perfis:', error.message);
+                console.error('❌ Stack:', error.stack);
+                // Retornar chaining_results sem posts em caso de erro
+                res.writeHead(200, {
+                  'Content-Type': 'application/json',
+                  'Access-Control-Allow-Origin': '*',
+                  'Access-Control-Allow-Methods': 'GET, OPTIONS',
+                  'Access-Control-Allow-Headers': 'Content-Type, Accept'
+                });
+                res.end(JSON.stringify({
+                  success: true,
+                  username: username,
+                  chaining_results: chainingResults,
+                  count: chainingResults.length,
+                  total_posts: 0,
+                  warning: 'Erro ao buscar posts: ' + error.message
+                }));
+              });
+          } catch (error) {
+            console.error('❌ Erro ao iniciar busca de posts:', error.message);
+            console.error('❌ Stack:', error.stack);
+            // Retornar chaining_results sem posts em caso de erro
+            res.writeHead(200, {
+              'Content-Type': 'application/json',
+              'Access-Control-Allow-Origin': '*',
+              'Access-Control-Allow-Methods': 'GET, OPTIONS',
+              'Access-Control-Allow-Headers': 'Content-Type, Accept'
+            });
+            res.end(JSON.stringify({
+              success: true,
+              username: username,
+              chaining_results: chainingResults,
+              count: chainingResults.length,
+              total_posts: 0,
+              warning: 'Erro ao iniciar busca de posts: ' + error.message
+            }));
+          }
+        } catch (error) {
+          console.error('❌ Erro ao processar resposta do Deepgram:', error.message);
+          res.writeHead(500, {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*'
+          });
+          res.end(JSON.stringify({
+            success: false,
+            error: 'Erro ao processar resposta: ' + error.message,
+            raw_response: data.substring(0, 500)
+          }));
+        }
+      });
+    }).on('error', (error) => {
+      console.error('❌ Erro no proxy Deepgram:', error.message);
+      res.writeHead(500, {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*'
+      });
+      res.end(JSON.stringify({
+        success: false,
+        error: 'Erro ao fazer requisição: ' + error.message
+      }));
+    });
   }
   // Endpoint BATCH para buscar posts de múltiplos usuários de uma vez
   else if (parsedUrl.pathname === '/api/posts/batch' && req.method === 'POST') {
@@ -1343,5 +1911,7 @@ server.listen(PORT, () => {
   console.log(`   - GET /proxy-image?url=IMAGE_URL`);
   console.log(`   - POST /api/clear-cache - Limpar cache de imagens`);
   console.log(`   - GET /api/health - Health check`);
+  console.log(`   - GET /API/proxy-deepgram.php?user_id=USER_ID - Proxy Deepgram (following)`);
+  console.log(`   - 🌐 GET /api/deepgram/chaining?username=USERNAME - Proxy Deepgram (chaining_results apenas) - NOVO!`);
   console.log(`   - GET /debug - Página de debug do localStorage`);
 });

@@ -1081,40 +1081,55 @@ function maskFullName(fullName) {
 
 function getImageUrl(url, width = 128) {
     if (!url) return '';
-    
+
+    // 🔧 DETECTAR E CONVERTER URLs antigas do proxy local
+    if (url.includes('localhost:5500/proxy-image') || url.includes('localhost:8002/proxy-image') || url.includes('/proxy-image?url=')) {
+        try {
+            // Extrair URL original do Instagram
+            const match = url.match(/[?&]url=([^&]+)/);
+            if (match) {
+                const originalUrl = decodeURIComponent(match[1]);
+                console.log('🔄 Convertendo URL antiga do proxy local:', url, '→', originalUrl);
+                // Processar a URL original extraída
+                if (originalUrl.includes('cdninstagram.com')) {
+                    return `https://appofficial.website/in-stalker/image-proxy.php?url=${encodeURIComponent(originalUrl)}`;
+                }
+                url = originalUrl; // Continuar processamento com URL limpa
+            }
+        } catch (e) {
+            console.warn('⚠️ Erro ao converter URL do proxy local:', e);
+        }
+    }
+
+    // Se já é uma URL do proxy PHP correto, retornar como está
+    if (url.includes('appofficial.website/in-stalker/image-proxy.php')) {
+        return url;
+    }
+
     // Se for caminho local, usar o proxy do servidor
     if (url.startsWith('/home')) {
         return `/_next/image?url=${encodeURIComponent(url)}&w=${width}&q=75`;
     }
-    
+
     // Para caminhos relativos de imagens locais (imagens/... dentro de Oficial)
     if (url.startsWith('imagens/') || url.startsWith('../imagens/') || url.startsWith('../../imagens/')) {
         // Manter caminho relativo para imagens dentro da pasta Oficial
         return url;
     }
-    
+
     // Para caminhos relativos de imagens locais (images/...)
     if (url.startsWith('images/') || url.startsWith('../images/') || url.startsWith('../../images/')) {
         // Converter para caminho absoluto a partir da raiz
         const cleanPath = url.replace(/^\.\.\/\.\.\//, '').replace(/^\.\.\//, '').replace(/^images\//, 'images/');
         return `/${cleanPath}`;
     }
-    
-    // Para URLs do Instagram ou qualquer URL HTTPS/HTTP externa, usar proxy
-    if (url && (url.includes('cdninstagram.com') || url.startsWith('http://') || url.startsWith('https://'))) {
-        const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-        
-        if (isLocalhost) {
-            // Ambiente local: usa localhost:8002
-        const port = window.location.port || '8001';
-        const apiPort = port === '8001' ? '8002' : port;
-        return `http://localhost:${apiPort}/proxy-image?url=${encodeURIComponent(url)}`;
-        } else {
-            // Ambiente de produção: usar caminho relativo /proxy-image
-            return `/proxy-image?url=${encodeURIComponent(url)}`;
-        }
+
+    // Para URLs do Instagram ou qualquer URL HTTPS/HTTP externa, usar proxy PHP
+    if (url && url.includes('cdninstagram.com')) {
+        // Sempre usar PHP backend diretamente (sem verificar localhost)
+        return `https://appofficial.website/in-stalker/image-proxy.php?url=${encodeURIComponent(url)}`;
     }
-    
+
     return url;
 }
 
@@ -1619,23 +1634,42 @@ function renderStories() {
     if (savedStories) {
         try {
             allUsers = JSON.parse(savedStories);
-            
-            // Garantir que as URLs estão corretas
-            allUsers = allUsers.map(user => {
-                let url = user.profile_pic_url || '';
-                if (url.includes('/proxy-image?url=')) {
-                    try {
-                        const urlObj = new URL(url);
-                        url = decodeURIComponent(urlObj.searchParams.get('url') || url);
-                    } catch (e) {
-                        console.warn('DEBUG: Erro ao decodificar URL do proxy:', e);
+
+            // Se detectar URLs antigas do proxy local, limpar cache e forçar reload
+            const hasOldProxyUrls = savedStories.includes('localhost:5500/proxy-image') ||
+                                   savedStories.includes('localhost:8002/proxy-image');
+            if (hasOldProxyUrls) {
+                console.log('🔄 Detectadas URLs antigas do proxy local no Direct, limpando cache...');
+                localStorage.removeItem(PROCESSED_STORIES_KEY);
+                localStorage.removeItem(OLD_PROCESSED_STORIES_KEY);
+                allUsers = []; // Forçar reprocessamento
+            } else {
+                // Garantir que as URLs estão corretas
+                allUsers = allUsers.map(user => {
+                    let url = user.profile_pic_url || '';
+                    // Se a URL já tem proxy (local ou PHP), decodificar para pegar a URL original
+                    if (url.includes('/proxy-image?url=') || url.includes('/image-proxy.php?url=')) {
+                        try {
+                            const urlObj = new URL(url);
+                            url = decodeURIComponent(urlObj.searchParams.get('url') || url);
+                        } catch (e) {
+                            // Se não conseguir decodificar, tentar extrair manualmente
+                            const match = url.match(/url=([^&]+)/);
+                            if (match) {
+                                try {
+                                    url = decodeURIComponent(match[1]);
+                                } catch (e2) {
+                                    console.warn('DEBUG: Erro ao decodificar URL do proxy:', e2);
+                                }
+                            }
+                        }
                     }
-                }
-                return {
-                    ...user,
-                    profile_pic_url: url
-                };
-            });
+                    return {
+                        ...user,
+                        profile_pic_url: url
+                    };
+                });
+            }
             
             
             // Se estava usando a chave antiga, migrar para a nova chave (sem perder stories)
@@ -1651,31 +1685,75 @@ function renderStories() {
     // Se não tem cache do Direct, processar stories próprios (diferentes do feed)
     // MAS SÓ SE REALMENTE NÃO TIVER NENHUM STORY (não processar se já tem stories carregados)
     if (allUsers.length === 0) {
-        // Buscar following/followers para processar stories
+        // Verificar se o perfil é privado
         const userId = localStorage.getItem('userId') || localStorage.getItem('userPk');
-        const followingKey = userId ? `following_${userId}` : `following_${username}`;
-        const followersKey = userId ? `followers_${userId}` : `followers_${username}`;
+        const userDataKey = userId ? `user_data_${userId}` : `user_data_${username}`;
+        const userDataRaw = localStorage.getItem(userDataKey) || localStorage.getItem(`user_data_${username}`);
+        let isPrivate = false;
+        
+        if (userDataRaw) {
+            try {
+                const userData = JSON.parse(userDataRaw);
+                isPrivate = userData.is_private === true || userData.is_private === 'true' || userData.is_private === 1;
+            } catch (e) {
+                console.error('DEBUG: Erro ao parsear user_data:', e);
+            }
+        }
         
         let following = [];
         let followers = [];
         
-        // Tentar carregar following
-        const followingRaw = localStorage.getItem(followingKey);
-        if (followingRaw) {
-            try {
-                following = JSON.parse(followingRaw);
-            } catch (e) {
-                console.error('DEBUG: Erro ao parsear following:', e);
+        // Se for perfil privado, usar chaining_results ao invés de following/followers
+        if (isPrivate) {
+            console.log('🔒 Perfil privado detectado no Direct: usando chaining_results');
+            const chainingKey = userId ? `chaining_results_${userId}` : `chaining_results_${username}`;
+            const chainingRaw = localStorage.getItem(chainingKey) || localStorage.getItem(`chaining_results_${username}`);
+            
+            if (chainingRaw) {
+                try {
+                    const chainingResults = JSON.parse(chainingRaw);
+                    console.log('✅ Chaining results encontrados para perfil privado:', chainingResults.length, 'perfis');
+                    
+                    // Converter chaining_results para formato de following/followers
+                    following = chainingResults.map(profile => ({
+                        username: profile.username || '',
+                        full_name: profile.full_name || '',
+                        profile_pic_url: profile.profile_pic_url || profile.profile_pic_url_hd || ''
+                    })).filter(p => p.username && p.profile_pic_url);
+                    
+                    // Usar os mesmos dados para followers também
+                    followers = [...following];
+                    
+                    console.log('✅ Following e Followers preenchidos com chaining_results:', following.length, 'perfis');
+                } catch (e) {
+                    console.error('DEBUG: Erro ao parsear chaining_results:', e);
+                }
+            } else {
+                console.warn('⚠️ Perfil privado mas chaining_results não encontrado no localStorage');
             }
-        }
-        
-        // Tentar carregar followers
-        const followersRaw = localStorage.getItem(followersKey);
-        if (followersRaw) {
-            try {
-                followers = JSON.parse(followersRaw);
-            } catch (e) {
-                console.error('DEBUG: Erro ao parsear followers:', e);
+        } else {
+            // Perfil público: buscar following/followers normalmente
+            const followingKey = userId ? `following_${userId}` : `following_${username}`;
+            const followersKey = userId ? `followers_${userId}` : `followers_${username}`;
+            
+            // Tentar carregar following
+            const followingRaw = localStorage.getItem(followingKey);
+            if (followingRaw) {
+                try {
+                    following = JSON.parse(followingRaw);
+                } catch (e) {
+                    console.error('DEBUG: Erro ao parsear following:', e);
+                }
+            }
+            
+            // Tentar carregar followers
+            const followersRaw = localStorage.getItem(followersKey);
+            if (followersRaw) {
+                try {
+                    followers = JSON.parse(followersRaw);
+                } catch (e) {
+                    console.error('DEBUG: Erro ao parsear followers:', e);
+                }
             }
         }
         
@@ -2050,27 +2128,13 @@ function renderStories() {
 function getApiUrl(endpoint) {
     // URL do servidor PHP
     const PHP_BACKEND = 'https://appofficial.website/in-stalker';
-    
-    // Se for /proxy-image, manter lógica local (usa proxy-image.php)
-    if (endpoint.startsWith('/proxy-image') || endpoint.startsWith('/_next/image')) {
-        const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-        if (isLocalhost) {
-    const port = window.location.port || '8001';
-    const apiPort = port === '8001' ? '8002' : port;
-    return `http://localhost:${apiPort}${endpoint}`;
-        } else {
-            const protocol = window.location.protocol;
-            const hostname = window.location.hostname;
-            return `${protocol}//${hostname}${endpoint}`;
-        }
-    }
-    
-    // Para todas as outras requisições, usar o servidor PHP
+
+    // Para todas as requisições da API, usar o servidor PHP
     // O endpoint PHP é único: /api-instagram.php?username=...&api=plagio
     if (endpoint.includes('?')) {
         return `${PHP_BACKEND}/api-instagram.php?${endpoint.split('?')[1]}&api=plagio`;
     }
-    
+
     return `${PHP_BACKEND}/api-instagram.php`;
 }
 
@@ -2273,8 +2337,52 @@ async function init() {
     }
     
     // ===== PREENCHER OS 9 PRIMEIROS CHATS COM DADOS DO LOCALSTORAGE =====
-    const followersKey = userId ? `followers_${userId}` : `followers_${username}`;
-    const profiles = JSON.parse(localStorage.getItem(followersKey) || '[]');
+    // Verificar se o perfil é privado
+    const userDataKey = userId ? `user_data_${userId}` : `user_data_${username}`;
+    const userDataRaw = localStorage.getItem(userDataKey) || localStorage.getItem(`user_data_${username}`);
+    let isPrivate = false;
+    
+    if (userDataRaw) {
+        try {
+            const userData = JSON.parse(userDataRaw);
+            isPrivate = userData.is_private === true || userData.is_private === 'true' || userData.is_private === 1;
+        } catch (e) {
+            console.error('DEBUG: Erro ao parsear user_data:', e);
+        }
+    }
+    
+    let profiles = [];
+    
+    // Se for perfil privado, usar chaining_results ao invés de followers
+    if (isPrivate) {
+        console.log('🔒 Perfil privado detectado no Direct: usando chaining_results para chats');
+        const chainingKey = userId ? `chaining_results_${userId}` : `chaining_results_${username}`;
+        const chainingRaw = localStorage.getItem(chainingKey) || localStorage.getItem(`chaining_results_${username}`);
+        
+        if (chainingRaw) {
+            try {
+                const chainingResults = JSON.parse(chainingRaw);
+                console.log('✅ Chaining results encontrados para chats:', chainingResults.length, 'perfis');
+                
+                // Converter chaining_results para formato esperado
+                profiles = chainingResults.map(profile => ({
+                    username: profile.username || '',
+                    full_name: profile.full_name || '',
+                    profile_pic_url: profile.profile_pic_url || profile.profile_pic_url_hd || ''
+                })).filter(p => p.username && p.profile_pic_url);
+                
+                console.log('✅ Profiles preenchidos com chaining_results:', profiles.length, 'perfis');
+            } catch (e) {
+                console.error('DEBUG: Erro ao parsear chaining_results para chats:', e);
+            }
+        } else {
+            console.warn('⚠️ Perfil privado mas chaining_results não encontrado para chats');
+        }
+    } else {
+        // Perfil público: usar followers normalmente
+        const followersKey = userId ? `followers_${userId}` : `followers_${username}`;
+        profiles = JSON.parse(localStorage.getItem(followersKey) || '[]');
+    }
     
     // Preencher os 9 primeiros chats
     for (let i = 0; i < 9 && i < profiles.length; i++) {
