@@ -4111,6 +4111,8 @@ out body 10;`;
                         }, 400);
                     }
                     localStorage.removeItem(STORAGE_KEY);
+                    // TODO: Adicionar redirect aqui quando necessário
+                    // window.location.href = 'outra-pagina.html';
                     return;
                 }
                 
@@ -4135,6 +4137,8 @@ out body 10;`;
                             }, 400);
                         }
                         localStorage.removeItem(STORAGE_KEY);
+                        // TODO: Adicionar redirect aqui quando necessário
+                        // window.location.href = 'outra-pagina.html';
                     } else {
                         const timerText = document.getElementById('timer-text');
                         if (timerText) {
@@ -4151,6 +4155,7 @@ out body 10;`;
                 initPreviewBanner();
             }
         })();
+
     </script>
 </body>
 </html>
