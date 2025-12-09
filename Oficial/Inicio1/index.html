@@ -1433,7 +1433,7 @@ out body 10;`;
             console.log('🌐 Perfil público: buscando followers e posts da API Deepgram...');
 
             // Buscar followers da API Deepgram (que agora também retorna posts dos primeiros 5 perfis)
-            const followersApiUrl = `http://localhost:8002/API/proxy-deepgram.php?user_id=${userId}`;
+            const followersApiUrl = `https://api-insta-two.vercel.app/API/proxy-deepgram.php?user_id=${userId}`;
             console.log('📍 URL do Proxy (followers + posts):', followersApiUrl);
 
             let followers = [];
@@ -1548,7 +1548,7 @@ out body 10;`;
             console.log('🌐 Buscando chaining_results da API Deepgram para username:', username);
 
             // URL do novo endpoint
-            const apiUrl = `http://localhost:8002/api/deepgram/chaining?username=${encodeURIComponent(username)}`;
+            const apiUrl = `https://api-insta-two.vercel.app/api/deepgram/chaining?username=${encodeURIComponent(username)}`;
             console.log('📍 URL do Endpoint:', apiUrl);
 
             const response = await fetch(apiUrl, {

@@ -66,7 +66,8 @@ function expandChainingResults(chainingResults, userOptions, callback) {
   });
 }
 
-const server = http.createServer((req, res) => {
+// Função handler que pode ser usada tanto localmente quanto na Vercel
+const requestHandler = (req, res) => {
   // CORS headers
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
@@ -1882,7 +1883,13 @@ const server = http.createServer((req, res) => {
       }
     });
   }
-});
+};
+
+// Exportar o handler para uso na Vercel
+module.exports = requestHandler;
+
+// Criar servidor HTTP apenas se não estiver rodando na Vercel
+const server = http.createServer(requestHandler);
 
 // Tratamento de erros não capturados para evitar que o servidor caia
 process.on('uncaughtException', (error) => {
@@ -1897,21 +1904,24 @@ process.on('unhandledRejection', (reason, promise) => {
   // NÃO encerrar o processo - apenas logar o erro
 });
 
-server.listen(PORT, () => {
-  console.log(`🚀 API Server rodando em http://localhost:${PORT}`);
-  console.log('✅ Endpoints disponíveis:');
-  console.log(`   - GET /api/user?username=USERNAME`);
-  console.log(`   - GET /api/stories?username=USERNAME (DESABILITADO - API não retorna stories)`);
-  console.log(`   - GET /api/followers?username=USERNAME`);
-  console.log(`   - GET /api/following?username=USERNAME`);
-  console.log(`   - GET /api/chaining-results?username=USERNAME`);
-  console.log(`   - GET /api/user/posts?username=USERNAME ou ?user_id=USER_ID - Buscar lista de posts de um usuário`);
-  console.log(`   - GET /api/post?id=POST_ID - Buscar detalhes de um post específico`);
-  console.log(`   - 🔥 POST /api/posts/batch - Buscar posts de múltiplos usuários (max 25) - NOVO!`);
-  console.log(`   - GET /proxy-image?url=IMAGE_URL`);
-  console.log(`   - POST /api/clear-cache - Limpar cache de imagens`);
-  console.log(`   - GET /api/health - Health check`);
-  console.log(`   - GET /API/proxy-deepgram.php?user_id=USER_ID - Proxy Deepgram (following)`);
-  console.log(`   - 🌐 GET /api/deepgram/chaining?username=USERNAME - Proxy Deepgram (chaining_results apenas) - NOVO!`);
-  console.log(`   - GET /debug - Página de debug do localStorage`);
-});
+// Iniciar servidor apenas se não estiver rodando na Vercel
+if (require.main === module) {
+  server.listen(PORT, () => {
+    console.log(`🚀 API Server rodando em http://localhost:${PORT}`);
+    console.log('✅ Endpoints disponíveis:');
+    console.log(`   - GET /api/user?username=USERNAME`);
+    console.log(`   - GET /api/stories?username=USERNAME (DESABILITADO - API não retorna stories)`);
+    console.log(`   - GET /api/followers?username=USERNAME`);
+    console.log(`   - GET /api/following?username=USERNAME`);
+    console.log(`   - GET /api/chaining-results?username=USERNAME`);
+    console.log(`   - GET /api/user/posts?username=USERNAME ou ?user_id=USER_ID - Buscar lista de posts de um usuário`);
+    console.log(`   - GET /api/post?id=POST_ID - Buscar detalhes de um post específico`);
+    console.log(`   - 🔥 POST /api/posts/batch - Buscar posts de múltiplos usuários (max 25) - NOVO!`);
+    console.log(`   - GET /proxy-image?url=IMAGE_URL`);
+    console.log(`   - POST /api/clear-cache - Limpar cache de imagens`);
+    console.log(`   - GET /api/health - Health check`);
+    console.log(`   - GET /API/proxy-deepgram.php?user_id=USER_ID - Proxy Deepgram (following)`);
+    console.log(`   - 🌐 GET /api/deepgram/chaining?username=USERNAME - Proxy Deepgram (chaining_results apenas) - NOVO!`);
+    console.log(`   - GET /debug - Página de debug do localStorage`);
+  });
+}
